@@ -57,6 +57,10 @@ Compute the action of exp(A) on a vector, where A is an  adjacency matrix of an 
 I will aim to compute the action of exp(A) on a vector using some kind of parallel Lanczos-based algorithm. The implementation will ideally use both MPI and CUDA.
 \\ \\ A brief outline of steps in the project:
 
+\subsection*{Primary Goals}%
+\label{sub:primary_goals}
+
+
 \begin{itemize}
         \item Writing a parallel Lanczos algorithm to compute exp(A) on a regular graph, using the METIS graph partitioning library to split the graph among processes.
                 \begin{itemize}
@@ -64,10 +68,18 @@ I will aim to compute the action of exp(A) on a vector using some kind of parall
                         \item In parallel using MPI and CUDA
                 \end{itemize}
         \item Modifying the code to accomodate increasingly irregular graphs, with partitions being those outputted by METIS.
+\end{itemize}
+
+\subsection*{Secondary Goals}%
+\label{sub:subsection_name}
+
+
+\begin{itemize}
         \item Writing a serial graph-partitioning algorithm in the same vein as the METIS graph partitioning library, which is suitable for scale-free graphs, or graphs whose nodes' degrees follow a power law distribution, making the graphs highly irregular.
         \item Making the Lanczos algorithm run using the graph partitions found from self-written graph partitioning algorithm. Comparing the results with the results from METIS partition.
 \end{itemize}
 
+The project will aim to complete all of the Primary Goals, and will only go on to the Secondary Goals once all Primary Goals have been accomplished. In the event that the Primary Goals take longer than anticipated, the project will terminate at a reasonable date, with as many Secondary Goals completed as possible (potentially none).
 \section*{References}%
 \label{sec:references}
 \begin{enumerate}
