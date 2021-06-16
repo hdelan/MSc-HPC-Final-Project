@@ -1,0 +1,79 @@
+\documentclass[a4paper, fleqn]{article}
+
+\date{\today}
+\author{Hugh Delaney}
+\title{MSc in HPC Project Proposal}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools, geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\DeclarePairedDelimiterX{\inp}[2]{\langle}{\rangle}{#1, #2}
+
+\setlength{\mathindent}{1cm}
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{subfigure, pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+        \def\svgwidth{\columnwidth}
+        \import{./figures/}{#1.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{proposition}{Proposition}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}{Lemma}[theorem]
+
+\renewcommand\qedsymbol{$\blacksquare$}
+
+\begin{document}
+\maketitle
+\begin{tabbing}
+        \textbf{Project Supervisor:}~~~~~~~ \=Kirk Soodhalter \\
+        \textbf{Secondary Supervisor:} \>Jose Refojo \\
+        \textbf{Research Area:}  \> Computational Graph Theory \\
+\end{tabbing}
+
+\section*{Project Brief}%
+\label{sec:project_brief}
+Compute the action of exp(A) on a vector, where A is an  adjacency matrix of an undirected graph. The graph exponential is generally computed using Krylov methods, most notably using the Lanczos algorithm with some preconditioning. Parallel Lanczos methods to compute the exponential are not common in academic literature, which may be a challenge. See (1) and (2) 
+
+\section*{Implementation Details}%
+\label{sec:project_brief}
+
+I will aim to compute the action of exp(A) on a vector using some kind of parallel Lanczos-based algorithm. The implementation will ideally use both MPI and CUDA.
+\\ \\ A brief outline of steps in the project:
+
+\begin{itemize}
+        \item Writing a parallel Lanczos algorithm to compute exp(A) on a regular graph, using the METIS graph partitioning library to split the graph among processes.
+                \begin{itemize}
+                        \item In parallel using MPI
+                        \item In parallel using MPI and CUDA
+                \end{itemize}
+        \item Modifying the code to accomodate increasingly irregular graphs, with partitions being those outputted by METIS.
+        \item Writing a serial graph-partitioning algorithm in the same vein as the METIS graph partitioning library, which is suitable for scale-free graphs, or graphs whose nodes' degrees follow a power law distribution, making the graphs highly irregular.
+        \item Making the Lanczos algorithm run using the graph partitions found from self-written graph partitioning algorithm. Comparing the results with the results from METIS partition.
+\end{itemize}
+
+\section*{References}%
+\label{sec:references}
+\begin{enumerate}
+        \item Jasper vanden Eshof and Marlis Hochbruck. \textit{Preconditioning lanczos approximations to the matrix exponential.} SIAM J. Sci. Comput., 27:1438–1457, November 2005.
+        \item Lorenzo Orecchia, Sushant Sachdeva, Nisheeth K. Vishnoi. \textit{Approximating the Exponential, the Lanczos Method and an O(m)-Time Spectral Algorithm for Balanced Separator}
+\end{enumerate}
+
+
+\end{document}
