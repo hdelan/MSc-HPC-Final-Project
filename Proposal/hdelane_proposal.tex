@@ -51,23 +51,32 @@
 \label{sec:project_brief}
 Compute the action of exp(A) on a vector, where A is an  adjacency matrix of an undirected graph. The graph exponential is generally computed using Krylov methods, most notably using the Lanczos algorithm with some preconditioning. Parallel Lanczos methods to compute the exponential are not common in academic literature, which may be a challenge. See (1) and (2) 
 
+\section*{Preliminaries}%
+\label{sec:preliminaries}
+
+Define a symmetric diagonally dominant matrix (SDD) matrix as a matrix where 
+\[  |a_{ii}| \ge \sum_{i\neq j} a_{ij} \]
+
 \section*{Implementation Details}%
 \label{sec:project_brief}
 
-I will aim to compute the action of exp(A) on a vector using some kind of parallel Lanczos-based algorithm. The implementation will ideally use both MPI and CUDA.
+I will aim to compute the action of exp(A) on a vector using a parallel Lanczos-based algorithm. The implementation will ideally use both MPI and CUDA.
 \\ \\ A brief outline of steps in the project:
 
 \subsection*{Primary Goals}%
 \label{sub:primary_goals}
 
-
 \begin{itemize}
-        \item Writing a parallel Lanczos algorithm to compute exp(A) on a regular graph, using the METIS graph partitioning library to split the graph among processes.
+        \item Writing a parallel Lanczos algorithm to compute exp(A) on a sparse Symmetric Diagonally Dominant (SDD) graph, using the METIS graph partitioning library to split the graph among processes.
                 \begin{itemize}
                         \item In parallel using MPI
                         \item In parallel using MPI and CUDA
                 \end{itemize}
-        \item Modifying the code to accomodate increasingly irregular graphs, with partitions being those outputted by METIS.
+        \item Modifying the code to accomodate non SDD matrices increasingly irregular graphs, with partitions being those outputted by METIS. The levels of complexity involved are as followed:
+                \begin{itemize}
+                        \item SDD graphs which can be neatly partitioned among processes without overlapping edges between processes (this is equivalent to a master-slave serial algorithm).
+                        \item SDD graphs with 
+                \end{itemize}
 \end{itemize}
 
 \subsection*{Secondary Goals}%
@@ -79,7 +88,11 @@ I will aim to compute the action of exp(A) on a vector using some kind of parall
         \item Making the Lanczos algorithm run using the graph partitions found from self-written graph partitioning algorithm. Comparing the results with the results from METIS partition.
 \end{itemize}
 
-The project will aim to complete all of the Primary Goals, and will only go on to the Secondary Goals once all Primary Goals have been accomplished. In the event that the Primary Goals take longer than anticipated, the project will terminate at a reasonable date, with as many Secondary Goals completed as possible (potentially none).
+\subsection*{Partial Completion}%
+\label{sub:partial_completion}
+
+The project will aim to complete all of the Primary Goals, and will only go on to the Secondary Goals once all Primary Goals have been accomplished. In the event that the Primary Goals take longer than anticipated, the project will terminate at a reasonable date, with as many Secondary Goals completed as possible (potentially none). The order in which Secondary goals are attacked is liable to change from the sequential order listed here.
+
 \section*{References}%
 \label{sec:references}
 \begin{enumerate}
