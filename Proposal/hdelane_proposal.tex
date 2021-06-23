@@ -49,33 +49,38 @@
 
 \section*{Project Brief}%
 \label{sec:project_brief}
-Compute the action of exp(A) on a vector, where A is an  adjacency matrix of an undirected graph. The graph exponential is generally computed using Krylov methods, most notably using the Lanczos algorithm with some preconditioning. Parallel Lanczos methods to compute the exponential are not common in academic literature, which may be a challenge. See (1) and (2) 
 
-\section*{Preliminaries}%
-\label{sec:preliminaries}
+Let $A$ to be the adjacency matrix of an undirected graph, $G$.
+\\ \\
+The matrix exponential is defined as:
 
-Define a symmetric diagonally dominant matrix (SDD) matrix as a matrix where 
-\[  |a_{ii}| \ge \sum_{i\neq j} a_{ij} \]
+\[ e^{\beta A} = \sum_{k=1}^{N} \frac{\beta^k}{k!}A^k \]
+
+$[e^{\beta A}]_{ij}$ gives us a good measure of the communicability of nodes $i,j$ in a graph. This is due to the fact that $[A^k]_{ij}$ tells us the number of walks of length  $k$ between nodes i,j.
+
+The graph exponential therefore gives us a weighted sum of walks of all lengths across our graph, where the weight is determined by $\beta > 0$, an inverse temperature parameter which can increase or decrease the importance of long walks between nodes $i,j$. Note that when $A$ is hermitian,  $e^{\beta A}$ is also hermitian.
+
+In my project I will endeavour to compute the action of exp($A$) on a vector $v$ such that  $\|v\| = 1$. The default choice will be the vector of ones, scaled by $\sqrt{n}$. The graph exponential is almost never computed explicitly, but rather by approximation, using Krylov methods.  The Lanczos algorithm with some preconditioning is usually applied for such procedures. Parallel Lanczos methods to compute the exponential are not common in academic literature, which may be a challenge. See (1) and (2) 
 
 \section*{Implementation Details}%
 \label{sec:project_brief}
 
-I will aim to compute the action of exp(A) on a vector using a parallel Lanczos-based algorithm. The implementation will ideally use both MPI and CUDA.
+I will aim to compute exp$(A)v$, $\|v\| = 1$ using a parallel Lanczos-based algorithm. The implementation will use both MPI and CUDA.
 \\ \\ A brief outline of steps in the project:
 
 \subsection*{Primary Goals}%
 \label{sub:primary_goals}
 
 \begin{itemize}
-        \item Writing a parallel Lanczos algorithm to compute exp(A) on a sparse Symmetric Diagonally Dominant (SDD) graph, using the METIS graph partitioning library to split the graph among processes.
+        \item Writing a parallel Lanczos algorithm to compute exp$(A)v$ on a sparse graph, using the METIS graph partitioning library to split the graph among processes. 
                 \begin{itemize}
                         \item In parallel using MPI
                         \item In parallel using MPI and CUDA
                 \end{itemize}
-        \item Modifying the code to accomodate non SDD matrices increasingly irregular graphs, with partitions being those outputted by METIS. The levels of complexity involved are as followed:
+        \item Modifying the code to accomodate increasingly irregular graphs, with partitions among processes becoming increasingly involved being those outputted by METIS. The levels of complexity involved are as followed:
                 \begin{itemize}
-                        \item SDD graphs which can be neatly partitioned among processes without overlapping edges between processes (this is equivalent to a master-slave serial algorithm).
-                        \item SDD graphs with 
+                        \item Graphs which can be neatly partitioned among processes without overlapping edges between processes (this is equivalent to a master-slave serial algorithm).
+                        \item Graphs with more and more edges overlapping between processes (with edge cuts approximately minimized by METIS).
                 \end{itemize}
 \end{itemize}
 

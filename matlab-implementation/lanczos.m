@@ -24,7 +24,7 @@ q(:,1) = q(:,1)/norm(q(:,1));
 h = zeros(n,n);
 
 for j = 1:n
-    w = adj*q(:,1);
+    w = adj*q(:,j);
     for i = 1:j
         h(i,j) = w'*q(:,i);
         w = w - h(i,j)*q(:,i);
