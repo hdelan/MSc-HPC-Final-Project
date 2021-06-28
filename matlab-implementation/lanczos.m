@@ -33,7 +33,7 @@ for j = 1:n
     q(:,j+1) = w/h(j+1,j);
 end
 
-q*h*(q(:, 1:n))'
-
+Q = q(:,1:n);
+Q
 %plot(graph(adj));
 
