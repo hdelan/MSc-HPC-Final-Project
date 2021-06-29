@@ -1,5 +1,5 @@
 clear; clc;
-n = 100; E = idivide(int32(n), 5);
+n = 100; E = idivide(n, 5);
 
 v0 = ones(n,1)./sqrt(n);
 
@@ -34,14 +34,11 @@ for j = 1:n
     q(:,j+1) = w/h(j+1,j);
 end
 
-<<<<<<< HEAD
 % h is now in tridiagonal form
 
-[h_eigvec, h_eigvals] = eigs(h(1:100, 1:100)); 
+[h_eigvec, h_eigvals] = eigs(h); 
 
-=======
-Q = q(:,1:n);
-Q
->>>>>>> 82704f79b2b2287194cad470594693e4d9e40f03
+q*h*(q(:, 1:n))'
+
 %plot(graph(adj));
 
