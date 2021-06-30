@@ -1,47 +1,55 @@
 clear; clc;
-n = 100; E = idivide(int32(n), 5);
+n = 10000; E = 150; %idivide(int32(n), 5);
+krylov_dim = 40;
 
-v0 = ones(n,1)./sqrt(n);
+% starting vector
+v0 = ones(n,1);
 
 tol = 1e-5;
 
-adj = spalloc(n, n, E);
-idx = randperm(n * n, E);
-adj(idx) = 1;
-adj = min( adj + adj.', 1);
+adj = make_graph(n, E);
+% plot(graph(adj));
 
-for i = 1:n
-    adj(i,i) = 0;
-end
-full(adj)
+v = zeros(n, krylov_dim);
+w = zeros(n, krylov_dim);
 
-% adj = rand(n, n);
-% adj = adj + adj';
+v(:,1) = v0/norm(v0);
 
-q = zeros(n, n);
+alpha = zeros(krylov_dim,1);
+beta = zeros(krylov_dim,1);
 
-q(:,1) = rand(n,1);
-q(:,1) = q(:,1)/norm(q(:,1));
-h = zeros(n,n);
-
-for j = 1:n
-    w = adj*q(:,j);
-    for i = 1:j
-        h(i,j) = w'*q(:,i);
-        w = w - h(i,j)*q(:,i);
+for j = 1:krylov_dim
+    if j > 1
+        beta(j) = norm(w(:,j-1));
+        if beta(j) > 0
+            v(:,j) = w(:,j-1)/beta(j);
+        end
     end
-    h(j+1,j) = norm(w);
-    q(:,j+1) = w/h(j+1,j);
+    w_tmp = adj*v(:,j);
+    alpha(j) = w_tmp'*v(:,j);
+    if j > 1
+        w(:,j) = w_tmp - alpha(j)*v(:,j) - beta(j)*v(:,j-1);
+    else
+        w(:,j) = w_tmp - alpha(j)*v(:,j);
+    end
 end
 
-<<<<<<< HEAD
-% h is now in tridiagonal form
 
-[h_eigvec, h_eigvals] = eigs(h(1:100, 1:100)); 
+h = zeros(krylov_dim, krylov_dim);
+for j=1:krylov_dim
+    h(j,j) = alpha(j);
+end
+for j=2:krylov_dim
+    h(j-1,j) = beta(j);
+    h(j,j-1) = beta(j);
+end
 
-=======
-Q = q(:,1:n);
-Q
->>>>>>> 82704f79b2b2287194cad470594693e4d9e40f03
-%plot(graph(adj));
+tmp = expm(h);
+
+y = norm(v0)*w*tmp*w';
+y = y(:,1);
+
+check = expm(adj)*v0;
+
+diff = check - y;
 
