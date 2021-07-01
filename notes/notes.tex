@@ -173,7 +173,7 @@ void eigenDecomp(lanczosDecomp D, eigenDecomp E);
 template <typename F>
 void applyFunction(eigenDecomp E, F func);
 \end{lstlisting}
-This will apply the function to the \texttt{E.lambdas}. The function will be applied in place. Explicit instantiation for templates will be needed.
+This will apply the function to the \texttt{E.lambdas}. The function will be applied in place. Explicit instantiation for templates will be needed. \texttt{F func} is a functor or function pointer.
 \subsection{Multiply out}%
 \label{sub:multiply_out}
 \begin{lstlisting}[language = C++]
