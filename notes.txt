@@ -1,5 +1,0 @@
-A = UTU*  (after Lanczos -- U unitary)
-A = U V_H \Lambda V_H* U*
-f(A) = U-V_H-f(\Lambda)-V_H*-U*
-f(A)v = U-V_H-f(\Lambda)-V_H*-U*-v
-

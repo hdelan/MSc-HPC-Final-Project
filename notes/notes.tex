@@ -1,0 +1,183 @@
+\documentclass[a4paper, fleqn]{article}
+
+\date{\today}
+\author{Hugh Delaney}
+\title{Project Notes}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools, geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\DeclarePairedDelimiterX{\inp}[2]{\langle}{\rangle}{#1, #2}
+
+\setlength{\mathindent}{1cm}
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{subfigure, pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+        \def\svgwidth{\columnwidth}
+        \import{./figures/}{#1.pdf_tex}
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+        backgroundcolor=\color{backcolour},   
+        commentstyle=\color{codegreen},
+        keywordstyle=\color{magenta},
+        numberstyle=\tiny\color{codegray},
+        stringstyle=\color{codepurple},
+        basicstyle=\ttfamily\footnotesize,
+        breakatwhitespace=false,         
+        breaklines=true,                 
+        captionpos=b,                    
+        keepspaces=true,                 
+        numbers=left,                    
+        numbersep=5pt,                  
+        showspaces=false,                
+        showstringspaces=false,
+        showtabs=false,                  
+        tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\pdfsuppresswarningpagegroup=1
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{proposition}{Proposition}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}{Lemma}[theorem]
+
+\renewcommand\qedsymbol{$\blacksquare$}
+
+\begin{document}
+\maketitle
+\section{Introduction}%
+\label{sec:introduction}
+
+
+
+We want to compute $f(A)x$ for $f(A) = e^A$, where $A \subseteq \mathbb{R}^{n\times n}$ and $n$ is large. We want to approximate this by using the Krylov subspace $\mathcal{K}_n\left( A, x \right) = \text{span}\{x, Ax, \ldots, A^{m-1}x\}$ which has rank $m \ll n$.
+
+We are using an impicit Schur decomposition by Lanczos algorithm. This is used since A is Hermitian (as G is an undirected graph), so the reduction to Hessenberg form (by Arnoldi/Lanczos) yields a hermitian upper Hessenberg matrix, which is tridiagonal.
+
+Note that we do not explicitly form the matrix $f(A)$ but rather apply it to some starting vector, which is normalized to become the first vector in our Krylov subspace.
+
+In abstract terms:
+\begin{alignat*}{4}
+        A &= QTQ* &&\text{\quad\quad} &&\text{Schur Decomposition of $A$ using Lanczos, where $q_1 = x/\|x\|$} \\
+        A &=  Q \left( V\Lambda V^*\right)Q^* && &&\text{Eigendecomposition of $T$}\\
+        f(A) &= QVf(\Lambda)V^*Q^* && &&\text{Applying $f$}\\
+        f(A)x &= QVf(\Lambda)V^*Q^*x && &&\text{Allowing $f(A)$ to act on $x$}\\
+        f(A)x &= QVf(\Lambda)V^*\|x\|e_1 && &&\text{$Q^*v = \|v\|e_1$ (since $x$ is normalized to give  $q_1$ and $Q$ is unitary)} \\
+\end{alignat*}
+Here $Q \subseteq \mathbb{R}^{n \times m}$ is the orthonormal basis for our Krylov subspace $\mathcal{K}_n\left( A, v \right) $. $V \subseteq \mathbb{R}^{m \times m}$ is the eigenvector matrix, which is easily calculated since $T$ is tridiagonal and small relative to $A$. Note that since $A$ is symmetric, $V^* = V^{-1}$, as long as the eigenvectors have been normalized.
+
+Which leads us to our approximation:
+\begin{equation}
+        f(A)x \approx  \|x\| QVf(\Lambda)V^*e_1
+\end{equation} 
+
+\section{Serial Implementation}%
+\label{sec:serial_implementation}
+In order to implement (1), we must.
+
+\begin{itemize}
+        \item Read in/generate graph. The graph is understood to be a sparse graph, and so we must read in/generate the graph into a sparse matrix A.
+        \item Compute Lanczos with respect to a starting vector $x$ and some dimension $n$ for  $\mathcal{K}_n$. Store $Q$ as a full matrix (not in sparse format).
+        \item Perform an eigendecomposition of the tridiagonal $T$. This can be done using LAPACK's SSTEVD routine.
+        \item Apply $f$ to the eigenvalues of $T$ (also known as the Ritz values).
+        \item Perform some matrix multiplication to compute $\|x\|QVf(\Lambda)V^*e_1$. Note that $V^*e_1 = v_{1*}$, the first row of  $V$. Since $f(\Lambda)$ is diagonal we can treat it like a vector, so the computation becomes $\|x\|QV\left(f(\Lambda).*v_{1*}\right)$, where $.*$ denotes elementwise multiplication of vectors. So we need to multiply tall, skinny $Q$ by small, square $V$, and then multiply tall, skinny  $QV$ by the vector $\left(f(\Lambda).*v_{1*}\right)$. Then scale the result by $\|x\|$.
+\end{itemize}
+
+\section{Data Structures}%
+\label{sec:data_structures}
+\subsection{Adjacency Matrix}%
+\label{sub:adjacency_matrix}
+
+
+By virtue of the fact that $a_{ij}$ can only take on values 0 or 1, we can store the adjacency matrix as two arrays: \texttt{unsigned * row, * col}, both of which have dimension \texttt{edge\_count}. Where there is an edge between nodes \texttt{row[i]} and \texttt{col[i]} for all \texttt{i}. We do not need to store the value at index \texttt{(row[i], col[i])} since all of the nonzero entries in our adjacency matrix have value 1. Since we are dealing with an undirected graph we do not need to store the bottom triangular part of the matrix since it is the same as the top (\texttt{row[i] < col[i]} for all  \texttt{i}  ).
+\begin{lstlisting}[language = C++]
+struct adjMatrix {
+      unsigned* row_idx; // dimension edge_count
+      unsigned* col_idx; // dimension edge_count
+      const unsigned edge_count;
+      const unsigned n;
+};
+\end{lstlisting}
+\subsection{Lanczos Decomp}%
+\label{sub:lanczos_decomp}
+It might be nice to be able to keep \texttt{alpha, beta} and \texttt{Q} together just for neatness.  
+\begin{lstlisting}[language = C++]
+struct lanczosDecomp {
+      double* alpha;   // dimension krylov_dim   -- diagonal of T
+      double* beta;    // dimension krylov_dim-1 -- subdiagonal of T
+      double* Q;       // dimension krylov_dim*n -- orthonormal basis for Krylov subspace
+      double* x;       // dimension n            -- starting vector for Krylov subspace
+      const unsigned krylov_dim;
+      const unsigned n;
+};
+\end{lstlisting}
+
+\subsection{Eigendecomposition}%
+\label{sub:eig_decomp}
+Potentially do the same for eigendecomposition:
+\begin{lstlisting}[language = C++]
+struct eigenDecomp {
+      double* V;       // dimension krylov_dim*krylov_dim -- the eigenvectors of T
+      double* lambdas;  // dimension krylov_dim            -- the eigenvalues of T
+};
+\end{lstlisting}
+Note that we don't need $V^{-1}$ since $V^{-1} = V^*$, moreover our algorithm only requires the first column of $V^{-1}$, which is the first row of $V$.
+
+\section{Functions needed}%
+\label{sec:functions_needed}
+\subsection{Read Sparse Matrix from File}%
+\label{sub:read_sparse_matrix_from_file}
+\begin{lstlisting}[language = C++]
+void readGraph(adjMatrix A, FILE * file);
+\end{lstlisting}
+
+
+\subsection{ Lanczos }
+\begin{lstlisting}[language = C++]
+void Lanczos(adjMatrix A, lanczosDecomp D);
+\end{lstlisting}
+\label{sub:Lanczos}
+To populate \texttt{D}'s arrays. Note that \texttt{Q} must be initialized before calling \texttt{Lanczos} with the input vector $x$ normalized as the first column of  \texttt{Q}.
+\subsection{Eigendecomposition}%
+\label{sub:eig}
+
+\begin{lstlisting}[language = C++]
+void eigenDecomp(lanczosDecomp D, eigenDecomp E);
+\end{lstlisting}
+
+\subsection{Apply function}%
+\label{sub:apply_function}
+\begin{lstlisting}[language = C++]
+template <typename F>
+void applyFunction(eigenDecomp E, F func);
+\end{lstlisting}
+This will apply the function to the \texttt{E.lambdas}. The function will be applied in place. Explicit instantiation for templates will be needed.
+\subsection{Multiply out}%
+\label{sub:multiply_out}
+\begin{lstlisting}[language = C++]
+void multOut(lanczosDecomp D, eigenDecomp E);
+\end{lstlisting}
+The approximation to $f(A)x$ will be stored in  \texttt{D.x}. 
+\end{document}

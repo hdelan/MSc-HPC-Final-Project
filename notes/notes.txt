@@ -1,0 +1,15 @@
+We want to compute
+f(A)x 
+where 
+f(A) = expm(A)
+
+We are using an impicit Schur decomposition by Lanczos algorithm. This is used since A is hermitian (since G is an undirected graph)
+
+A = QTQ*  (after Lanczos -- U unitary)
+A =  QV Lambda V*Q*
+f(A) = QVf(\Lambda)V*U*
+f(A)v = U-V_H-f(\Lambda)-V_H*-U*-v
+
+We are using the formula
+
+y \approx norm(x) Q
