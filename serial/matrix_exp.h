@@ -4,27 +4,26 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <vector>
 
 class adjMatrix {
         public:
                 adjMatrix() = delete;
-                adjMatrix(std::string filename) {
-                        std::ifstream f;
-                        f.open(filename);
-                        if (f.fail()) throw std::exception();
-                        
+                adjMatrix(const std::ifstream & f) : idx()} {
                         f >> n >> n >> edge_count;
                         row = new unsigned[edge_count];
                         col = new unsigned[edge_count];
                         for (auto i = 0u; i < edge_count; ++i) {
                                 f >> col[i] >> row[i];
-                                col[i] -= 1;
-                                row[i] -= 1;
+                                col[i] -= 1u;
+                                row[i] -= 1u;
                         }
                 };
+                /*
                 adjMatrix(unsigned N, unsigned edges) : n {N}, edge_count {edges} {
                         std::random_device rd;
                 };
+                */
                 adjMatrix(adjMatrix &) = delete;
                 adjMatrix & operator=(adjMatrix &) = delete;
                 ~adjMatrix() {
@@ -42,8 +41,7 @@ class adjMatrix {
                 };
 
         private:
-                unsigned * row;
-                unsigned * col;
+                std::vector<std::vector<unsigned>> idx;
                 unsigned edge_count;
                 unsigned n;
 };

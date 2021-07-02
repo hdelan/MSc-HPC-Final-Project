@@ -1,14 +1,18 @@
 #include "matrix_exp.h"
+#include <cassert>
+
 
 int main(int argc, char *argv[])
 {       
-        try {
-                adjMatrix A(argv[1]);
-        } catch (std::exception e) {
-                std::cerr << "Reading file failed. Caught: " << e.what();
-        } catch (std::bad_alloc b) {
-                std::cerr << "Allocating space failed. Caught: " << b.what();
+        if (argc != 2) {
+                std::cerr << "Usage: ./adj file.txt\n";
+                exit(EXIT_FAILURE);
         }
+        std::string filename {argv[1]};
+
+        std::ifstream fs;
+        assert (!fs.fail());
+        adjMatrix A(fs);
 
         std::cout << "n: " << A.get_n() << std::endl;
         std::cout << "edges: " << A.get_edges() << std::endl;
