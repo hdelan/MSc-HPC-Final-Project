@@ -21,21 +21,22 @@ class lanczosDecomp {
                 lanczosDecomp(lanczosDecomp &) = delete;
                 lanczosDecomp& operator=(lanczosDecomp &) = delete;
                 ~lanczosDecomp() = default;
-
+        
+                friend class eigenDecomp;
                 friend std::ostream& operator<<(std::ostream & os, const lanczosDecomp & D) {
-                        os << "Alpha: \n";
+                        os << "\nAlpha: \n";
                         auto n {D.Q[0].size()};
                         for (auto j=0u;j<D.krylov_dim;j++){
                                 os << D.alpha.at(j) << " ";
                         }
-                        os << "\nBeta: \n";
+                        os << "\n\nBeta: \n";
                         for (auto j=0u;j<D.krylov_dim-1;j++) {
                                 os << D.beta.at(j) << " ";
                         }
-                        os << "\nQ:\n";
+                        os << "\n\nQ:\n";
                         for (auto j=0u;j<n;j++) {
                                 for (auto k=0u;k<D.krylov_dim;k++) {
-                                        os << D.Q.at(k).at(j) << " ";
+                                        os << D.Q.at(k).at(j) << "\t";
                                 }
                                 os << '\n';
                         }

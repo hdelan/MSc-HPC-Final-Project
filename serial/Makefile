@@ -4,7 +4,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -std=c++17
 LIBS = 
 MAIN = adj
-OBJECTS = adjMatrix.o main.o sparse_mult.o lanczos.o
+OBJECTS = adjMatrix.o main.o sparse_mult.o lanczos.o eigen.o
 
 ########################################################################
 
@@ -21,6 +21,9 @@ main.o: main.cc adjMatrix.h
 	$(CXX) -c $< $(LIBS) $(CXXFLAGS)
 
 lanczos.o: lanczos.cc lanczos.h
+	$(CXX) -c $< $(LIBS) $(CXXFLAGS)
+
+eigen.o: eigen.cc eigen.h
 	$(CXX) -c $< $(LIBS) $(CXXFLAGS)
 
 .PHONY:

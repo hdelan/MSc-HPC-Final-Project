@@ -32,10 +32,8 @@ int main(int argc, char *argv[]){
         A.print_full();
         
         std::vector<double> x(n, 1);
-
-
         
-        unsigned krylov_dim {2};
+        unsigned krylov_dim {3};
         //assert(krylov_dim <= n);
         
         lanczosDecomp lanc(A, krylov_dim, x);
