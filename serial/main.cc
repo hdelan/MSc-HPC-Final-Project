@@ -1,4 +1,5 @@
 #include "adjMatrix.h"
+#include "eigen.h"
 #include "lanczos.h"
 //#include <cassert>
 
