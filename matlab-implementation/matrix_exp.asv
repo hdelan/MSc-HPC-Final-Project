@@ -1,14 +1,19 @@
 %% Setting up
 clear; clc;
-n = 50; E = 70; %idivide(int32(n), 5);
-krylov_dim = 7;
+%n = 50; E = 70; %idivide(int32(n), 5);
+%krylov_dim = 7;
+
+adj = [0 0 1 1 1 ; 0 0 1 0 0 ; 1 1 0 0 0 ; 1 0 0 0 1 ; 1 0 0 1 0];
+n=5;
+E=5;
+krylov_dim=3;
 
 % starting vector
 x = ones(n,1); % x = rand(n,1);
 
 %% Make graph and run Lanczos iteration
 
-adj = make_graph(n, E);
+%adj = make_graph(n, E);
 % plot(graph(adj));
 
 [alpha, beta, Q] = Lanczos(adj, x, krylov_dim);
@@ -47,8 +52,7 @@ display("Norm of error f(A) = exp(A): "+norm(diff));
 [V, lambda] = eig(T);
 
 LHS = LHS; % same as before
-RHS = norm(x)*Q*V*expm(lambda)*V()';
-RHS = RHS(:,1);
+RHS = norm(x)*Q*V*expm(lambda)*V(1,:)';
 
 diff = LHS - RHS;
 display("Norm of error with eig decomp f(A) = exp(A): "+norm(diff));

@@ -6,12 +6,16 @@
 #include <fstream>
 #include <vector>
 
+class eigenDecomp;
+class lanczosDecomp;
+
 class adjMatrix {
         public:
                 adjMatrix() = delete;
                 adjMatrix(const unsigned N, const unsigned edges, std::ifstream & f) :
                         idx(2, std::vector<unsigned>(2*edges)),
                         rows(N, std::vector<unsigned>()),
+                        ans(N),
                         n {N},
                         edge_count {edges}
                         {
@@ -23,6 +27,12 @@ class adjMatrix {
 
                 unsigned get_n() const { return n;};
                 unsigned get_edges() const { return edge_count;};
+                void get_ans() const { 
+                        std::cout << "Answer vector:\n";
+                        for (auto i=0u; i<n; ++i) {
+                                std::cout << ans[i] << '\n';
+                        }
+                };
                 friend std::ostream& operator<<(std::ostream & os, const adjMatrix & A) {
                         for (auto i = 0u; i < A.edge_count*2; ++i) {
                                 os << "(" << A.idx[0][i] << ", " << A.idx[1][i] << ")\n";
@@ -31,12 +41,15 @@ class adjMatrix {
                 };
                 void print_full();
                 template <typename T>
-                friend void sparse_adj_mat_vec_mult(const adjMatrix & A, const std::vector<T> in, std::vector<T> & out);
+                friend void sparse_adj_mat_vec_mult(const adjMatrix &, const std::vector<T>, std::vector<T>&);
+                friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
 
         private:
                 // This will be stored in row-major order
                 std::vector<std::vector<unsigned>> idx;
                 std::vector<std::vector<unsigned>> rows;
+                
+                std::vector<double> ans;
 
                 unsigned n;
                 unsigned edge_count;

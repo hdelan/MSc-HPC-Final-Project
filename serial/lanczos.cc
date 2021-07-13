@@ -1,17 +1,6 @@
 #include "lanczos.h"
 #include "adjMatrix.h"
 
-double norm(const std::vector<double> & v) {
-        double ans {0.0};
-        for (auto it=v.begin();it!=v.end();it++) {
-                ans+=(*it)*(*it);
-        }
-        return sqrt(ans);
-        /*
-           return sqrt(std::inner_product(v.begin(), v.end(), v.begin(), 0));
-           */
-}
-
 void print_a(const double & a) {
         std::cout << a << " ";
 }

@@ -4,6 +4,9 @@
 #include <vector>
 #include <cmath>
 #include <numeric>
+#include <algorithm>
+#include <iostream>
+
 #include "adjMatrix.h"
 
 class lanczosDecomp {
@@ -14,15 +17,17 @@ class lanczosDecomp {
                         beta(krylov-1),
                         Q(krylov, std::vector<double>(A.get_n())),
                         x {starting_vec},
-                        krylov_dim {krylov} 
+                        krylov_dim {krylov},
+                        x_norm {norm(starting_vec)}
                 {
                         decompose(A);
                 };
                 lanczosDecomp(lanczosDecomp &) = delete;
                 lanczosDecomp& operator=(lanczosDecomp &) = delete;
                 ~lanczosDecomp() = default;
-        
+
                 friend class eigenDecomp;
+                friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
                 friend std::ostream& operator<<(std::ostream & os, const lanczosDecomp & D) {
                         os << "\nAlpha: \n";
                         auto n {D.Q[0].size()};
@@ -45,6 +50,15 @@ class lanczosDecomp {
                         return os;
                 };
 
+                double norm(const std::vector<double> & v) {
+                        double norm {0.0};
+                        for (auto it=v.begin();it!=v.end();it++)
+                                norm+=(*it)*(*it);
+                        return std::sqrt(norm);
+                }
+
+
+
 
         private:
                 std::vector<double> alpha;
@@ -53,8 +67,11 @@ class lanczosDecomp {
                 std::vector<double> x;
 
                 unsigned krylov_dim;
+                
+                double x_norm;
 
                 void decompose(const adjMatrix & A);
 
 };
 #endif
+

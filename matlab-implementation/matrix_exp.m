@@ -1,14 +1,19 @@
 %% Setting up
 clear; clc;
-n = 50; E = 70; %idivide(int32(n), 5);
-krylov_dim = 7;
+%n = 50; E = 70; %idivide(int32(n), 5);
+%krylov_dim = 7;
+
+adj = [0 0 1 1 1 ; 0 0 1 0 0 ; 1 1 0 0 0 ; 1 0 0 0 1 ; 1 0 0 1 0];
+n=5;
+E=5;
+krylov_dim=3;
 
 % starting vector
 x = ones(n,1); % x = rand(n,1);
 
 %% Make graph and run Lanczos iteration
 
-adj = make_graph(n, E);
+%adj = make_graph(n, E);
 % plot(graph(adj));
 
 [alpha, beta, Q] = Lanczos(adj, x, krylov_dim);
