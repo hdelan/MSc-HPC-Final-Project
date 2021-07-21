@@ -1,17 +1,6 @@
-#include "eigen.h"
-#include "lanczos.h"
+#include "multiplyOut.h"
 #include "lapacke.h"
 #include "cblas.h"
-
-void print_matrix(unsigned rows, unsigned cols, double * A) {
-        std::cout << "Printing matrix for "<<rows<<" rows and " << cols<< "cols\n";
-        for (auto i=0u; i<rows; ++i) {
-                for (auto j=0u; j<cols; ++j){
-                        std::cout << A[i*cols+j] << " ";
-                }
-                std::cout << '\n';
-        }
-}
 
 void exp_func(double & a) {
         a = std::exp(a);
@@ -66,4 +55,14 @@ void multOut(lanczosDecomp & D, eigenDecomp & E, adjMatrix & A) {
         delete[](Va);
         delete[](QVa);
         
+}
+
+void print_matrix(unsigned rows, unsigned cols, double * A) {
+        std::cout << "Printing matrix for "<<rows<<" rows and " << cols<< "cols\n";
+        for (auto i=0u; i<rows; ++i) {
+                for (auto j=0u; j<cols; ++j){
+                        std::cout << A[i*cols+j] << " ";
+                }
+                std::cout << '\n';
+        }
 }

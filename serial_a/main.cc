@@ -22,31 +22,32 @@ int main(int argc, char *argv[]){
         fs >> n >> n >> edges;
         
         adjMatrix A(n, edges, fs);
-        
+       
         std::cout << "n: " << A.get_n() << '\n';
         std::cout << "krylov dimension: " << krylov_dim << '\n';
         
         //std::cout << "A: \n";
         //A.print_full();
-        
         std::vector<double> x(n, 1);
         
         //assert(krylov_dim <= n);
         
-        lanczosDecomp L(A, krylov_dim, x);
+        lanczosDecomp L(A, krylov_dim, &x[0]);
         //std::cout << L;
+        
         
         eigenDecomp E(L);
         //std::cout << E;
-
+/*        
+        
         multOut(L, E, A);
         
         std::cout << '\n';
 
-        A.get_ans();
+        L.get_ans();
 
         std::cout << '\n';
-        
+        */
         return 0;
 }
 

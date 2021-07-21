@@ -6,34 +6,37 @@ LIBS =
 LAPACKE = -lblas -llapack -llapacke -lm #"-I/usr/local/opt/lapack/include"
 MAIN = adj
 
-SRCDIR = ./lib
+SRCDIR = ./serial/lib
 BUILDDIR = ./build
 
 FILES = adjMatrix.cc \
+       sparse_mult.cc \
        lanczos.cc \
        eigen.cc \
        multiplyOut.cc \
-       sparse_mult.cc \
        helpers.cc
 
 SRCS = $(FILES:%=$(SRCDIR)/%)
 OBJS = $(FILES:%.cc=$(BUILDDIR)/%.o)
-INCS = $(FILES:%.cc=$(SRCDIR)/%.h)
 
-#PROFILE = -pg
+INCLUDES = eigen.h lanczos.h adjMatrix.h
+
+PROFILE = -pg
 ########################################################################
 
-$(MAIN): main.cc $(OBJS) 
-	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(LAPACKE) $(PROFILE) -o $@
-
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cc $(SRCDIR)/%.h
-	$(CXX) $(LIBS) $(CXXFLAGS) $(PROFILE) -c $< -o $@
+all:
+	echo $(OBJS)
+	echo $(SRCS)
 
 .PHONY:
 	clean run
 
 clean:
-	rm $(BUILDDIR)/* $(MAIN) *.out
+	rm $(OBJDIR)*.o $(MAIN)
+
+profile: main
+	prof = true
+	
 
 run: $(MAIN)
-	./adj ../data/file.txt 
+	./adj ../data/file.txt
