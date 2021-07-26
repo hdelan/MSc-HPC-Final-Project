@@ -4,12 +4,16 @@ clear; clc;
 %krylov_dim = 7;
 
 adj = [0 0 1 1 1 ; 0 0 1 0 0 ; 1 1 0 0 0 ; 1 0 0 0 1 ; 1 0 0 1 0];
-n=5;
-E=5;
-krylov_dim=3;
+load NotreDame_yeast;
+adj = Problem.A;
+[n,~] = size(adj);
+E = 2277;
+%E = 5;
+krylov_dim=4;
 
 % starting vector
 x = ones(n,1); % x = rand(n,1);
+
 
 %% Make graph and run Lanczos iteration
 

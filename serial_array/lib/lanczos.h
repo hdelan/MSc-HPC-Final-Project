@@ -13,7 +13,7 @@ class lanczosDecomp
 {
 public:
 lanczosDecomp() = delete;
-lanczosDecomp(adjMatrix &A, const unsigned krylov, double * starting_vec) : krylov_dim{krylov},
+lanczosDecomp(adjMatrix &A, const long unsigned krylov, double * starting_vec) : krylov_dim{krylov},
                                                                                 n {A.get_n()},
                                                                                 alpha(new double[krylov]),
                                                                                 beta(new double[krylov - 1]),
@@ -36,13 +36,15 @@ lanczosDecomp &operator=(lanczosDecomp &) = delete;
         friend class eigenDecomp;
         friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
         friend std::ostream &operator<<(std::ostream &os, const lanczosDecomp &D);
+        
+        void check_ans(const double *) const;
 
         double norm(const double *) const;
-        double inner_prod(const double * const, const double * const, const unsigned) const;
+        double inner_prod(const double * const, const double * const, const long unsigned) const;
 
 private:
-        unsigned krylov_dim;                // Dimension of the krylov subspace
-        unsigned n;                         // Dimension of n
+        long unsigned krylov_dim;                // Dimension of the krylov subspace
+        long unsigned n;                         // Dimension of n
         
         double * alpha;          // The diagonal of tridiag matrix
         double * beta;           // The subdiagonal of tridiag matrix

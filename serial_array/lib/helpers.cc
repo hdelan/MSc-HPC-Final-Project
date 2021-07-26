@@ -1,6 +1,6 @@
 #include "helpers.h"
 
-int parseArguments (int argc, char *argv[], std::string & filename, unsigned & krylov_dim) {
+int parseArguments (int argc, char *argv[], std::string & filename, long unsigned & krylov_dim) {
         int c;
 
         while ((c = getopt (argc, argv, "k:f:")) != -1) {

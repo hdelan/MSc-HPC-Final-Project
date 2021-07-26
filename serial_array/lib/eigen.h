@@ -32,8 +32,8 @@ private:
         double * eigenvalues;
         double * eigenvectors;
 
-        const unsigned n;
-        const unsigned k;
+        const long unsigned n;
+        const long unsigned k;
 
         void decompose(lanczosDecomp &);
 };

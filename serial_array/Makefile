@@ -14,8 +14,8 @@ FILES 		:= adjMatrix.cc \
        			eigen.cc \
        			multiplyOut.cc \
        			sparse_mult.cc \
-       			helpers.cc
-
+       			helpers.cc \
+				make_graph.cc
 
 OBJS		:= $(FILES:%.cc=$(BUILDDIR)/%.o)
 
@@ -26,7 +26,7 @@ PROFILE 	:=
 $(MAIN): main.cc $(OBJS) 
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cc $(SRCDIR)/%.h
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cc #$(SRCDIR)/%.h
 	$(CXX) $(CXXFLAGS) $(OPT) $(PROFILE) -c $< -o $@
 
 .PHONY:
@@ -36,7 +36,11 @@ clean:
 	rm $(BUILDDIR)/* $(MAIN) *.out
 
 run: $(MAIN)
-	./adj ../data/file.txt 
+	./adj ../data/file.txt
+
+test: tests/test.cc $(OBJS)
+	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./test 
 
 prof: PROFILE := -pg
 prof: $(MAIN)

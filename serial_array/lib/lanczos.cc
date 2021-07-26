@@ -4,7 +4,7 @@
 
 void lanczosDecomp::decompose(const adjMatrix &A)
 {
-        unsigned n{A.get_n()}, i{0u};
+        long unsigned n{A.get_n()}, i{0u};
         double * v {new double[n]};
         double * Q_raw(new double [2*n]);
         double * Q_s[2] {Q_raw, &Q_raw[n]};     // Tmp contiguous columns to use before storing
@@ -15,11 +15,17 @@ void lanczosDecomp::decompose(const adjMatrix &A)
         for (auto k=0u;k<n;k++) 
                 Q_s[i][k] = x[k]/x_norm;
 
+        std::cout << "x:\n";
+        for (auto j=0u;j<5;j++) std::cout << Q_s[i][j] << " ";
+        std::cout << '\n';
+
         for (auto j = 0u; j < krylov_dim; j++)
         {
 
                 // v = A*Q(:,j)
                 sparse_adj_mat_vec_mult(A, Q_s[i], v);
+
+                std::cout << v[0] << " " << v[1] << '\n';
 
                 // alpha = v*Q(:,j)
                 alpha[j] = inner_prod(v, Q_s[i], n);
@@ -50,6 +56,11 @@ void lanczosDecomp::decompose(const adjMatrix &A)
 /*
         */
         }
+        std::cout << "\nAlpha: ";
+        for (auto j=0u;j<krylov_dim;j++) std::cout << alpha[j] << " ";
+        std::cout << "\nBeta: ";
+        for (auto j=0u;j<krylov_dim-1;j++) std::cout << beta[j] << " ";
+        std::cout << '\n';
         delete[] v; delete[] Q_raw;
 }
 
@@ -81,7 +92,7 @@ double lanczosDecomp::norm(const double * v) const
         return std::sqrt(norm);
 }
 
-double lanczosDecomp::inner_prod(const double * const v, const double * const w, const unsigned N) const {
+double lanczosDecomp::inner_prod(const double * const v, const double * const w, const long unsigned N) const {
         double ans {0.0};
         for (auto i=0u;i<N;i++) {
                 ans += v[i]*w[i];
@@ -95,4 +106,19 @@ void lanczosDecomp::get_ans() const
         
         for (auto i=0u;i<n;i++) 
                 std::cout << ans[i] << '\n';
+}
+
+
+void lanczosDecomp::check_ans(const double * analytic_ans) const {
+        std::vector<double> diff(n);
+        for (auto i=0u;i<n;i++) {
+                diff[i] = std::abs(ans[i] - analytic_ans[i]);
+        }
+        auto max_it = std::max_element(diff.begin(), diff.end());
+        auto max_idx = std::distance(diff.begin(), max_it);
+        std::cout << "\nMax difference of " << *max_it
+                << " found at index\nlanczos[" << max_idx << "] \t\t= " << ans[max_idx]
+                << "\nanalytic_ans["<<max_idx<<"] \t= "<<analytic_ans[max_idx]<<'\n';
+
+        std::cout << "Total norm of differences: " << norm(&diff[0]) << '\n'; 
 }
