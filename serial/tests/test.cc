@@ -9,10 +9,13 @@
 int main(int argc, char *argv[])
 {
         std::string dir{"../data/NotreDame_yeast/"};
-        std::string filename{dir+"data.mtx"};
-        unsigned krylov_dim{4};
+        std::string filename{dir + "data.mtx"};
+        unsigned krylov_dim{20};
 
         long unsigned n, edges;
+
+        std::cout << "\nComparing the Lanczos based approximation with an analytic answer, using the fact that " <<
+                "\n\tf(A)v = f(lambda)v\nwhen v is an eigenvector and lambda is its corresponding eigenvalue.\n\n";
 
         std::ifstream fs;
         fs.open(filename);
@@ -20,8 +23,6 @@ int main(int argc, char *argv[])
 
         fs >> n >> n >> edges;
 
-        std::cout << n << " " << edges << std::endl;
-        
         assert(n > 0 && edges > 0);
 
         adjMatrix A(n, edges, fs);
@@ -33,14 +34,15 @@ int main(int argc, char *argv[])
                 for (auto i = 0u; i < 6; i++)
                         fs >> eigvecs[i][j];
         fs.close();
-/*
-                std::cout << "Eigvecs:\n";
-        for (auto i=0u;i<5;i++) {
-                for (auto j=0u;j<6;j++) 
+        /*
+        std::cout << "Eigvecs:\n";
+        for (auto i = n - 6; i < n; i++)
+        {
+                for (auto j = 0u; j < 6; j++)
                         std::cout << eigvecs[j][i] << " ";
                 std::cout << '\n';
         }
-*/
+        */
         fs.open(dir + "eigvals.csv");
         double *eigvals{new double[6]};
         for (auto i = 0u; i < 36; i++)
@@ -48,14 +50,15 @@ int main(int argc, char *argv[])
                 double tmp;
                 fs >> tmp;
                 if (i % 6 == i / 6)
-                        eigvals[i%6] = tmp;
+                        eigvals[i % 6] = tmp;
         }
         fs.close();
-
+/*
         std::cout << "Eigenvalues: \n";
-        for (int i=0u;i<6;i++) std::cout << eigvals[i] << " ";
+        for (int i = 0u; i < 6; i++)
+                std::cout << eigvals[i] << " ";
         std::cout << "\n";
-
+*/
         edges = A.get_edges();
         n = A.get_n();
 
@@ -68,21 +71,36 @@ int main(int argc, char *argv[])
                   << A << '\n';
         A.print_full();
         */
-
-       for (auto i=0u;i<6;i++) {
-                //std::vector<double> x(eigvecs[i].begin(), eigvecs[i].end());
-                std::vector<double> x(n, 1);
+/*
+        //std::vector<double> x(n, 1);
+        {
+                std::vector<double> x(eigvecs[0].begin(), eigvecs[0].end());
                 lanczosDecomp L(A, krylov_dim, &x[0]);
                 eigenDecomp E(L);
                 multOut(L, E, A);
-                
+
                 // Getting the analytic answer since exp(A)v=exp(lambda)v when v is an
                 // eigenvector and eigenvectors are orthogonal
-                std::for_each(x.begin(), x.end(), [&](double & a) { a *= std::exp(eigvals[i]);});
+                std::for_each(x.begin(), x.end(), [&](double &a)
+                              { a *= std::exp(eigvals[0]); });
                 L.check_ans(&x[0]);
+                //L.get_ans();
+        }
+        */
+        {
+                int i=0;
+                std::vector<double> x(eigvecs[i].begin(), eigvecs[i].end());
+                lanczosDecomp L(A, krylov_dim, &x[0]);
+                eigenDecomp E(L);
+                multOut(L, E, A);
 
-       }
-
+                // Getting the analytic answer since exp(A)v=exp(lambda)v when v is an
+                // eigenvector and eigenvectors are orthogonal
+                std::for_each(x.begin(), x.end(), [&](double &a)
+                              { a *= std::exp(eigvals[i]); });
+                L.check_ans(&x[0]);
+                //L.get_ans();
+        }
 
         //assert(krylov_dim <= n);
 

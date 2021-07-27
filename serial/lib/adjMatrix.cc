@@ -24,6 +24,7 @@ void adjMatrix::populate_sparse_matrix(std::ifstream &f)
                 col_idx[i] = it->n2;
                 i++;
         }
+        edge_count = edges.size()/2;
 
 }
 

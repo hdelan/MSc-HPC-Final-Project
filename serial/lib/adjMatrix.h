@@ -89,5 +89,7 @@ public:
         friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
         friend void get_raw_upper_matrix(double *, adjMatrix &);
         friend void get_raw_full_matrix(double *, adjMatrix &);
+
+        friend class lanczosDecomp;
 };
 #endif

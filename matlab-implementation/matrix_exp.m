@@ -4,15 +4,14 @@ clear; clc;
 %krylov_dim = 7;
 
 adj = [0 0 1 1 1 ; 0 0 1 0 0 ; 1 1 0 0 0 ; 1 0 0 0 1 ; 1 0 0 1 0];
-load NotreDame_yeast;
-adj = Problem.A;
-[n,~] = size(adj);
-E = 2277;
-%E = 5;
-krylov_dim=4;
+load NotreDame_yeast.mtx;
+adj = read_mat(NotreDame_yeast, 2114);n=2114;E = 2240;
+krylov_dim=2;
+
+[vecs, vals] = eigs(adj);
 
 % starting vector
-x = ones(n,1); % x = rand(n,1);
+x = vecs(:,1); % x = rand(n,1);
 
 
 %% Make graph and run Lanczos iteration
@@ -20,7 +19,7 @@ x = ones(n,1); % x = rand(n,1);
 %adj = make_graph(n, E);
 % plot(graph(adj));
 
-[alpha, beta, Q] = Lanczos(adj, x, krylov_dim);
+[w, alpha, beta, Q] = Lanczos(adj, x, krylov_dim);
 
 %% Turn alpha, beta into T
 T = zeros(krylov_dim, krylov_dim);

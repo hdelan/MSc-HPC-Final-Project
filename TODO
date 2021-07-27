@@ -1,0 +1,27 @@
+TODO
+
+- Parallelize:
+        Lanczos
+                - SPMV
+                - dot product
+                - v -= alpha*Q(:,j)
+                - norm
+        multOut
+                - cuBLAS
+
+
+STEPS:
+        Parallel Lanczos        
+        (Q), (alpha, beta)
+         |    |_________|
+         |         \
+         |          \
+         V           \
+Reorthogonalize(?)    \
+  with TSQR            \
+                        |
+                        V
+                   Eigendecomp (in serial)
+         
+        
+        

@@ -1,4 +1,5 @@
 #include "eigen.h"
+#include <iomanip>
 
 void eigenDecomp::decompose(lanczosDecomp &D)
 {

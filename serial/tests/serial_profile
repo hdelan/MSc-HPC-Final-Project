@@ -1,0 +1,66 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  us/call  us/call  name    
+ 99.53     24.61    24.61                             multOut(lanczosDecomp&, eigenDecomp&, adjMatrix&)
+  0.45     24.72     0.11                             lanczosDecomp::decompose(adjMatrix const&)
+  0.12     24.75     0.03     1000    30.03    30.03  void sparse_adj_mat_vec_mult<double>(adjMatrix const&, double const*, double*)
+  0.00     24.75     0.00    32300     0.00     0.00  std::pair<std::_Rb_tree_iterator<Edge>, bool> std::_Rb_tree<Edge, Edge, std::_Identity<Edge>, std::less<Edge>, std::allocator<Edge> >::_M_insert_unique<Edge>(Edge&&)
+  0.00     24.75     0.00       12     0.00     0.00  eigenDecomp::~eigenDecomp()
+  0.00     24.75     0.00        2     0.00     0.00  _GLOBAL__sub_I__Z8exp_funcRd
+  0.00     24.75     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN11eigenDecomp9decomposeER13lanczosDecomp
+  0.00     24.75     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN13lanczosDecomp9decomposeERK9adjMatrix
+  0.00     24.75     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN9adjMatrix10random_adjEv
+  0.00     24.75     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN9adjMatrix22populate_sparse_matrixERSt14basic_ifstreamIcSt11char_traitsIcEE
+  0.00     24.75     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+
+			Call graph
+
+
+granularity: each sample hit covers 2 byte(s) for 0.04% of 24.75 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     99.4   24.61    0.00                 multOut(lanczosDecomp&, eigenDecomp&, adjMatrix&) [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]      0.6    0.11    0.03                 lanczosDecomp::decompose(adjMatrix const&) [2]
+                0.03    0.00    1000/1000        void sparse_adj_mat_vec_mult<double>(adjMatrix const&, double const*, double*) [3]
+-----------------------------------------------
+                0.03    0.00    1000/1000        lanczosDecomp::decompose(adjMatrix const&) [2]
+[3]      0.1    0.03    0.00    1000         void sparse_adj_mat_vec_mult<double>(adjMatrix const&, double const*, double*) [3]
+-----------------------------------------------
+                0.00    0.00   32300/32300       adjMatrix::populate_sparse_matrix(std::basic_ifstream<char, std::char_traits<char> >&) [28]
+[11]     0.0    0.00    0.00   32300         std::pair<std::_Rb_tree_iterator<Edge>, bool> std::_Rb_tree<Edge, Edge, std::_Identity<Edge>, std::less<Edge>, std::allocator<Edge> >::_M_insert_unique<Edge>(Edge&&) [11]
+-----------------------------------------------
+                                4400             eigenDecomp::~eigenDecomp() [12]
+                0.00    0.00      12/12          adjMatrix::populate_sparse_matrix(std::basic_ifstream<char, std::char_traits<char> >&) [28]
+[12]     0.0    0.00    0.00      12+4400    eigenDecomp::~eigenDecomp() [12]
+                                4400             eigenDecomp::~eigenDecomp() [12]
+-----------------------------------------------
+                0.00    0.00       2/2           __libc_csu_init [43]
+[13]     0.0    0.00    0.00       2         _GLOBAL__sub_I__Z8exp_funcRd [13]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [43]
+[14]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN11eigenDecomp9decomposeER13lanczosDecomp [14]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [43]
+[15]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN13lanczosDecomp9decomposeERK9adjMatrix [15]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [43]
+[16]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN9adjMatrix10random_adjEv [16]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [43]
+[17]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN9adjMatrix22populate_sparse_matrixERSt14basic_ifstreamIcSt11char_traitsIcEE [17]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [43]
+[18]     0.0    0.00    0.00       1         _GLOBAL__sub_I_main [18]
+-----------------------------------------------
+
+Index by function name
+
+  [13] _GLOBAL__sub_I__Z8exp_funcRd [17] _GLOBAL__sub_I__ZN9adjMatrix22populate_sparse_matrixERSt14basic_ifstreamIcSt11char_traitsIcEE [12] eigenDecomp::~eigenDecomp()
+  [14] _GLOBAL__sub_I__ZN11eigenDecomp9decomposeER13lanczosDecomp [18] _GLOBAL__sub_I_main [2] lanczosDecomp::decompose(adjMatrix const&)
+  [15] _GLOBAL__sub_I__ZN13lanczosDecomp9decomposeERK9adjMatrix [3] void sparse_adj_mat_vec_mult<double>(adjMatrix const&, double const*, double*) [11] std::pair<std::_Rb_tree_iterator<Edge>, bool> std::_Rb_tree<Edge, Edge, std::_Identity<Edge>, std::less<Edge>, std::allocator<Edge> >::_M_insert_unique<Edge>(Edge&&)
+  [16] _GLOBAL__sub_I__ZN9adjMatrix10random_adjEv [1] multOut(lanczosDecomp&, eigenDecomp&, adjMatrix&)

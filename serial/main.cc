@@ -13,10 +13,11 @@ int main(int argc, char *argv[])
 
         long unsigned n{100}, edges{40};
         unsigned deg {1};
+        bool verbose {false};
 
         assert(n > 0 && edges > 0 && deg > 0);
 
-        parseArguments(argc, argv, filename, krylov_dim);
+        parseArguments(argc, argv, filename, krylov_dim, verbose);
         adjMatrix A;
 
         char make_matrix{'b'};
@@ -84,7 +85,7 @@ int main(int argc, char *argv[])
 
         std::cout << '\n';
 
-        L.get_ans();
+        if (verbose) L.get_ans();
         std::cout << '\n';
         return 0;
 }

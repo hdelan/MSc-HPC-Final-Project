@@ -4,6 +4,6 @@
 #include <string>
 #include <unistd.h>
 
-int parseArguments(int, char **, std::string &, long unsigned &);
+int parseArguments(int, char **, std::string &, long unsigned &, bool &);
 
 #endif

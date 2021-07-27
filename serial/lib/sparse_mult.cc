@@ -11,7 +11,7 @@
 template <typename T>
 void sparse_adj_mat_vec_mult(const adjMatrix & A, const T * const in, T * const out) {
         for (auto i = 0u; i < A.n; ++i) {
-                out[i] = 0;
+                out[i] = 0.0;
         }
 
         for (auto i = 0u; i < 2*A.edge_count; ++i) {
