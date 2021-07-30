@@ -60,8 +60,6 @@ void lanczosDecomp::decompose()
                         Q[j + k * krylov_dim] = Q_s[i][k];
 
                 i = 1 - i;
-                /*
-        */
         }
         /*
         std::cout << "\nAlpha: ";

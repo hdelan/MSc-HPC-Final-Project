@@ -1,5 +1,5 @@
-#ifndef LANCZOS_H_1238249102
-#define LANCZOS_H_1238249102
+#ifndef LANCZOS_H_CU1238249102
+#define LANCZOS_H_CU1238249102
 
 #include <vector>
 #include <cmath>
@@ -8,6 +8,9 @@
 #include <iostream>
 
 #include "adjMatrix.h"
+
+//#include "linalg.h"
+//#include "SPMV.h"
 
 class lanczosDecomp
 {
@@ -25,6 +28,7 @@ private:
         double x_norm;
 
         void decompose();
+        void cu_decompose();
 public:
 lanczosDecomp() = delete;
 lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double * starting_vec) : A {adj},
@@ -37,9 +41,7 @@ lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double * starting_vec)
                                                                                 x_norm {norm(starting_vec)}
 {
         for (auto i=0u;i<A.n;i++) x[i] = starting_vec[i];
-        //decompose();
-        cu_decompose();
-
+        decompose();
 };
 lanczosDecomp(lanczosDecomp &) = delete;
 lanczosDecomp &operator=(lanczosDecomp &) = delete;
