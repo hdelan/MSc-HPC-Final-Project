@@ -145,11 +145,11 @@ void lanczosDecomp::check_ans(const double *analytic_ans) const
                   << " found at index\n\tlanczos[" << max_idx << "] \t\t\t= " << ans[max_idx]
                   << "\n\tanalytic_ans[" << max_idx << "] \t\t= " << analytic_ans[max_idx] << '\n';
 
-        std::cout << "\nTotal norm of differences\t= " << norm(&diff[0]) << '\n';
-        std::cout << "Relative norm of differences\t= " << norm(&diff[0])/norm(analytic_ans) << '\n';
+        std::cout << "\nTotal norm of differences\t= " << std::setprecision(20) << (&diff[0]) << '\n';
+        std::cout << "Relative norm of differences\t= " << std::setprecision(20)<< norm(&diff[0])/norm(analytic_ans) << '\n';
 }
 
-
+// Doesn't work! (doesn't give better accuracy)
 void lanczosDecomp::reorthog() {
         double * tau {new double [krylov_dim]};
         LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, A.n, krylov_dim, Q, krylov_dim, tau);

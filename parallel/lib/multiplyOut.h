@@ -3,7 +3,7 @@
 
 #include "adjMatrix.h"
 #include "eigen.h"
-#include "lanczos.h"
+#include "cu_lanczos.h"
 
 void print_matrix(unsigned, unsigned, double *);
 void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);

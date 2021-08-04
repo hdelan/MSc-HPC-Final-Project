@@ -1,7 +1,7 @@
 #ifndef EIGEN_H_732234189
 #define EIGEN_H_732234189
 
-#include "lanczos.h"
+#include "cu_lanczos.h"
 #include "adjMatrix.h"
 #include <lapacke.h>
 #include <vector>

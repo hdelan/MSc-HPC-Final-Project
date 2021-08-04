@@ -10,16 +10,16 @@ MAIN 		:= adj
 
 SRCDIR 		:= ./lib
 BUILDDIR 	:= ./build
+TESTDIR 	:= ./tests
 
 FILES 		:= adjMatrix.cc \
-       			eigen.cc \
-       			multiplyOut.cc \
        			sparse_mult.cc \
        			helpers.cc \
 				make_graph.cc \
-       			lanczos.cc 
 
 CUFILES		:= cu_lanczos.cu \
+       			multiplyOut.cu \
+       			eigen.cu \
 				SPMV.cu \
 				linalg.cu
 
@@ -32,10 +32,10 @@ PROFILE 	:=
 $(MAIN): main.cu $(OBJS) 
 	$(NVCXX) $^ $(LIBS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cc #$(SRCDIR)/%.h
-	$(CXX) $(CXXFLAGS) $(OPT) $(PROFILE) -c $< -o $@
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cc $(SRCDIR)/%.h
+	$(NVCXX) $(NVCCFLAGS) $(OPT) $(PROFILE) -c $< -o $@
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.cu #$(SRCDIR)/%.h
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cu $(SRCDIR)/%.h
 	$(NVCXX) $(NVCCFLAGS) $(OPT) $(PROFILE) -c $< -o $@
 
 .PHONY:
@@ -47,9 +47,14 @@ clean:
 run: $(MAIN)
 	./adj ../data/file.txt
 
-test: tests/test.cc $(OBJS)
+test: $(TESTDIR)/test.cc $(OBJS)
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
-	./test 
+	./test
+
+linalg_test: $(TESTDIR)/linalg_test.cu $(BUILDDIR)/linalg.o
+	$(NVCXX) $^ $(LIBS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./linalg_test
+
 
 prof: PROFILE := -pg
 prof: $(MAIN)
