@@ -29,10 +29,11 @@ int main (void)
     cu_linalg_test<float>(n);
     
     std::cout << "\n";
-    
+    /*
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n' << std::setfill(' ');
     std::cout << "DOUBLE PRECISION\n";
     cu_linalg_test<double>(n);
+    */
 
 }
 
@@ -115,7 +116,7 @@ void cu_linalg_test(const unsigned n) {
     
     long unsigned long_n {static_cast<long unsigned>(n)};
     
-    cu_spMV1<T, long unsigned><<<blocks,threads>>>(IA_d, JA_d, long_n, x_d, spMV_ans_d);
+    cu_spMV1<T><<<blocks,threads>>>(IA_d, JA_d, long_n, x_d, spMV_ans_d);
     
     std::cout << "y[0]\t" << gpu_ans_vec[0] << '\n';
     cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T)*n, cudaMemcpyDeviceToHost);
