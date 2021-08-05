@@ -17,7 +17,7 @@ __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
     unsigned i = blockIdx.x*blockSize*2 + tid;
     if (i >= n) return;
     unsigned gridSize = blockSize*2*gridDim.x;
-    extern __shared__ __align__(sizeof(T)) unsigned char sdata_uchar[];
+    extern __shared__ unsigned char sdata_uchar[];
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     
     sdata[tid]=0.0;
@@ -43,7 +43,7 @@ __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
 // Reduce operation, use for 1 block to get a final answer
 template <typename T, unsigned blockSize>
 __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
-    extern __shared__ __align__(sizeof(T)) unsigned char sdata_uchar[];
+    extern __shared__ unsigned char sdata_uchar[];
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     //extern __shared__ T sdata[];
     unsigned tid = threadIdx.x;
@@ -75,7 +75,7 @@ __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
 
 template <typename T, unsigned blockSize>
 __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
-    extern __shared__ __align__(sizeof(T)) unsigned char sdata_uchar[];
+    extern __shared__ unsigned char sdata_uchar[];
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     //extern __shared__ T sdata[];
     unsigned tid = threadIdx.x;
@@ -108,7 +108,7 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
 template <typename T, unsigned blockSize>
 __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
     //extern __shared__ T sdata[];
-    extern __shared__ __align__(sizeof(T)) unsigned char sdata_uchar[];
+    extern __shared__ unsigned char sdata_uchar[];
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     
     unsigned tid = threadIdx.x;
