@@ -9,8 +9,8 @@
 
 #include "adjMatrix.h"
 
-#include "linalg.h"
-#include "SPMV.h"
+#include "cu_linalg.h"
+#include "cu_SPMV.h"
 
 class lanczosDecomp
 {

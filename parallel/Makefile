@@ -20,8 +20,14 @@ FILES 		:= adjMatrix.cc \
 CUFILES		:= cu_lanczos.cu \
        			multiplyOut.cu \
        			eigen.cu \
-				SPMV.cu \
+				cu_SPMV.cu \
 				linalg.cu
+TESTOBJS 	:=  $(BUILDDIR)/cu_linalg.o \
+				$(BUILDDIR)/cu_SPMV.o \
+				$(BUILDDIR)/SPMV.o \
+				$(BUILDDIR)/helpers.o \
+				$(BUILDDIR)/adjMatrix.o \
+				$(BUILDDIR)/make_graph.o \
 
 OBJS		:= $(FILES:%.cc=$(BUILDDIR)/%.o) $(CUFILES:%.cu=$(BUILDDIR)/%.o) 
 
@@ -51,7 +57,7 @@ test: $(TESTDIR)/test.cc $(OBJS)
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
 	./test
 
-linalg_test: $(TESTDIR)/linalg_test.cu $(BUILDDIR)/linalg.o
+linalg_test: $(TESTDIR)/linalg_test.cu $(TESTOBJS)
 	$(NVCXX) $^ $(LIBS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
 	./linalg_test
 

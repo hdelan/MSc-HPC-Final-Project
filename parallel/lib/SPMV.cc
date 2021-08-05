@@ -1,5 +1,4 @@
-#include "sparse_mult.h"
-
+#include "SPMV.h"
 
 /* --------------------------------------------------------------------------*/
 /**
@@ -20,5 +19,5 @@ void spMV(const adjMatrix & A, const T * const in, T * const out) {
         }
 }
  
-template void spMV(const adjMatrix & A, const double * in, double * const out);
-template void spMV(const adjMatrix & A, const float * in, float * const out);
+template void spMV<double>(const adjMatrix & A, const double * in, double * const out);
+template void spMV<float>(const adjMatrix & A, const float * in, float * const out);

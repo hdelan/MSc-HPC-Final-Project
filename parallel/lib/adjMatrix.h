@@ -90,6 +90,8 @@ public:
         friend std::ostream &operator<<(std::ostream &, const adjMatrix &);
         friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
         friend void lanczos_gpu(adjMatrix &);
+        template <typename T>
+        friend void cu_linalg_test(const unsigned n);
 
         friend class lanczosDecomp;
 };

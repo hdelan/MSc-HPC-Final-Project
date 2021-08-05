@@ -1,6 +1,4 @@
 #include "lanczos.h"
-#include "linalg.h"
-#include "SPMV.h"
 
 void lanczosDecomp::cu_decompose()
 {

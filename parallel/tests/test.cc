@@ -80,21 +80,6 @@ int main(int argc, char *argv[])
         A.print_full();
         */
 /*
-        //std::vector<double> x(n, 1);
-        {
-                std::vector<double> x(eigvecs[0].begin(), eigvecs[0].end());
-                lanczosDecomp L(A, krylov_dim, &x[0]);
-                eigenDecomp E(L);
-                multOut(L, E, A);
-
-                // Getting the analytic answer since exp(A)v=exp(lambda)v when v is an
-                // eigenvector and eigenvectors are orthogonal
-                std::for_each(x.begin(), x.end(), [&](double &a)
-                              { a *= std::exp(eigvals[0]); });
-                L.check_ans(&x[0]);
-                //L.get_ans();
-        }
-        */
         {
                 int i=0;
                 std::vector<double> x(eigvecs[i].begin(), eigvecs[i].end());
