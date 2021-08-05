@@ -91,7 +91,7 @@ public:
         friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
         friend void lanczos_gpu(adjMatrix &);
         template <typename T>
-        friend void cu_linalg_test(const unsigned n);
+        friend void cu_linalg_test(const unsigned n, adjMatrix &);
 
         friend class lanczosDecomp;
 };
