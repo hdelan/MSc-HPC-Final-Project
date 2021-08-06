@@ -37,8 +37,7 @@ lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double * starting_vec)
                                                                                 x_norm {norm(starting_vec)}
 {
         for (auto i=0u;i<A.n;i++) x[i] = starting_vec[i];
-        //decompose();
-        cu_decompose();
+        decompose();
 
 };
 lanczosDecomp(lanczosDecomp &) = delete;
