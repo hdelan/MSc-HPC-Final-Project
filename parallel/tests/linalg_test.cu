@@ -67,7 +67,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
               << std::setfill(' ');
-    std::cout << "\t\tCUDA\t\tSerial\t\tRelative Error\tSpeedup\n";
+    std::cout << "\t\tCUDA\t\tSerial\t\tRelative Error\t\tSpeedup\n";
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
               << std::setfill(' ');
 
@@ -106,7 +106,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         std::cout << "Inner product: \t" << ans
                   << "\t\t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t" << speedup << "\n\n";
+                  << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
     {
         cudaEvent_t computeFloatGpuStart1, computeFloatGpuEnd1;
@@ -134,7 +134,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         std::cout << "Norm squared: \t" << ans
                   << "\t\t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t" << speedup << "\n\n";
+                  << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
     {
         cudaEvent_t computeFloatGpuStart1, computeFloatGpuEnd1;
@@ -162,7 +162,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         std::cout << "Reduce: \t" << ans
                   << "\t\t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t" << speedup << "\n\n";
+                  << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
     {
         cudaMalloc((void **)&IA_d, sizeof(long unsigned) * (n + 1));
@@ -204,7 +204,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         std::cout << "SPMV: \t\t" << ans
                   << "\t\t" << serial_ans << "\t\t"
-                  << relative_error / serial_ans << "\t\t" << speedup << "\n\n";
+                  << relative_error / serial_ans << "\t\t\t" << speedup << "\n\n";
     }
 
     cudaFree(x_d);
