@@ -31,9 +31,9 @@ __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
         i += gridSize;
     }
     __syncthreads();
-    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[i+256]; __syncthreads(); }
-    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[i+128]; __syncthreads(); }
-    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[i+64]; __syncthreads(); }
+    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
+    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
+    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
 
     //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
@@ -64,9 +64,9 @@ __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
 
     __syncthreads();
 
-    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[i+256]; __syncthreads(); }
-    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[i+128]; __syncthreads(); }
-    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[i+64]; __syncthreads(); }
+    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
+    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
+    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
 
     //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
@@ -96,9 +96,9 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
     
     __syncthreads();
 
-    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[i+256]; __syncthreads(); }
-    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[i+128]; __syncthreads(); }
-    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[i+64]; __syncthreads(); }
+    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
+    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
+    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
 
     //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
@@ -128,9 +128,9 @@ __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
     }
     __syncthreads();
 
-    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[i+256]; __syncthreads(); }
-    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[i+128]; __syncthreads(); }
-    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[i+64]; __syncthreads(); }
+    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
+    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
+    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
 
     if (tid < 32) warpReduce<T, blockSize>(sdata, tid);
     if (tid == 0) ans[blockIdx.x] = sdata[0];
