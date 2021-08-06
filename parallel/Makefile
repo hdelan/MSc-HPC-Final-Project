@@ -1,7 +1,7 @@
 SHELL 		:= /bin/bash
 CXX 		:= g++
 NVCXX 		:= nvcc
-NVCCFLAGS 	:= --use_fast_math -arch=sm_35 -Wno-deprecated-gpu-targets
+NVCCFLAGS 	:= --use_fast_math -Wno-deprecated-gpu-targets #-arch=sm_35 
 CXXFLAGS 	:= -Wall -Wextra -Wno-unused-parameter -std=c++17
 LIBS 	 	:= -lblas -llapack -llapacke -lm #"-I/usr/local/opt/lapack/include"
 OPT			:= -O3
@@ -45,7 +45,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cu $(SRCDIR)/%.h
 	$(NVCXX) $(NVCCFLAGS) $(OPT) $(PROFILE) -c $< -o $@
 
 .PHONY:
-	clean run prof
+	clean run 
 
 clean:
 	rm $(BUILDDIR)/* $(MAIN) *.out 
@@ -53,16 +53,5 @@ clean:
 run: $(MAIN)
 	./adj ../data/file.txt
 
-test: $(TESTDIR)/test.cc $(OBJS)
-	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
-	./test
-
 linalg_test: $(TESTDIR)/linalg_test.cu $(TESTOBJS)
 	$(NVCXX) $^ $(LIBS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
-	./linalg_test
-
-
-prof: PROFILE := -pg
-prof: $(MAIN)
-	./adj -e 10000000 -n 1000000 -k 1000
-	gprof -b ./adj > tests/serial_profile
