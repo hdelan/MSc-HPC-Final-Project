@@ -22,20 +22,16 @@ __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
     
     sdata[tid]=0.0;
 
-    while (i<n-blockSize) {
+    while (i+blockSize<n) {
         sdata[tid] += a[i]*b[i]+a[i+blockSize]*b[i+blockSize];
         i += gridSize;
     }
-    while (i<n) {
-        sdata[tid] += a[i]*b[i];
-        i += gridSize;
-    }
+    if (i<n) sdata[tid] += a[i]*b[i];
     __syncthreads();
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
     if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
     if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
 
-    //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
     if (tid == 0) ans[blockIdx.x] = sdata[0];
 }
@@ -47,23 +43,20 @@ __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     //extern __shared__ T sdata[];
     unsigned tid = threadIdx.x;
-    unsigned i = blockIdx.x*blockSize*2 + tid;
+    int i = blockIdx.x*blockSize*2 + tid;
     if (i >= n) return;
     unsigned gridSize = blockSize*2*gridDim.x;
+
     
     sdata[tid]=0.0;
 
-    while (i<n-blockSize) {
+    while (i+blockSize<n) {
         sdata[tid] += a[i]+a[i+blockSize];
         i += gridSize;
     }
-    while (i<n) {
-        sdata[tid] += a[i];
-        i += gridSize;
-    }
+    if (i<n) sdata[tid] += a[i];
 
     __syncthreads();
-
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
     if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
     if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
@@ -79,7 +72,7 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     //extern __shared__ T sdata[];
     unsigned tid = threadIdx.x;
-    unsigned i = blockIdx.x*blockSize*2 + tid;
+    int i = blockIdx.x*blockSize*2 + tid;
     if (i >= n) return;
     unsigned gridSize = blockSize*2*gridDim.x;
     
@@ -89,10 +82,7 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
         sdata[tid] += a[i]+a[i+blockSize];
         i += gridSize;
     }
-    while (i < n) { 
-        sdata[tid] += a[i]+a[i+blockSize];
-        i += gridSize;
-    }
+    if (i < n) sdata[tid] += a[i]+a[i+blockSize];
     
     __syncthreads();
 
@@ -122,10 +112,8 @@ __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
         sdata[tid] += a[i]*a[i]+a[i+blockSize]*a[i+blockSize];
         i += gridSize;
     }
-    while (i<n) {
-        sdata[tid] += a[i]*a[i];
-        i += gridSize;
-    }
+    if (i<n) sdata[tid] += a[i]*a[i];
+    
     __syncthreads();
 
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }

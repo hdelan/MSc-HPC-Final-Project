@@ -13,7 +13,7 @@
 
 #include <cuda_profiler_api.h>
 
-#define BLOCKSIZE 128
+#define BLOCKSIZE 64
 #define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
@@ -87,7 +87,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         cudaEventCreate(&computeFloatGpuEnd1);
         cudaEventRecord(computeFloatGpuStart1, 0);
 
-        cu_dot_prod<T, BLOCKSIZE><<<half_blocks, threads, block_size*4* sizeof(T)>>>(x_d, y_d, n, tmp_d);
+        cu_dot_prod<T, BLOCKSIZE><<<half_blocks, threads, block_size*sizeof(T)>>>(x_d, y_d, n, tmp_d);
         cu_reduce<T, BLOCKSIZE><<<one_block, threads, num_blocks * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
 
         cudaEventRecord(computeFloatGpuEnd1, 0);

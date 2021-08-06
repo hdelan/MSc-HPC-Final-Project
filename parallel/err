@@ -1,0 +1,807 @@
+========= CUDA-MEMCHECK
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (63,0,0) in block (0,0,0)
+=========     Address 0x000001fc is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (62,0,0) in block (0,0,0)
+=========     Address 0x000001f8 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (61,0,0) in block (0,0,0)
+=========     Address 0x000001f4 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (60,0,0) in block (0,0,0)
+=========     Address 0x000001f0 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (59,0,0) in block (0,0,0)
+=========     Address 0x000001ec is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (58,0,0) in block (0,0,0)
+=========     Address 0x000001e8 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (57,0,0) in block (0,0,0)
+=========     Address 0x000001e4 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (56,0,0) in block (0,0,0)
+=========     Address 0x000001e0 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (55,0,0) in block (0,0,0)
+=========     Address 0x000001dc is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (54,0,0) in block (0,0,0)
+=========     Address 0x000001d8 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (53,0,0) in block (0,0,0)
+=========     Address 0x000001d4 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (52,0,0) in block (0,0,0)
+=========     Address 0x000001d0 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (51,0,0) in block (0,0,0)
+=========     Address 0x000001cc is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (50,0,0) in block (0,0,0)
+=========     Address 0x000001c8 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (49,0,0) in block (0,0,0)
+=========     Address 0x000001c4 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (48,0,0) in block (0,0,0)
+=========     Address 0x000001c0 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (47,0,0) in block (0,0,0)
+=========     Address 0x000001bc is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (46,0,0) in block (0,0,0)
+=========     Address 0x000001b8 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (45,0,0) in block (0,0,0)
+=========     Address 0x000001b4 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (44,0,0) in block (0,0,0)
+=========     Address 0x000001b0 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (43,0,0) in block (0,0,0)
+=========     Address 0x000001ac is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (42,0,0) in block (0,0,0)
+=========     Address 0x000001a8 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (41,0,0) in block (0,0,0)
+=========     Address 0x000001a4 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (40,0,0) in block (0,0,0)
+=========     Address 0x000001a0 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (39,0,0) in block (0,0,0)
+=========     Address 0x0000019c is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (38,0,0) in block (0,0,0)
+=========     Address 0x00000198 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (37,0,0) in block (0,0,0)
+=========     Address 0x00000194 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (36,0,0) in block (0,0,0)
+=========     Address 0x00000190 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (35,0,0) in block (0,0,0)
+=========     Address 0x0000018c is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (34,0,0) in block (0,0,0)
+=========     Address 0x00000188 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (33,0,0) in block (0,0,0)
+=========     Address 0x00000184 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Invalid __shared__ read of size 4
+=========     at 0x00000228 in void cu_reduce<float, unsigned int=128>(float*, unsigned int, float*)
+=========     by thread (32,0,0) in block (0,0,0)
+=========     Address 0x00000180 is out of bounds
+=========     Saved host backtrace up to driver entry point at kernel launch time
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 (cuLaunchKernel + 0x2b8) [0x2235d8]
+=========     Host Frame:./linalg_test [0x1a82b]
+=========     Host Frame:./linalg_test [0x672e0]
+=========     Host Frame:./linalg_test [0xec9a]
+=========     Host Frame:./linalg_test [0xbc6c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventSynchronize.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4e1a8]
+=========     Host Frame:./linalg_test [0xbc8c]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventElapsedTime.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4e4c0]
+=========     Host Frame:./linalg_test [0xbca0]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMemcpy.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x62bed]
+=========     Host Frame:./linalg_test [0xbcd7]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe51]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnuTime elapsed for build random adjacency matrix with n = 10000 edges = 1000000: 2.71622 seconds
+
+
+Testing CUDA vs serial execution of linalg functions for n = 10000
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SINGLE PRECISION
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		CUDA		Serial		Relative Error		Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Inner product: 	4.26643e+34		2491.39		-1.71247e+31		8.10936e+38
+
+CUDA error: unspecified launch failure
+/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe5b]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe62]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe69]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe73]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe7d]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xbe84]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaGetLastError.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4a0d4]
+=========     Host Frame:./linalg_test [0xbe89]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaProfilerStop.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x69bf7]
+=========     Host Frame:./linalg_test [0xbeca]
+=========     Host Frame:./linalg_test [0x8f5f]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMalloc.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x50b12]
+=========     Host Frame:./linalg_test [0xb280]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMalloc.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x50b12]
+=========     Host Frame:./linalg_test [0xb28d]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMalloc.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x50b12]
+=========     Host Frame:./linalg_test [0xb2a2]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMalloc.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x50b12]
+=========     Host Frame:./linalg_test [0xb2b1]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMemcpy.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x62bed]
+=========     Host Frame:./linalg_test [0xb2cb]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMemcpy.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x62bed]
+=========     Host Frame:./linalg_test [0xb2e5]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventCreate.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4da08]
+=========     Host Frame:./linalg_test [0xb2ef]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventCreate.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4da08]
+=========     Host Frame:./linalg_test [0xb2f9]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventRecord.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x66867]
+=========     Host Frame:./linalg_test [0xb305]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaLaunchKernel.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x6731f]
+=========     Host Frame:./linalg_test [0x1299b]
+=========     Host Frame:./linalg_test [0xb349]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaLaunchKernel.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x6731f]
+=========     Host Frame:./linalg_test [0x12a7a]
+=========     Host Frame:./linalg_test [0xb386]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventRecord.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x66867]
+=========     Host Frame:./linalg_test [0xb392]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventSynchronize.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4e1a8]
+=========     Host Frame:./linalg_test [0xb39c]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventSynchronize.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4e1a8]
+=========     Host Frame:./linalg_test [0xb3a6]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaEventElapsedTime.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4e4c0]
+=========     Host Frame:./linalg_test [0xb3ba]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaMemcpy.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x62bed]
+=========     Host Frame:./linalg_test [0xb3f1]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5c9]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5d3]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5da]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5e1]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5eb]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver ent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DOUBLE PRECISION
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		CUDA		Serial		Relative Error		Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Inner product: 	4.66531e-310		2490.16		1		0.02
+
+CUDA error: unspecified launch failure
+ry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5f5]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaFree.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x51175]
+=========     Host Frame:./linalg_test [0xb5fc]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaGetLastError.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x4a0d4]
+=========     Host Frame:./linalg_test [0xb601]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= Program hit cudaErrorLaunchFailure (error 719) due to "unspecified launch failure" on CUDA API call to cudaProfilerStop.
+=========     Saved host backtrace up to driver entry point at error
+=========     Host Frame:/lib/x86_64-linux-gnu/libcuda.so.1 [0x361cc3]
+=========     Host Frame:./linalg_test [0x69bf7]
+=========     Host Frame:./linalg_test [0xb642]
+=========     Host Frame:./linalg_test [0x8fcc]
+=========     Host Frame:/lib/x86_64-linux-gnu/libc.so.6 (__libc_start_main + 0xd5) [0x28565]
+=========     Host Frame:./linalg_test [0xaabe]
+=========
+========= ERROR SUMMARY: 69 errors
