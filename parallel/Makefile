@@ -13,15 +13,15 @@ BUILDDIR 	:= ./build
 TESTDIR 	:= ./tests
 
 FILES 		:= adjMatrix.cc \
-       			sparse_mult.cc \
        			helpers.cc \
-				make_graph.cc \
+				make_graph.cc
 
 CUFILES		:= cu_lanczos.cu \
-       			multiplyOut.cu \
-       			eigen.cu \
 				cu_SPMV.cu \
-				linalg.cu
+				cu_linalg.cu \
+       			multiplyOut.cu \
+       			eigen.cu 
+
 TESTOBJS 	:=  $(BUILDDIR)/cu_linalg.o \
 				$(BUILDDIR)/cu_SPMV.o \
 				$(BUILDDIR)/SPMV.o \
@@ -51,7 +51,7 @@ clean:
 	rm $(BUILDDIR)/* $(MAIN) *.out 
 
 run: $(MAIN)
-	./adj ../data/file.txt
+	./adj 
 
 linalg_test: $(TESTDIR)/linalg_test.cu $(TESTOBJS)
 	$(NVCXX) $^ $(LIBS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@

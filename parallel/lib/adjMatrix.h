@@ -92,6 +92,8 @@ public:
         friend void lanczos_gpu(adjMatrix &);
         template <typename T>
         friend void cu_linalg_test(const unsigned n, adjMatrix &);
+        template <typename T>
+        friend void get_blockrows(adjMatrix &, const unsigned, long unsigned *, long unsigned &);
 
         friend class lanczosDecomp;
 };

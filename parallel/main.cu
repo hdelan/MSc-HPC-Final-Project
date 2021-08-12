@@ -2,17 +2,18 @@
 #include "lib/eigen.h"
 #include "lib/lanczos.h"
 #include "lib/helpers.h"
-#include "lib/sparse_mult.h"
-#include "lib/multiplyOut.h"
-#include "lib/linalg.h"
 #include "lib/SPMV.h"
+#include "lib/multiplyOut.h"
+#include "lib/cu_linalg.h"
+#include "lib/cu_SPMV.h"
+
 #include <iomanip>
 
 int main(int argc, char *argv[])
 {
 
         std::string filename{"../data/file.txt"};
-        long unsigned krylov_dim{10};
+        long unsigned krylov_dim{1};
 
         long unsigned n{100}, edges{40};
         long unsigned deg {0};
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
         {
                 std::ifstream fs;
                 fs.open(filename);
-                //assert (!fs.fail());
+                assert (!fs.fail() && "File opening failed\n");
 
                 fs >> n >> n >> edges;
 
@@ -81,6 +82,8 @@ int main(int argc, char *argv[])
         //assert(krylov_dim <= n);
 
         lanczosDecomp L(A, krylov_dim, &x[0]);
+        
+        /*
         //std::cout << L;
         eigenDecomp E(L);
         //std::cout << E;
@@ -88,7 +91,8 @@ int main(int argc, char *argv[])
 
         std::cout << '\n';
 
-        if (verbose) L.get_ans();
+        //if (verbose) L.get_ans();
         std::cout << '\n';
+        */
         return 0;
 }
