@@ -13,7 +13,7 @@
 
 #include <cuda_profiler_api.h>
 
-#define BLOCKSIZE 4
+#define BLOCKSIZE 32
 #define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
@@ -25,7 +25,7 @@ float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end);
 
 int main(void)
 {
-    unsigned n{5'000};
+    unsigned n{50'000};
 
     long unsigned edges{n * 100};
     timeval start, end;
@@ -304,6 +304,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
     }
     /**************SPMV3*********/
     // The numerics are currently not working on this. Just included to get timings
+    /*
     {
         std::vector<T> gpu_ans_vec(n);
         std::vector<long unsigned> blockrows(n);
@@ -342,7 +343,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << relative_error / serial_ans << "\t\t\t" << speedup << "\n\n";
 
         cudaFree(tmp_d);
-    }
+    }*/
 
     cudaFree(x_d);
     cudaFree(y_d);

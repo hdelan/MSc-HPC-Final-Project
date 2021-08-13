@@ -17,10 +17,12 @@ void lanczosDecomp::cu_decompose()
 
     double *x_normed{new double[n]};
     double x_norm = norm(x);
+
+    /*
     std::cout << "x\n";
     for (auto k = 0u; k < n; k++)
         std::cout << x[k] << '\n';
-
+*/
 
     for (auto k = 0u; k < n; k++)
         x_normed[k] = x[k] / x_norm;
@@ -43,7 +45,6 @@ void lanczosDecomp::cu_decompose()
 
     int i{0};
 
-    std::cout << "1\n";
     for (auto k = 0u; k < krylov_dim; k++)
     {
         std::vector<double> tmp_vec(n);
@@ -51,7 +52,8 @@ void lanczosDecomp::cu_decompose()
 
         // v = A*Q(:,j)
         cu_spMV1<double, unsigned long><<<blocks, threads>>>(IA_d, JA_d, n, Q_d_ptr[i], v_d);
-
+        
+        /*
         cudaMemcpy(&tmp2[0], &IA_d[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
         std::cout << "IA: \n";
         std::for_each(tmp2.begin(), tmp2.end(), [](long unsigned a)
@@ -64,7 +66,7 @@ void lanczosDecomp::cu_decompose()
         std::cout << "Q_s: \n";
         std::for_each(tmp_vec.begin(), tmp_vec.end(), [](double a)
                       { std::cout << a << '\n'; });
-
+*/
         // alpha = v*Q(:,j)
         
         if (num_blocks==1) { 
@@ -82,11 +84,12 @@ void lanczosDecomp::cu_decompose()
 
         // v = v - alpha*Q(:,j)
         cu_dpax<double><<<blocks, threads>>>(v_d, &alpha_d[k], Q_d_ptr[i], n);
+        /*
         cudaMemcpy(&tmp_vec[0], &v_d[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
         std::cout << "v -= alpha*Q_s: \n";
         std::for_each(tmp_vec.begin(), tmp_vec.end(), [](double a)
                       { std::cout << a << '\n'; });
-
+*/
         if (k > 0)
         {
             // v = v - beta*Q(:,j-1)
@@ -115,7 +118,7 @@ void lanczosDecomp::cu_decompose()
     }
     cudaMemcpy(alpha, alpha_d, sizeof(double) * krylov_dim, cudaMemcpyDeviceToHost);
     cudaMemcpy(beta, beta_d, sizeof(double) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
-
+/*
     std::cout << "Q:\n";
     for (int i=0;i<n;i++) {
         for (int j=0;j<krylov_dim;j++)
@@ -129,7 +132,7 @@ void lanczosDecomp::cu_decompose()
     std::cout << "\n\nBeta:\n";
     for (int i=0;i<krylov_dim-1;i++) std::cout << beta[i] << '\t';
     std::cout << "\n\n";
-
+*/
 
     cudaFree(IA_d);
     cudaFree(JA_d);
@@ -147,4 +150,156 @@ void lanczosDecomp::get_ans() const
 
         for (auto i = 0u; i < A.n; i++)
                 std::cout << std::setprecision(20) << ans[i] << '\n';
+}
+
+void lanczosDecomp::decompose()
+{
+        long unsigned n{A.get_n()}, i{0u};
+        double *v{new double[n]};
+        double *Q_raw(new double[2 * n]);
+        double *Q_s[2]{Q_raw, &Q_raw[n]}; // Tmp contiguous columns to use before storing
+                                          // in row-major matrix
+/*
+        std::cout << "A first edges: \n";
+        for (auto j=0u;j<10;j++) 
+        std::cout << A.row_idx[j] << " " << A.col_idx[j] << '\n';
+        
+        std::cout << "A last edges: \n";
+        for (auto j=2*A.edge_count-10;j<2*A.edge_count;j++) 
+        std::cout << A.row_idx[j] << " " << A.col_idx[j] << '\n';
+  */      
+        
+        double x_norm = norm(x);
+
+        for (auto k = 0u; k < n; k++)
+                Q_s[i][k] = x[k] / x_norm;
+        
+        for (auto j = 0u; j < krylov_dim; j++)
+        {
+
+                // v = A*Q(:,j)
+                spMV(A, Q_s[i], v);
+                
+                // alpha = v*Q(:,j)
+                alpha[j] = inner_prod(v, Q_s[i], n);
+
+                // v = v - alpha*Q(:,j)
+                for (auto k = 0u; k < n; k++)
+                        v[k] -= alpha[j] * Q_s[i][k];
+
+                if (j > 0)
+                {
+                        // v = v - beta*Q(:,j-1)
+                        for (auto k = 0u; k < n; k++)
+                                v[k] -= beta[j - 1] * Q_s[1 - i][k];
+                }
+
+                if (j < krylov_dim - 1)
+                {
+                        beta[j] = norm(v);
+                        for (auto k = 0u; k < n; k++)
+                                Q_s[1 - i][k] = v[k] / beta[j];
+                }
+
+                // Copying the Q_s column into the Q matrix (implemented as a 1d row maj vector)
+                for (auto k = 0u; k < n; k++)
+                        Q[j + k * krylov_dim] = Q_s[i][k];
+
+                i = 1 - i;
+        }
+        /*
+        std::cout << "\nAlpha: ";
+        for (auto j = 0u; j < krylov_dim; j++)
+                std::cout << alpha[j] << " ";
+        std::cout << "\nBeta: ";
+        for (auto j = 0u; j < krylov_dim - 1; j++)
+                std::cout << beta[j] << " ";
+        std::cout << '\n';
+        std::cout << '\n';
+*/
+/* PRINT OUT Q
+        for (auto j = 0u; j < n; j++)
+        {
+                for (auto k = 0u; k < krylov_dim; k++)
+                        std::cout << std::setprecision(20) << Q[k + j * krylov_dim] << " ";
+                std::cout << '\n';
+        }
+*/
+        delete[] v;
+        delete[] Q_raw;
+}
+
+std::ostream &operator<<(std::ostream &os, const lanczosDecomp &D)
+{
+        auto n {D.A.get_n()};
+        os << "\nAlpha: \n";
+        for (auto i = 0u; i < n; i++)
+                os << D.alpha[i] << " ";
+
+        os << "\n\nBeta: \n";
+        for (auto i = 0u; i < n - 1; i++)
+                os << D.beta[i] << " ";
+
+        os << "\n\nQ:\n";
+        for (auto i = 0u; i < n - 1; i++)
+        {
+                os << D.Q[i] << " ";
+                if (i % D.krylov_dim == D.krylov_dim - 1)
+                        os << '\n';
+        }
+
+        os << '\n';
+        return os;
+}
+
+void lanczosDecomp::check_ans(const double *analytic_ans) const
+{
+        std::vector<double> diff(A.n);
+        for (auto i = 0u; i < A.n; i++)
+        {
+                diff[i] = std::abs(ans[i] - analytic_ans[i]);
+        }
+        auto max_it = std::max_element(diff.begin(), diff.end());
+        auto max_idx = std::distance(diff.begin(), max_it);
+        std::cout << "\nMax difference of " << *max_it
+                  << " found at index\n\tlanczos[" << max_idx << "] \t\t\t= " << ans[max_idx]
+                  << "\n\tanalytic_ans[" << max_idx << "] \t\t= " << analytic_ans[max_idx] << '\n';
+
+        std::cout << "\nTotal norm of differences\t= " << std::setprecision(20) << (&diff[0]) << '\n';
+        std::cout << "Relative norm of differences\t= " << std::setprecision(20)<< norm(&diff[0])/norm(analytic_ans) << '\n';
+}
+
+void lanczosDecomp::check_ans(lanczosDecomp & L) const
+{
+        std::vector<double> diff(A.n);
+        for (auto i = 0u; i < A.n; i++)
+        {
+                diff[i] = std::abs(ans[i] - L.ans[i]);
+        }
+        auto max_it = std::max_element(diff.begin(), diff.end());
+        auto max_idx = std::distance(diff.begin(), max_it);
+        std::cout << "\nMax difference of " << *max_it
+                  << " found at index\n\tserial_ans[" << max_idx << "] \t\t\t= " << ans[max_idx]
+                  << "\n\tcuda_ans[" << max_idx << "]   \t\t= " << L.ans[max_idx] << '\n';
+
+        std::cout << "\nTotal norm of differences\t= " << std::setprecision(20) << norm(&diff[0]) << '\n';
+        std::cout << "Relative norm of differences\t= " << std::setprecision(20)<< norm(&diff[0])/norm(L.ans) << '\n';
+}
+/*
+// Doesn't work! (doesn't give better accuracy)
+void lanczosDecomp::reorthog() {
+        double * tau {new double [krylov_dim]};
+        LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, A.n, krylov_dim, Q, krylov_dim, tau);
+        LAPACKE_dorgqr(LAPACK_ROW_MAJOR, A.n, krylov_dim, krylov_dim, Q, krylov_dim, tau);
+        delete[] tau;
+}
+*/
+double lanczosDecomp::inner_prod(const double *const v, const double *const w, const long unsigned N) const
+{
+        double ans{0.0};
+        for (auto i = 0u; i < N; i++)
+        {
+                ans += v[i] * w[i];
+        }
+        return ans;
 }

@@ -54,9 +54,13 @@ public:
         {
                 generate_sparse_matrix('r');    // Creates naive random graph
         }
-
+        
+        // Only a shallow copy is needed
+        adjMatrix(adjMatrix & A) : row_offset{A.row_offset},
+                            col_idx {A.col_idx},
+                            n {A.n},
+                            edge_count {A.edge_count}{};
         // Deleted copy
-        adjMatrix(adjMatrix &) = delete;
         adjMatrix &operator=(adjMatrix &) = delete;
 
         // Move assignment

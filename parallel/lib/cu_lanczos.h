@@ -12,6 +12,7 @@
 
 #include "cu_linalg.h"
 #include "cu_SPMV.h"
+#include "SPMV.h"
 
 class lanczosDecomp
 {
@@ -33,7 +34,7 @@ private:
 
 public:
     lanczosDecomp() = delete;
-    lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double *starting_vec) : A{adj},
+    lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double *starting_vec, bool cuda) : A{adj},
                                                                                       krylov_dim{krylov},
                                                                                       alpha(new double[krylov]),
                                                                                       beta(new double[krylov - 1]),
@@ -44,7 +45,8 @@ public:
     {
         for (auto i = 0u; i < A.n; i++)
             x[i] = starting_vec[i];
-        cu_decompose();
+        if (cuda) { cu_decompose(); }
+        else { decompose(); }
     };
     lanczosDecomp(lanczosDecomp &) = delete;
     lanczosDecomp &operator=(lanczosDecomp &) = delete;
@@ -66,6 +68,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const lanczosDecomp &D);
 
     void check_ans(const double *) const;
+    void check_ans(lanczosDecomp &) const;
 
     double inner_prod(const double *const, const double *const, const long unsigned) const;
 

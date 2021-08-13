@@ -2,12 +2,41 @@
 
 #include "edge.h"
 #include <set>
+#include <algorithm>
 
 void adjMatrix::random_adj()
 {
         std::random_device rd;
         std::mt19937 gen{rd()};
         std::uniform_int_distribution<long unsigned> distrib(0, n - 1);
+        /*
+        unsigned idx {0};
+        std::vector<Edge> all_possible_edges(n*(n-1)/2);
+        for (auto i=0u;i<n;i++)
+          for (auto j=i+1;j<n;j++) 
+            all_possible_edges[idx++] = Edge(i, j);
+
+        std::shuffle(all_possible_edges.begin(), all_possible_edges.end(), gen);
+
+        std::vector<Edge> chosen_edges (edge_count*2);
+
+        idx = 0;
+        for (auto it=all_possible_edges.begin();it!=all_possible_edges.begin()+edge_count;it++) {
+          chosen_edges[idx++] = *it;
+          chosen_edges[idx++] = Edge(it->n2, it->n1);
+        }
+
+        std::sort(chosen_edges.begin(), chosen_edges.end());
+        
+        auto i{0u};
+        auto prev_row {0u};
+        for (auto it = chosen_edges.begin(); it != chosen_edges.end(); it++)
+        {
+                while (prev_row != it->n1) row_offset[++prev_row] = i;
+                col_idx[i++] = it->n2;
+        }
+        row_offset[n] = chosen_edges.size();
+*/
 
         unsigned n1, n2;
 

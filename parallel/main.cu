@@ -1,11 +1,11 @@
 #include "lib/adjMatrix.h"
 #include "lib/eigen.h"
-#include "lib/lanczos.h"
 #include "lib/helpers.h"
 #include "lib/SPMV.h"
 #include "lib/multiplyOut.h"
 #include "lib/cu_linalg.h"
 #include "lib/cu_SPMV.h"
+#include "lib/cu_lanczos.h"
 
 #include <iomanip>
 
@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
         long unsigned n{100}, edges{40};
         long unsigned deg {0};
         bool verbose {true};
+        
+        bool cuda {true};
 
         unsigned width {40}; // for formatting text
 
@@ -80,8 +82,8 @@ int main(int argc, char *argv[])
         std::vector<double> x(n, 1);
 
         //assert(krylov_dim <= n);
-
-        lanczosDecomp L(A, krylov_dim, &x[0]);
+        
+        lanczosDecomp L(A, krylov_dim, &x[0], cuda);
         
         //std::cout << L;
         eigenDecomp E(L);
