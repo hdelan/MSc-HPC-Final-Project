@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
 
         std::string filename{"../data/file.txt"};
-        long unsigned krylov_dim{1};
+        long unsigned krylov_dim{3};
 
         long unsigned n{100}, edges{40};
         long unsigned deg {0};
@@ -83,7 +83,6 @@ int main(int argc, char *argv[])
 
         lanczosDecomp L(A, krylov_dim, &x[0]);
         
-        /*
         //std::cout << L;
         eigenDecomp E(L);
         //std::cout << E;
@@ -91,8 +90,7 @@ int main(int argc, char *argv[])
 
         std::cout << '\n';
 
-        //if (verbose) L.get_ans();
+        if (verbose) L.get_ans();
         std::cout << '\n';
-        */
         return 0;
 }

@@ -2,7 +2,7 @@
 #include "../lib/eigen.h"
 #include "../lib/lanczos.h"
 #include "../lib/helpers.h"
-#include "../lib/sparse_mult.h"
+#include "../lib/SPMV.h"
 #include "../lib/multiplyOut.h"
 
 #include <iomanip>
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
         bool reorthogonalize{false};
 
-        unsigned max_eigen{100}, eigens{25};
+        unsigned max_eigen{100}, eigens{100};
 
         long unsigned n, edges, deg;
 
@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
         std::cout << std::setw(width) << std::setfill('~') << '\n'
                   << std::setfill(' ');
         std::cout << "Comparing the Lanczos based approximation with an analytic answer, using the \nfact that: "
-                  << "\n\n\tf(A)v = f(lambda)v\n\nfor an eigenpair (v,lambda).\n\n";
+                  << "\n\n\tf(A)v = f(lambda)v\n\nfor an eigenpair (v,lambda).\n\n"
+                  << "Using the first "<<eigens<<" eigenpairs to construct our problem vector x.\n\n";
         std::cout << std::setw(width) << std::setfill('~') << '\n'
                   << std::setfill(' ');
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
         }
         */
         fs.open(dir + "eigvals.csv");
-        double *eigvals{new double[max_eigen]};
+        std::vector<double> eigvals(max_eigen);
         for (auto i = 0u; i < max_eigen * max_eigen; i++)
         {
                 double tmp;
@@ -101,27 +102,6 @@ int main(int argc, char *argv[])
         std::cout << std::setw(width) << std::setfill('~') << '\n'
                   << std::setfill(' ');
 
-        /*
-        std::cout << "A: \n"
-                  << A << '\n';
-        A.print_full();
-        */
-        /*
-        //std::vector<double> x(n, 1);
-        {
-                std::vector<double> x(eigvecs[0].begin(), eigvecs[0].end());
-                lanczosDecomp L(A, krylov_dim, &x[0]);
-                eigenDecomp E(L);
-                multOut(L, E, A);
-
-                // Getting the analytic answer since exp(A)v=exp(lambda)v when v is an
-                // eigenvector and eigenvectors are orthogonal
-                std::for_each(x.begin(), x.end(), [&](double &a)
-                              { a *= std::exp(eigvals[0]); });
-                L.check_ans(&x[0]);
-                //L.get_ans();
-        }
-        */
         {
                 lanczosDecomp L(A, krylov_dim, &x[0]);
                 eigenDecomp E(L);
@@ -145,17 +125,8 @@ int main(int argc, char *argv[])
                 //L.get_ans();
         }
 
-        //assert(krylov_dim <= n);
-
-        //std::cout << L;
-
-        //std::cout << E;
-
         std::cout << '\n';
-        //L.get_ans();
         std::cout << '\n';
-
-        //delete[] raw_adj_matrix;
 
         return 0;
 }

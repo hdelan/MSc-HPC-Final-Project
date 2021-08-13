@@ -1,6 +1,6 @@
 #include "lanczos.h"
 #include "adjMatrix.h"
-#include "sparse_mult.h"
+#include "SPMV.h"
 
 #include <iomanip>
 
@@ -141,7 +141,8 @@ void lanczosDecomp::check_ans(const double *analytic_ans) const
         {
                 diff[i] = std::abs(ans[i] - analytic_ans[i]);
         }
-        auto max_it = std::max_element(diff.begin(), diff.end());
+        auto max_it {diff.begin()};
+        max_it = std::max_element(diff.begin(), diff.end());
         auto max_idx = std::distance(diff.begin(), max_it);
         std::cout << "\nMax difference of " << *max_it
                   << " found at index\n\tlanczos[" << max_idx << "] \t\t\t= " << ans[max_idx]

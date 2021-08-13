@@ -35,7 +35,7 @@ __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
 
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
     if (tid == 0) ans[blockIdx.x] = sdata[0];
-    if (tid==0) printf("Just wrote %lf\n", ans[blockIdx.x]);
+    //if (tid==0) printf("Just wrote %lf\n", ans[blockIdx.x]);
 }
 
 // Reduce operation, use for 1 block to get a final answer
@@ -126,26 +126,55 @@ __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
     if (tid == 0) ans[blockIdx.x] = sdata[0];
 }
 
-template <typename T>
-__global__ void cu_dpax(T * v, T alpha, T * x, const long unsigned n) {
-    unsigned tid = threadIdx.x+blockIdx.x*blockDim.x;
-    if (tid >= n) return;
-    v[tid] -= alpha*x[tid];
+template <typename T, unsigned blockSize>
+__global__ void cu_norm_sq_sqrt(T * a, const unsigned n, T * ans) {
+    //extern __shared__ T sdata[];
+    extern __shared__ unsigned char sdata_uchar[];
+    T * sdata = reinterpret_cast<T *>(sdata_uchar);
+    
+    unsigned tid = threadIdx.x;
+    unsigned i = blockIdx.x*blockSize*2 + tid;
+    if (i >= n) return;
+    unsigned gridSize = blockSize*2*gridDim.x;
+    
+    sdata[tid]=0.0;
+
+    while (i+blockSize<n) {
+        sdata[tid] += a[i]*a[i]+a[i+blockSize]*a[i+blockSize];
+        i += gridSize;
+    }
+    if (i<n) sdata[tid] += a[i]*a[i];
+    
+    __syncthreads();
+
+    if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
+    if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
+    if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
+
+    if (tid < 32) warpReduce<T, blockSize>(sdata, tid);
+    if (tid == 0) ans[blockIdx.x] = std::sqrt(sdata[0]);
 }
 
 template <typename T>
-__global__ void cu_dvexda(T * v, T alpha, T * x, const long unsigned n) {
+__global__ void cu_dpax(T * v_d, T * alpha_d, T * x_d, const long unsigned n) {
     unsigned tid = threadIdx.x+blockIdx.x*blockDim.x;
     if (tid >= n) return;
-    v[tid] = x[tid]/alpha;
+    v_d[tid] -= (*alpha_d)*x_d[tid];
+}
+
+template <typename T>
+__global__ void cu_dvexda(T * v_d, T * alpha_d, T * x_d, const long unsigned n) {
+    unsigned tid = threadIdx.x+blockIdx.x*blockDim.x;
+    if (tid >= n) return;
+    v_d[tid] = x_d[tid]/(*alpha_d);
 }
 
 // EXPLICIT INSTANTIATIONS
-template __global__ void cu_dpax<double>(double * v, double alpha, double * x, const long unsigned n);
-template __global__ void cu_dpax<float>(float * v, float alpha, float * x, const long unsigned n);
+template __global__ void cu_dpax<double>(double * v, double * alpha, double * x, const long unsigned n);
+template __global__ void cu_dpax<float>(float * v, float * alpha, float * x, const long unsigned n);
 
-template __global__ void cu_dvexda<double>(double * v, double alpha, double * x, const long unsigned n);
-template __global__ void cu_dvexda<float>(float * v, float alpha, float * x, const long unsigned n);
+template __global__ void cu_dvexda<double>(double * v, double * alpha, double * x, const long unsigned n);
+template __global__ void cu_dvexda<float>(float * v, float * alpha, float * x, const long unsigned n);
 
 template __device__ void warpReduce<float ,1>(volatile float * sdata, const unsigned tid);
 template __global__ void cu_dot_prod<float, 1>(float * a, float * b, const unsigned n, float * ans);
@@ -278,3 +307,27 @@ template __global__ void cu_dot_prod<double, 1024>(double * a, double * b, const
 template __global__ void cu_reduce<double, 1024>(double * a, const unsigned n, double * ans);
 template __global__ void cu_reduce_sqrt<double, 1024>(double * a, const unsigned n, double * ans);
 template __global__ void cu_norm_sq<double, 1024>(double * a, const unsigned n, double * ans);
+
+
+template __global__ void cu_norm_sq_sqrt<float, 1>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 2>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 4>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 8>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 16>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 32>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 64>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 128>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 256>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 512>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<float, 1024>(float * a, const unsigned n, float * ans);
+template __global__ void cu_norm_sq_sqrt<double, 1>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 2>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 4>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 8>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 16>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 32>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 64>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 128>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 256>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 512>(double * a, const unsigned n, double * ans);
+template __global__ void cu_norm_sq_sqrt<double, 1024>(double * a, const unsigned n, double * ans);

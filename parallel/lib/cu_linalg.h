@@ -11,9 +11,11 @@ template <typename T, unsigned blockSize>
 __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans);
 template <typename T, unsigned blockSize>
 __global__ void cu_norm_sq(T * a, const unsigned n, T * ans);
+template <typename T, unsigned blockSize>
+__global__ void cu_norm_sq_sqrt(T * a, const unsigned n, T * ans);
 template <typename T>
-__global__ void cu_dpax(T * v, T alpha, T * x, const long unsigned n);
+__global__ void cu_dpax(T * v, T * alpha, T * x, const long unsigned n);
 template <typename T>
-__global__ void cu_dvexda(T * v, T alpha, T * x, const long unsigned n);
+__global__ void cu_dvexda(T * v, T * alpha, T * x, const long unsigned n);
 
 #endif

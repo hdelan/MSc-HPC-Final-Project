@@ -15,7 +15,7 @@ FILES 		:= adjMatrix.cc \
        			multiplyOut.cc \
        			sparse_mult.cc \
        			helpers.cc \
-				make_graph.cc
+			make_graph.cc
 
 OBJS		:= $(FILES:%.cc=$(BUILDDIR)/%.o)
 
@@ -38,9 +38,9 @@ clean:
 run: $(MAIN)
 	./adj ../data/file.txt
 
-test: tests/test.cc $(OBJS)
+numerical_test: tests/numerical_test.cc $(OBJS)
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
-	./test 
+	./numerical_test
 
 prof: PROFILE := -pg
 prof: $(MAIN)

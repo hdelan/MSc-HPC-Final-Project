@@ -2,7 +2,7 @@
 #include "lib/eigen.h"
 #include "lib/lanczos.h"
 #include "lib/helpers.h"
-#include "lib/sparse_mult.h"
+#include "lib/SPMV.h"
 #include "lib/multiplyOut.h"
 #include <iomanip>
 
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
         long unsigned n{100}, edges{40};
         long unsigned deg {0};
-        bool verbose {false};
+        bool verbose {true};
 
         unsigned width {40}; // for formatting text
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         
         adjMatrix A;
 
-        char make_matrix{'r'};
+        char make_matrix{'f'};
 
         switch (make_matrix)
         {

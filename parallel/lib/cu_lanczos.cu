@@ -68,46 +68,68 @@ void lanczosDecomp::cu_decompose()
         // alpha = v*Q(:,j)
         
         if (num_blocks==1) { 
-            printf("In here!\n");
             cu_dot_prod<double, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, Q_d_ptr[i], n, &alpha_d[k]);
-        double alpha_tmp{-11};
-        cudaMemcpy(&alpha_tmp, tmp_d, sizeof(double), cudaMemcpyDeviceToHost);
+        /*double alpha_tmp{-11};
+        cudaMemcpy(&alpha_tmp, &alpha_d[k], sizeof(double), cudaMemcpyDeviceToHost);
         std::cout << "Got alpha=" << alpha_tmp << " from card\n";
+        */
         } else {
-            cu_dot_prod<double, BLOCK_SIZE><<<std::max(1u,num_blocks/2), threads, BLOCK_SIZE*sizeof(double)>>>(v_d, Q_d_ptr[i], n, tmp_d);
+            cu_dot_prod<double, BLOCK_SIZE><<<num_blocks/2, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, Q_d_ptr[i], n, tmp_d);
             cu_reduce<double, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(tmp_d, num_blocks, &alpha_d[k]);
         }
 
 
 
-        /*
         // v = v - alpha*Q(:,j)
-        cu_dpax<double><<<blocks, threads>>>(v_d, alpha_d[k], Q_d_ptr[i], n);
+        cu_dpax<double><<<blocks, threads>>>(v_d, &alpha_d[k], Q_d_ptr[i], n);
+        cudaMemcpy(&tmp_vec[0], &v_d[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
+        std::cout << "v -= alpha*Q_s: \n";
+        std::for_each(tmp_vec.begin(), tmp_vec.end(), [](double a)
+                      { std::cout << a << '\n'; });
 
         if (k > 0)
         {
             // v = v - beta*Q(:,j-1)
-            cu_dpax<double><<<blocks, threads>>>(v_d, beta_d[k - 1], Q_s[1 - i], n);
+            cu_dpax<double><<<blocks, threads>>>(v_d, &beta_d[k - 1], Q_d_ptr[1 - i], n);
         }
 
         if (k < krylov_dim - 1)
         {
             // beta[j] = norm(v)
-            cu_norm_sq<double, BLOCK_SIZE><<<blocks, threads>>>(v_d, n, tmp_d);
-            cu_reduce_sqrt<double,BLOCK_SIZE><<<1, threads>>>(tmp_d, num_blocks, &beta_d[k]);
-
-            cu_dvexda<double><<<blocks, threads>>>(Q_s[1 - i], beta_d[k], v_d, n);
+            if (num_blocks==1) {
+                cu_norm_sq_sqrt<double, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, n, &beta_d[k]);
+            } else {
+                cu_norm_sq<double, BLOCK_SIZE><<<num_blocks/2, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, n, tmp_d);
+                cu_reduce_sqrt<double,BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(tmp_d, num_blocks, &beta_d[k]);
+            }
+            cu_dvexda<double><<<blocks, threads>>>(Q_d_ptr[1 - i], &beta_d[k], v_d, n);
         }
 
-        cudaMemcpy(Q_s[i], &tmp[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
+        cudaMemcpy(&tmp[0], Q_d_ptr[i], sizeof(double) * n, cudaMemcpyDeviceToHost);
 
         for (auto j = 0u; j < n; j++)
             Q[k + j * krylov_dim] = tmp[j];
+        /*
 */
         i = 1 - i;
     }
-    cudaMemcpy(alpha_d, alpha, sizeof(double) * krylov_dim, cudaMemcpyDeviceToHost);
-    cudaMemcpy(beta_d, beta, sizeof(double) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
+    cudaMemcpy(alpha, alpha_d, sizeof(double) * krylov_dim, cudaMemcpyDeviceToHost);
+    cudaMemcpy(beta, beta_d, sizeof(double) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
+
+    std::cout << "Q:\n";
+    for (int i=0;i<n;i++) {
+        for (int j=0;j<krylov_dim;j++)
+            std::cout << Q[i*krylov_dim+j] << '\t';
+        std::cout << '\n';
+    }
+
+    std::cout << "\nAlpha:\n";
+    for (int i=0;i<krylov_dim;i++) std::cout << alpha[i] << '\t';
+    
+    std::cout << "\n\nBeta:\n";
+    for (int i=0;i<krylov_dim-1;i++) std::cout << beta[i] << '\t';
+    std::cout << "\n\n";
+
 
     cudaFree(IA_d);
     cudaFree(JA_d);
@@ -116,4 +138,13 @@ void lanczosDecomp::cu_decompose()
     cudaFree(alpha_d);
     cudaFree(beta_d);
     cudaFree(tmp_d);
+}
+
+
+void lanczosDecomp::get_ans() const
+{
+        std::cout << "Answer vector:\n";
+
+        for (auto i = 0u; i < A.n; i++)
+                std::cout << std::setprecision(20) << ans[i] << '\n';
 }

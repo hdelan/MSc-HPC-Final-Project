@@ -25,7 +25,7 @@ float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end);
 
 int main(void)
 {
-    unsigned n{10'000};
+    unsigned n{5'000};
 
     long unsigned edges{n * 100};
     timeval start, end;
@@ -65,9 +65,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
     for (auto it = y.begin(); it != y.end(); it++)
         *it = U(gen);
 
-    unsigned block_size{BLOCKSIZE}, num_blocks{n / block_size + (n % block_size ? 1 : 0)}, h_blocks{n / (2 * block_size) + (n % (2 * block_size) ? 1 : 0)};
-
-    dim3 blocks{num_blocks}, half_blocks{h_blocks}, threads{block_size}, one_block{1u};
+    unsigned num_blocks{n / BLOCKSIZE + (n % BLOCKSIZE ? 1 : 0)}, h_blocks{n / (2 * BLOCKSIZE) + (n % (2 * BLOCKSIZE) ? 1 : 0)};
 
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
               << std::setfill(' ');
@@ -75,21 +73,24 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
               << std::setfill(' ');
 
-    T *x_d, *y_d, *tmp_d, *ans_d, *spMV_ans_d;
+    T *x_d, *y_d, *tmp_d, *ans_d, *spMV_ans_d, *alpha_d;
     long unsigned *IA_d, *JA_d;
 
     cudaMalloc((void **)&x_d, sizeof(T) * n);
     cudaMalloc((void **)&y_d, sizeof(T) * n);
     cudaMalloc((void **)&tmp_d, sizeof(T) * num_blocks);
     cudaMalloc((void **)&ans_d, sizeof(T));
+    cudaMalloc((void **)&alpha_d, sizeof(T));
     cudaMemcpy(x_d, &x[0], sizeof(T) * n, cudaMemcpyHostToDevice);
     cudaMemcpy(y_d, &y[0], sizeof(T) * n, cudaMemcpyHostToDevice);
+    
+    /*************DOT PRODUCT**********/
     {
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_dot_prod<T, BLOCKSIZE><<<half_blocks, threads, block_size * sizeof(T)>>>(x_d, y_d, n, tmp_d);
-        cu_reduce<T, BLOCKSIZE><<<1, threads, block_size * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
+        cu_dot_prod<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(x_d, y_d, n, tmp_d);
+        cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
 
         float gpu_time{cuda_end_timer(start_d, end_d)};
 
@@ -105,12 +106,13 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << "  \t" << serial_ans << "\t\t"
                   << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
+    /*************NORM SQUARED**********/
     {
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_norm_sq<T, BLOCKSIZE><<<half_blocks, threads, block_size * sizeof(T)>>>(x_d, n, tmp_d);
-        cu_reduce<T, BLOCKSIZE><<<1, threads, block_size * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
+        cu_norm_sq<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(x_d, n, tmp_d);
+        cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
 
         float gpu_time{cuda_end_timer(start_d, end_d)};
 
@@ -126,12 +128,13 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << "  \t" << serial_ans << "\t\t"
                   << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
+    /*************REDUCE*************/
     {
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_reduce<T, BLOCKSIZE><<<half_blocks, threads, block_size * sizeof(T)>>>(x_d, n, tmp_d);
-        cu_reduce<T, BLOCKSIZE><<<1, threads, block_size * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
+        cu_reduce<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(x_d, n, tmp_d);
+        cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
 
         float gpu_time{cuda_end_timer(start_d, end_d)};
 
@@ -147,17 +150,20 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << "  \t" << serial_ans << "\t\t"
                   << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
+    /**********VECTOR ADDITION*******/
     {
         cudaMemcpy(x_d, &x[0], sizeof(T) * n, cudaMemcpyHostToDevice);
         cudaMemcpy(y_d, &y[0], sizeof(T) * n, cudaMemcpyHostToDevice);
 
         T alpha{2};
+        cudaMemcpy(alpha_d, &alpha, sizeof(T), cudaMemcpyHostToDevice);
+        
         std::vector<T> gpu_ans_vec(n);
 
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_dpax<T><<<blocks, threads>>>(x_d, alpha, y_d, n);
+        cu_dpax<T><<<num_blocks, BLOCKSIZE>>>(x_d, alpha_d, y_d, n);
 
         float gpu_time{cuda_end_timer(start_d, end_d)};
 
@@ -179,17 +185,20 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << "  \t" << serial_ans << "\t\t"
                   << (serial_ans - ans) / serial_ans << "\t\t\t" << speedup << "\n\n";
     }
+    /**********VECTOR SCALING*********/
     {
         cudaMemcpy(x_d, &x[0], sizeof(T) * n, cudaMemcpyHostToDevice);
         cudaMemcpy(y_d, &y[0], sizeof(T) * n, cudaMemcpyHostToDevice);
 
         T alpha{4};
+        cudaMemcpy(alpha_d, &alpha, sizeof(T), cudaMemcpyHostToDevice);
+        
         std::vector<T> gpu_ans_vec(n);
 
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_dvexda<T><<<blocks, threads>>>(x_d, alpha, y_d, n);
+        cu_dvexda<T><<<num_blocks, BLOCKSIZE>>>(x_d, alpha_d, y_d, n);
 
         float gpu_time{cuda_end_timer(start_d, end_d)};
 
@@ -217,13 +226,14 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
     cudaMalloc((void **)&spMV_ans_d, sizeof(T) * n);
     cudaMemcpy(IA_d, A.row_offset, sizeof(long unsigned) * (n + 1), cudaMemcpyHostToDevice);
     cudaMemcpy(JA_d, A.col_idx, sizeof(long unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice);
+    /**************SPMV1*********/
     {
         std::vector<T> gpu_ans_vec(n);
 
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_spMV1<T><<<blocks, threads>>>(IA_d, JA_d, static_cast<unsigned long>(n), x_d, spMV_ans_d);
+        cu_spMV1<T><<<num_blocks, BLOCKSIZE>>>(IA_d, JA_d, static_cast<unsigned long>(n), x_d, spMV_ans_d);
 
         cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T) * n, cudaMemcpyDeviceToHost);
 
@@ -248,11 +258,12 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << "\t\t" << serial_ans << "\t\t"
                   << relative_error / serial_ans << "\t\t\t" << speedup << "\n\n";
     }
+    /**************SPMV2*********/
     {
         std::vector<T> gpu_ans_vec(n);
         std::vector<long unsigned> blockrows(n);
         long unsigned blocks_needed{0u};
-        get_blockrows<T>(A, block_size, &blockrows[0], blocks_needed);
+        get_blockrows<T>(A, BLOCKSIZE, &blockrows[0], blocks_needed);
 
         dim3 blocks_IPCSR{static_cast<unsigned>(blocks_needed)};
 
@@ -265,7 +276,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_spMV2<T, long unsigned><<<blocks_IPCSR, threads>>>(IA_d, JA_d, blockrows_d, static_cast<unsigned long>(n), x_d, spMV_ans_d);
+        cu_spMV2<T, long unsigned><<<blocks_IPCSR, BLOCKSIZE>>>(IA_d, JA_d, blockrows_d, static_cast<unsigned long>(n), x_d, spMV_ans_d);
 
         cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T) * n, cudaMemcpyDeviceToHost);
 
@@ -291,6 +302,8 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
                   << relative_error / serial_ans << "\t\t\t" << speedup << "\n\n";
         cudaFree(blockrows_d);
     }
+    /**************SPMV3*********/
+    // The numerics are currently not working on this. Just included to get timings
     {
         std::vector<T> gpu_ans_vec(n);
         std::vector<long unsigned> blockrows(n);
@@ -302,8 +315,8 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
-        cu_spMV3_kernel1<T, long unsigned><<<blocks, threads>>>(JA_d, A.get_edges() * 2, x_d, tmp_d);
-        cu_spMV3_kernel2<T, long unsigned><<<1, threads, 49152>>>(tmp_d, IA_d, static_cast<unsigned long>(n), spMV_ans_d);
+        cu_spMV3_kernel1<T, long unsigned><<<num_blocks, BLOCKSIZE>>>(JA_d, A.get_edges() * 2, x_d, tmp_d);
+        cu_spMV3_kernel2<T, long unsigned><<<1, BLOCKSIZE, 49152>>>(tmp_d, IA_d, static_cast<unsigned long>(n), spMV_ans_d);
 
         cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T) * n, cudaMemcpyDeviceToHost);
 
@@ -337,6 +350,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
     cudaFree(JA_d);
     cudaFree(tmp_d);
     cudaFree(ans_d);
+    cudaFree(alpha_d);
     cudaFree(spMV_ans_d);
 
     cudaError_t err = cudaGetLastError();
