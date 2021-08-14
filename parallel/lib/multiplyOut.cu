@@ -3,6 +3,9 @@
 #include "cblas.h"
 #include <iomanip>
 
+void naive_dgemm(double * a, double * b, const unsigned rows, const unsigned cols, double * ans);
+void naive_dgemv(double * a, double * v, const unsigned rows, const unsigned cols, double * ans);
+
 void exp_func(double & a) {
         a = std::exp(a);
 }
@@ -47,18 +50,23 @@ void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
         */
         // This call to cblas_dgemm was not working for me!
         auto k = L.get_krylov();
-        cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 1, QV, k);
-/*
+        //naive_dgemm(L.Q, E.eigenvectors, n,k, QV);
+        cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 0, QV, k);
 // PRINT OUT QV
-        for (auto j = 0u; j < n; j++)
+/*
+        std::cout << "\nQV\n";
+        for (auto j = 0u; j < L.krylov_dim; j++)
         {
                 for (auto k = 0u; k < L.krylov_dim; k++)
-                        std::cout << std::setprecision(20) << QV[k + j * L.krylov_dim] << " ";
+                        std::cout <<std::setprecision(4)<< QV[k + j * L.krylov_dim] << " ";
                 std::cout << '\n';
         }
         */
+/*
+        */
         // Getting QV*f(lambda)
-        cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, L.krylov_dim, &E.eigenvalues[0], 1, 1, &L.ans[0],1);
+        cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, k, &E.eigenvalues[0], 1, 0, &L.ans[0],1);
+        //naive_dgemv(QV, &E.eigenvalues[0], n, L.krylov_dim, &L.ans[0]);
 
         delete[](QV);
         
@@ -72,4 +80,23 @@ void print_matrix(unsigned rows, unsigned cols, double * A) {
                 }
                 std::cout << '\n';
         }
+}
+
+void naive_dgemm(double * a, double * b, const unsigned rows, const unsigned cols, double * ans) {
+  for (int i=0;i<rows;i++) {
+    for (int j=0;j<cols;j++) {
+      ans[i*cols+j] = 0.0;
+      for (int k=0;k<cols;k++) {
+        ans[i*cols+j] += a[i*cols+k]*b[k*cols+j];
+      }
+    }
+  }
+}
+
+void naive_dgemv(double * a, double * v, const unsigned rows, const unsigned cols, double * ans) {
+  for (int i=0;i<rows;i++) {
+    ans[i] = 0.0;
+    for (int j=0;j<cols;j++) 
+      ans[i] += a[i*cols+j]*v[j];
+  }
 }

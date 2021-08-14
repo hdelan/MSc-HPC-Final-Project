@@ -52,11 +52,11 @@ public:
     lanczosDecomp &operator=(lanczosDecomp &) = delete;
     ~lanczosDecomp()
     {
-        delete[] alpha;
-        delete[] beta;
-        delete[] Q;
-        delete[] x;
-        delete[] ans;
+        if (alpha!=nullptr) { delete[] alpha; alpha=nullptr;}
+        if (beta!=nullptr) { delete[] beta; beta=nullptr;}
+        if (Q!=nullptr) { delete[] Q; Q=nullptr;}
+        if (x!=nullptr) { delete[] x; x=nullptr;}
+        if (ans!=nullptr) { delete[] ans; ans=nullptr;}
     };
 
     void get_ans() const;

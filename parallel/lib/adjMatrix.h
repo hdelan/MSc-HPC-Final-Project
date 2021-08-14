@@ -78,10 +78,8 @@ public:
         };
         ~adjMatrix()
         {
-                if (row_offset != nullptr)
-                        delete[] row_offset;
-                if (col_idx != nullptr)
-                        delete[] col_idx;
+                if (row_offset != nullptr) { delete[] row_offset; row_offset=nullptr;}
+                if (col_idx != nullptr) { delete[] col_idx; col_idx=nullptr;}
         };
 
         long unsigned get_n() const { return n; };

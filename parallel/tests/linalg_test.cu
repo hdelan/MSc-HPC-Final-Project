@@ -5,15 +5,17 @@
 #include "../lib/helpers.h"
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <random>
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <sys/time.h>
 
 #include <cuda_profiler_api.h>
 
-#define BLOCKSIZE 32
+#define BLOCKSIZE 128
 #define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
@@ -25,12 +27,20 @@ float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end);
 
 int main(void)
 {
-    unsigned n{50'000};
-
+    unsigned n{5'000};
     long unsigned edges{n * 100};
+    
+    std::string filename {"../data/California.mtx"};
+    std::ifstream fs;
+    fs.open(filename);
+    assert(!fs.fail() && "Reading in file failed\n");
+    fs >> n >> n >> edges;
+
     timeval start, end;
     gettimeofday(&start, NULL);
-    adjMatrix A(n, edges);
+    //adjMatrix A(n, edges);
+    adjMatrix A(n, edges, fs);
+    fs.close();
     gettimeofday(&end, NULL);
     std::cout << "Time elapsed for build random adjacency matrix with n = " << n << " edges = " << edges << ": "
               << end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0 << " seconds\n\n";
@@ -45,11 +55,13 @@ int main(void)
               << std::setfill(' ');
     std::cout << "DOUBLE PRECISION\n";
     cu_linalg_test<double>(n, A);
+    std::cout << '\n';
 }
 
 template <typename T>
 void cu_linalg_test(const unsigned n, adjMatrix &A)
 {
+    unsigned width {16};
     T ans;
 
     std::random_device rd;
@@ -69,12 +81,13 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
               << std::setfill(' ');
-    std::cout << "\t\tCUDA\t\tSerial\t\tRelative Error\t\tSpeedup\n";
+    std::cout << std::setw(2*width)<<"CUDA"<<std::setw(width)<<"Serial"<<std::setw(width)<<"Rel. Error"<<std::setw(width)<<"Speedup"<<std::endl;
     std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
               << std::setfill(' ');
 
     T *x_d, *y_d, *tmp_d, *ans_d, *spMV_ans_d, *alpha_d;
     long unsigned *IA_d, *JA_d;
+
 
     cudaMalloc((void **)&x_d, sizeof(T) * n);
     cudaMalloc((void **)&y_d, sizeof(T) * n);
@@ -102,17 +115,17 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         gettimeofday(&end, NULL);
         auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
 
-        std::cout << "Inner product: \t" << ans
-                  << "  \t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
+        std::cout << std::setw(width)<<std::left<< "Inner product:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
     }
-    /*************NORM SQUARED**********/
+    /*************NORM*****************/
     {
         cudaEvent_t start_d, end_d;
         cuda_start_timer(start_d, end_d);
 
         cu_norm_sq<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(x_d, n, tmp_d);
-        cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
+        cu_reduce_sqrt<T, BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE * sizeof(T)>>>(tmp_d, num_blocks, ans_d);
 
         float gpu_time{cuda_end_timer(start_d, end_d)};
 
@@ -120,13 +133,13 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         timeval start, end;
         gettimeofday(&start, NULL);
-        auto serial_ans = std::inner_product(x.begin(), x.end(), x.begin(), 0.0);
+        auto serial_ans = std::sqrt(std::inner_product(x.begin(), x.end(), x.begin(), 0.0));
         gettimeofday(&end, NULL);
         auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
 
-        std::cout << "Norm squared: \t" << ans
-                  << "  \t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
+        std::cout << std::setw(width)<<std::left<< "Norm:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
     }
     /*************REDUCE*************/
     {
@@ -145,10 +158,11 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         auto serial_ans = std::accumulate(x.begin(), x.end(), 0.0);
         gettimeofday(&end, NULL);
         auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
+        
+        std::cout << std::setw(width)<<std::left<< "Reduce:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
 
-        std::cout << "Reduce: \t" << ans
-                  << "  \t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t\t" << speedup << "\n\n";
     }
     /**********VECTOR ADDITION*******/
     {
@@ -181,9 +195,9 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         gettimeofday(&end, NULL);
         auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
 
-        std::cout << "Vector add: \t" << ans
-                  << "  \t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t\t\t" << speedup << "\n\n";
+        std::cout << std::setw(width)<<std::left<< "Vector add:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
     }
     /**********VECTOR SCALING*********/
     {
@@ -216,9 +230,9 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         gettimeofday(&end, NULL);
         auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
 
-        std::cout << "v=v/scalar: \t" << ans
-                  << "  \t" << serial_ans << "\t\t"
-                  << (serial_ans - ans) / serial_ans << "\t\t\t" << speedup << "\n\n";
+        std::cout << std::setw(width)<<std::left<< "v = v/alpha:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
     }
 
     cudaMalloc((void **)&IA_d, sizeof(long unsigned) * (n + 1));
@@ -254,9 +268,9 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         ans = std::sqrt(std::inner_product(gpu_ans_vec.begin(), gpu_ans_vec.end(), gpu_ans_vec.begin(), 0));
         auto serial_ans = std::sqrt(std::inner_product(ans_vec.begin(), ans_vec.end(), ans_vec.begin(), 0));
 
-        std::cout << "SPMV1: \t\t" << ans
-                  << "\t\t" << serial_ans << "\t\t"
-                  << relative_error / serial_ans << "\t\t\t" << speedup << "\n\n";
+        std::cout << std::setw(width)<<std::left<< "SPMV1:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << relative_error / serial_ans <<std::setw(width) << speedup << "\n";
     }
     /**************SPMV2*********/
     {
@@ -297,9 +311,9 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
         ans = std::sqrt(std::inner_product(gpu_ans_vec.begin(), gpu_ans_vec.end(), gpu_ans_vec.begin(), 0));
         auto serial_ans = std::sqrt(std::inner_product(ans_vec.begin(), ans_vec.end(), ans_vec.begin(), 0));
 
-        std::cout << "SPMV2: \t\t" << ans
-                  << "\t\t" << serial_ans << "\t\t"
-                  << relative_error / serial_ans << "\t\t\t" << speedup << "\n\n";
+        std::cout << std::setw(width)<<std::left<< "SPMV2:"<<std::right<<std::setw(width) << ans
+                  << std::setw(width) << serial_ans 
+                  <<std::setw(width) << relative_error / serial_ans <<std::setw(width) << speedup << "\n";
         cudaFree(blockrows_d);
     }
     /**************SPMV3*********/

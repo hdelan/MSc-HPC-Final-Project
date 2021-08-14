@@ -7,11 +7,13 @@
 #include "../lib/helpers.h"
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <random>
 #include <vector>
 #include <algorithm>
 #include <sys/time.h>
+#include <string>
 
 #include <cuda_profiler_api.h>
 
@@ -27,11 +29,20 @@ int main(void)
     unsigned n{100};
 
     long unsigned edges{n * 5};
+
+    std::string filename {"../data/California.mtx"};
+    std::ifstream fs;
+    fs.open(filename);
+    assert(!fs.fail() && "File opening failed\n");
+    fs >> n >> n >> edges;
+
+
     timeval start, end;
     gettimeofday(&start, NULL);
-    adjMatrix A(n, edges);
+    adjMatrix A(n, edges, fs);
+    fs.close();
     gettimeofday(&end, NULL);
-    std::cout << "Time elapsed to build random adjacency matrix with n = " << n << " edges = " << edges << ": "
+    std::cout << "Time elapsed to build random adjacency matrix with n = " << n << " edges = " << edges << ":\n\t"
               << end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0 << " seconds\n\n";
     
     unsigned krylov_dim {20};
@@ -57,8 +68,8 @@ int main(void)
     multOut(L, E, A);
 
     gettimeofday(&e, NULL);
-    std::cout <<  "Speedup: \t"
-              << (end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0)/gpu_time << "\n\n";
+    std::cout <<  "Speedup:"
+              << std::setw(10) << (end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0)/gpu_time << "\n\n";
 
     L.check_ans(cu_L);
 }

@@ -84,14 +84,13 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
         sdata[tid] += a[i]+a[i+blockSize];
         i += gridSize;
     }
-    if (i < n) sdata[tid] += a[i]+a[i+blockSize];
+    if (i < n) sdata[tid] += a[i];
     
     __syncthreads();
 
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
     if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
     if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
-
     //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
     if (tid == 0) ans[blockIdx.x] = std::sqrt(sdata[0]);

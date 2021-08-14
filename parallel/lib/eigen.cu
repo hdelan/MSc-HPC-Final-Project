@@ -4,6 +4,13 @@
 void eigenDecomp::decompose()
 {
         LAPACKE_dstevd(LAPACK_ROW_MAJOR, 'V', L.krylov_dim, eigenvalues, L.beta, eigenvectors, L.krylov_dim);
+        /*
+        std::cout << "Eigenvalues:\n";
+        for (int i=0;i<L.get_krylov();i++) {
+          std::cout << eigenvalues[i] << " ";
+        }
+          std::cout << '\n';
+          */
 }
 
 std::ostream &operator<<(std::ostream &os, eigenDecomp &E)

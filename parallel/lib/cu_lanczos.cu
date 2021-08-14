@@ -118,19 +118,20 @@ void lanczosDecomp::cu_decompose()
     }
     cudaMemcpy(alpha, alpha_d, sizeof(double) * krylov_dim, cudaMemcpyDeviceToHost);
     cudaMemcpy(beta, beta_d, sizeof(double) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
+
 /*
-    std::cout << "Q:\n";
-    for (int i=0;i<n;i++) {
+    std::cout << "cu_Q:\n";
+    for (int i=0;i<krylov_dim;i++) {
         for (int j=0;j<krylov_dim;j++)
-            std::cout << Q[i*krylov_dim+j] << '\t';
+            std::cout << Q[i*krylov_dim+j] << " ";
         std::cout << '\n';
     }
 
-    std::cout << "\nAlpha:\n";
-    for (int i=0;i<krylov_dim;i++) std::cout << alpha[i] << '\t';
+    std::cout << "\ncu_Alpha:\n";
+    for (int i=0;i<krylov_dim;i++) std::cout << alpha[i] << " ";
     
-    std::cout << "\n\nBeta:\n";
-    for (int i=0;i<krylov_dim-1;i++) std::cout << beta[i] << '\t';
+    std::cout << "\n\ncu_Beta:\n";
+    for (int i=0;i<krylov_dim-1;i++) std::cout << beta[i] << " ";
     std::cout << "\n\n";
 */
 
@@ -217,14 +218,14 @@ void lanczosDecomp::decompose()
         std::cout << '\n';
         std::cout << '\n';
 */
-/* PRINT OUT Q
-        for (auto j = 0u; j < n; j++)
+/* PRINT OUT Q 
+        std::cout << "\nQ\n";
+        for (auto j = 0u; j < krylov_dim; j++)
         {
                 for (auto k = 0u; k < krylov_dim; k++)
-                        std::cout << std::setprecision(20) << Q[k + j * krylov_dim] << " ";
+                        std::cout << Q[k + j * krylov_dim] << " ";
                 std::cout << '\n';
-        }
-*/
+        }*/
         delete[] v;
         delete[] Q_raw;
 }
@@ -270,7 +271,14 @@ void lanczosDecomp::check_ans(const double *analytic_ans) const
 }
 
 void lanczosDecomp::check_ans(lanczosDecomp & L) const
-{
+{     
+        /*
+        unsigned width {15};
+        std::cout <<std::setw(width) << "Serial" << std::setw(width) << "CUDA" << std::endl;
+        for (int i=0;i<5;i++) {
+          std::cout << std::setw(width) << ans[i] << std::setw(width) << L.ans[i] << std::endl;
+        }
+        */
         std::vector<double> diff(A.n);
         for (auto i = 0u; i < A.n; i++)
         {
@@ -279,11 +287,11 @@ void lanczosDecomp::check_ans(lanczosDecomp & L) const
         auto max_it = std::max_element(diff.begin(), diff.end());
         auto max_idx = std::distance(diff.begin(), max_it);
         std::cout << "\nMax difference of " << *max_it
-                  << " found at index\n\tserial_ans[" << max_idx << "] \t\t\t= " << ans[max_idx]
-                  << "\n\tcuda_ans[" << max_idx << "]   \t\t= " << L.ans[max_idx] << '\n';
+                  << " found at index\n"<<std::setw(15)<<"serial_ans[" << max_idx << "] = " <<std::setw(15)<< ans[max_idx] <<"\n"
+                  <<std::setw(15)<<"cuda_ans[" << max_idx << "] = "<< std::setw(15) << L.ans[max_idx] << '\n' << std::endl;
 
-        std::cout << "\nTotal norm of differences\t= " << std::setprecision(20) << norm(&diff[0]) << '\n';
-        std::cout << "Relative norm of differences\t= " << std::setprecision(20)<< norm(&diff[0])/norm(L.ans) << '\n';
+        std::cout << std::setw(30) << std::left << "Total norm of differences" << "=" << std::right << std::setprecision(20) <<  std::setw(30) << norm(&diff[0]) << std::endl;
+        std::cout << std::setw(30) << std::left << "Relative norm of differences"<< "=" << std::right << std::setprecision(20) << std::setw(30) << norm(&diff[0])/norm(L.ans) << std::endl;
 }
 /*
 // Doesn't work! (doesn't give better accuracy)
