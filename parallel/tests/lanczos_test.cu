@@ -18,15 +18,13 @@
 
 #include <cuda_profiler_api.h>
 
-#define BLOCKSIZE 32
-#define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
 int main(void)
 {
     unsigned n{10'000};
     long unsigned edges{n * 10};
-    unsigned krylov_dim {1000};
+    unsigned krylov_dim {10};
     
     /*
     std::string filename {"../data/California.mtx"};

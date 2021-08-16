@@ -1,86 +1,69 @@
 #include "cu_multiplyOut.h"
 #include "cblas.h"
 #include <iomanip>
+#include <algorithm>
 
 #include "cublas_v2.h"
 
-void my_exp_func(double & a) {
+void my_exp_func(double &a)
+{
         a = std::exp(a);
 }
 
-void cu_multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
+void cu_multOut(lanczosDecomp &L, eigenDecomp &E, adjMatrix &A)
+{
 
-        auto n {L.get_n()}, k {L.get_krylov()};
-        
+        auto n{L.get_n()}, k{L.get_krylov()};
+
         // Applying function
-        for (auto j=0u;j<L.krylov_dim;j++) my_exp_func(E.eigenvalues[j]);
-        
+        for (auto j = 0u; j < L.krylov_dim; j++)
+                my_exp_func(E.eigenvalues[j]);
+
         // Elementwise multiplying of f(lambda) by first row of eigenvectors
-        for (auto j=0u;j<L.krylov_dim;j++) E.eigenvalues[j] *= L.x_norm * E.eigenvectors[j];
+        for (auto j = 0u; j < L.krylov_dim; j++)
+                E.eigenvalues[j] *= L.x_norm * E.eigenvectors[j];
 
         //print_matrix(3, 1, &E.eigenvalues[0]);
-        double *Q_d, *V_d;
-        double * QV_d;
+        double *Q_d, *V_d, *QV_d, *eigvals_d, *ans_d, *alpha_d, *beta_d, alpha {1}, beta {0};
 
-        cudaMalloc(&Q_d, sizeof(double)*n*k);
-        cudaMalloc(&V_d, sizeof(double)*k*k);
-        cudaMalloc(&QV_d, sizeof(double)*n*k);
+        cudaMalloc(&Q_d, sizeof(double) * n * k);
+        cudaMalloc(&V_d, sizeof(double) * k * k);
+        cudaMalloc(&QV_d, sizeof(double) * n * k);
+        cudaMalloc(&eigvals_d, sizeof(double) * k);
+        cudaMalloc(&ans_d, sizeof(double) * n);
+        cudaMalloc(&alpha_d, sizeof(double));
+        cudaMalloc(&beta_d, sizeof(double));
 
-        cudaMemcpy(Q_d, L.Q, sizeof(double)*n*k,cudaMemcpyHostToDevice);
-        cudaMemcpy(V_d, E.eigenvectors, sizeof(double)*k*k,cudaMemcpyHostToDevice);
-        
-        cublasHandle_t handle;
+        cudaMemcpy(Q_d, L.Q, sizeof(double) * n * k, cudaMemcpyHostToDevice);
+        cudaMemcpy(V_d, E.eigenvectors, sizeof(double) * k * k, cudaMemcpyHostToDevice);
+        cudaMemcpy(eigvals_d, E.eigenvalues, sizeof(double) * k, cudaMemcpyHostToDevice);
+        cudaMemcpy(alpha_d, &alpha, sizeof(double), cudaMemcpyHostToDevice);
+        cudaMemcpy(beta_d, &beta, sizeof(double), cudaMemcpyHostToDevice);
 
-        double alpha{1}, beta{0};
-        
-        cublasDgemm(handle, CUBLAS_OP_T, CUBLAS_OP_T,n,k,k,&alpha,V_d,k,Q_d,n,&beta,QV_d,n);
+        cublasHandle_t handle{};
 
-        /*
-        for (auto j = 0u; j < n; j++)
-        {
-                for (auto k = 0u; k < L.krylov_dim; k++)
-                        std::cout << std::setprecision(20) << Q[k + j * L.krylov_dim] << " ";
-                std::cout << '\n';
-        }
-        for (auto j = 0u; j < L.krylov_dim; j++)
-        {
-                for (auto k = 0u; k < L.krylov_dim; k++)
-                        std::cout << std::setprecision(20) << E.eigenvectors[k + j * L.krylov_dim] << " ";
-                std::cout << '\n';
-        }
-        */
-/*
-        // Getting QV (n x k)
-        for (auto i=0u;i<n;i++) {
-                for (auto j=0u;j<L.krylov_dim;j++) {
-                        QV[i*L.krylov_dim+j] = 0.0;
-                        for (auto k=0u;k<L.krylov_dim;k++) {
-                                QV[i*L.krylov_dim+j] += L.Q[i*L.krylov_dim+k]*E.eigenvectors[k*L.krylov_dim+j];
-                        }
-                }
-        }
-        cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 0, QV, k);
-        */
-// PRINT OUT QV
-/*
-        std::cout << "\nQV\n";
-        for (auto j = 0u; j < L.krylov_dim; j++)
-        {
-                for (auto k = 0u; k < L.krylov_dim; k++)
-                        std::cout <<std::setprecision(4)<< QV[k + j * L.krylov_dim] << " ";
-                std::cout << '\n';
-        }
-        */
-/*
-        */
-        // Getting QV*f(lambda)
-        //cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, k, &E.eigenvalues[0], 1, 0, &L.ans[0],1);
-        //naive_dgemv(QV, &E.eigenvalues[0], n, L.krylov_dim, &L.ans[0]);
 
-        //delete[](QV);
+        cublasDgemm_v2(handle, CUBLAS_OP_T, CUBLAS_OP_T,k,n,k,alpha_d,V_d,k,Q_d,n,beta_d,QV_d,n);
+        cublasDgemv_v2(handle, CUBLAS_OP_T, k, n, alpha_d, Q_d, k, eigvals_d, 1, beta_d ,ans_d, 1);
+
+        std::vector<double> tmp(10);
+
+        cudaMemcpy(&tmp[0], V_d, sizeof(double) * 10, cudaMemcpyDeviceToHost);
+        std::cout << "CU first QV:\n";
+        std::for_each(tmp.begin(), tmp.end(), [](double & a){ std::cout << a << " ";});
+        std::cout << "\n";
+
+        cudaMemcpy(&L.ans[0], ans_d, sizeof(double) * n, cudaMemcpyDeviceToHost);
+        cudaMemcpy(&tmp[0], ans_d, sizeof(double) * 10, cudaMemcpyDeviceToHost);
+        std::cout << "CU first ans:\n";
+        std::for_each(tmp.begin(), tmp.end(), [](double & a){ std::cout << a << " ";});
+        std::cout << "\n\n";
+
         cudaFree(Q_d);
         cudaFree(V_d);
         cudaFree(QV_d);
-        
+        cudaFree(eigvals_d);
+        cudaFree(ans_d);
+        cudaFree(alpha_d);
+        cudaFree(beta_d);
 }
-

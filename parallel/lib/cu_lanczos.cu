@@ -133,8 +133,8 @@ void lanczosDecomp::cu_decompose()
     std::cout << "\n\ncu_Beta:\n";
     for (int i=0;i<krylov_dim-1;i++) std::cout << beta[i] << " ";
     std::cout << "\n\n";
-*/
 
+*/
     cudaFree(IA_d);
     cudaFree(JA_d);
     cudaFree(v_d);
@@ -209,10 +209,10 @@ void lanczosDecomp::decompose()
                 i = 1 - i;
         }
         /*
-        std::cout << "\nAlpha: ";
+        std::cout << "\nAlpha:\n";
         for (auto j = 0u; j < krylov_dim; j++)
                 std::cout << alpha[j] << " ";
-        std::cout << "\nBeta: ";
+        std::cout << "\n\nBeta:\n";
         for (auto j = 0u; j < krylov_dim - 1; j++)
                 std::cout << beta[j] << " ";
         std::cout << '\n';
