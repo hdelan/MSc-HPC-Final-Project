@@ -14,8 +14,7 @@ __device__ void warpReduce(volatile T * sdata, const unsigned tid) {
 template <typename T, unsigned blockSize>
 __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
     unsigned tid = threadIdx.x;
-    unsigned i = blockIdx.x*blockSize*2 + tid;
-    if (i >= n) return;
+    int i = blockIdx.x*blockSize*2 + tid;
     unsigned gridSize = blockSize*2*gridDim.x;
     extern __shared__ unsigned char sdata_uchar[];
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
@@ -46,9 +45,7 @@ __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
     //extern __shared__ T sdata[];
     unsigned tid = threadIdx.x;
     int i = blockIdx.x*blockSize*2 + tid;
-    if (i >= n) return;
     unsigned gridSize = blockSize*2*gridDim.x;
-
     
     sdata[tid]=0.0;
 
@@ -62,7 +59,7 @@ __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
     if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
     if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
-
+    
     //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
     if (tid == 0) ans[blockIdx.x] = sdata[0];
@@ -75,7 +72,6 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
     //extern __shared__ T sdata[];
     unsigned tid = threadIdx.x;
     int i = blockIdx.x*blockSize*2 + tid;
-    if (i >= n) return;
     unsigned gridSize = blockSize*2*gridDim.x;
     
     sdata[tid]=0.0;
@@ -91,6 +87,7 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
     if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
     if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
+    
     //if (tid < 32) warpReduce(sdata, tid, blockSize);
     if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
     if (tid == 0) ans[blockIdx.x] = std::sqrt(sdata[0]);
@@ -103,12 +100,11 @@ __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
     T * sdata = reinterpret_cast<T *>(sdata_uchar);
     
     unsigned tid = threadIdx.x;
-    unsigned i = blockIdx.x*blockSize*2 + tid;
-    if (i >= n) return;
+    int i = blockIdx.x*blockSize*2 + tid;
     unsigned gridSize = blockSize*2*gridDim.x;
     
     sdata[tid]=0.0;
-
+    
     while (i+blockSize<n) {
         sdata[tid] += a[i]*a[i]+a[i+blockSize]*a[i+blockSize];
         i += gridSize;
@@ -116,7 +112,7 @@ __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
     if (i<n) sdata[tid] += a[i]*a[i];
     
     __syncthreads();
-
+    
     if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
     if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
     if (blockSize >= 128) { if (tid < 64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
@@ -133,7 +129,6 @@ __global__ void cu_norm_sq_sqrt(T * a, const unsigned n, T * ans) {
     
     unsigned tid = threadIdx.x;
     unsigned i = blockIdx.x*blockSize*2 + tid;
-    if (i >= n) return;
     unsigned gridSize = blockSize*2*gridDim.x;
     
     sdata[tid]=0.0;

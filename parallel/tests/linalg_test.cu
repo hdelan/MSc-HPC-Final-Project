@@ -33,6 +33,8 @@ int main(void)
     assert(!fs.fail() && "Reading in file failed\n");
     fs >> n >> n >> edges;
 
+    std::cout << "\nTesting CUDA linear algebra functions for n ="<<n<<" blocksize="<<BLOCKSIZE<<"\n\n";
+    
     timeval start, end;
     gettimeofday(&start, NULL);
     //adjMatrix A(n, edges);
@@ -114,7 +116,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         std::cout << std::setw(width)<<std::left<< "Inner product:"<<std::right<<std::setw(width) << ans
                   << std::setw(width) << serial_ans 
-                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
+                  << std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
     }
     /*************NORM*****************/
     {
@@ -136,7 +138,7 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
 
         std::cout << std::setw(width)<<std::left<< "Norm:"<<std::right<<std::setw(width) << ans
                   << std::setw(width) << serial_ans 
-                  <<std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
+                  << std::setw(width) << (serial_ans - ans) / serial_ans <<std::setw(width) << speedup << "\n";
     }
     /*************REDUCE*************/
     {

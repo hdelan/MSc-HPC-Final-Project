@@ -24,7 +24,7 @@
 
 int main(void)
 {
-    unsigned n{100'000};
+    unsigned n{10'000};
     long unsigned edges{n * 10};
     unsigned krylov_dim {1000};
     
