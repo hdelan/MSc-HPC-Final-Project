@@ -24,46 +24,93 @@ void cu_multOut(lanczosDecomp &L, eigenDecomp &E, adjMatrix &A)
                 E.eigenvalues[j] *= L.x_norm * E.eigenvectors[j];
 
         //print_matrix(3, 1, &E.eigenvalues[0]);
-        double *Q_d, *V_d, *QV_d, *eigvals_d, *ans_d, *alpha_d, *beta_d, alpha {1}, beta {0};
+        double *Q_d, *V_d, *QV_d, *eigvals_d, *ans_d, alpha {1.0}, beta {0.0};
 
-        cudaMalloc(&Q_d, sizeof(double) * n * k);
-        cudaMalloc(&V_d, sizeof(double) * k * k);
-        cudaMalloc(&QV_d, sizeof(double) * n * k);
-        cudaMalloc(&eigvals_d, sizeof(double) * k);
-        cudaMalloc(&ans_d, sizeof(double) * n);
-        cudaMalloc(&alpha_d, sizeof(double));
-        cudaMalloc(&beta_d, sizeof(double));
+        std::vector<double> QV(n*k, 1.0);
 
-        cudaMemcpy(Q_d, L.Q, sizeof(double) * n * k, cudaMemcpyHostToDevice);
-        cudaMemcpy(V_d, E.eigenvectors, sizeof(double) * k * k, cudaMemcpyHostToDevice);
-        cudaMemcpy(eigvals_d, E.eigenvalues, sizeof(double) * k, cudaMemcpyHostToDevice);
-        cudaMemcpy(alpha_d, &alpha, sizeof(double), cudaMemcpyHostToDevice);
-        cudaMemcpy(beta_d, &beta, sizeof(double), cudaMemcpyHostToDevice);
+        cublasStatus_t status;
+        cudaError_t cudaStat;
+        cublasHandle_t handle;
+        
+        cudaStat = cudaMalloc(&Q_d, sizeof(double) * n * k);
+        if (cudaStat != cudaSuccess) {
+          std::cerr << "Allocation error for Q_d\n";
+          return;
+        }
+        cudaStat = cudaMalloc(&V_d, sizeof(double) * k * k);
+        if (cudaStat != cudaSuccess) {
+          std::cerr << "Allocation error for V_d.\n";
+          return;
+        }
+        cudaStat = cudaMalloc(&QV_d, sizeof(double) * n * k);
+        if (cudaStat != cudaSuccess) {
+          std::cerr << "Allocation error for QV_d.\n";
+          return;
+        }
+        cudaStat = cudaMalloc(&eigvals_d, sizeof(double) * k);
+        if (cudaStat != cudaSuccess) {
+          std::cerr << "Allocation error for eigvals_d.\n";
+          return;
+        }
+        cudaStat = cudaMalloc(&ans_d, sizeof(double) * n);
+        if (cudaStat != cudaSuccess) {
+          std::cerr << "Allocation error for ans_d.\n";
+          return;
+        }
 
-        cublasHandle_t handle{};
+        status = cublasCreate(&handle);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Cublas initialization error.\n";
+          return;
+        }
+        status = cublasSetVector(n*k, sizeof(double),L.Q, 1, Q_d,1);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Device access error.\n";
+          return;
+        }
+        status = cublasSetVector(k*k, sizeof(double),E.eigenvectors, 1, V_d,1);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Device access error.\n";
+          return;
+        }
+        status = cublasSetVector(k, sizeof(double),E.eigenvalues, 1, eigvals_d,1);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Device access error.\n";
+          return;
+        }
+        status = cublasSetVector(k*n, sizeof(double),&QV[0], 1, QV_d,1);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Device access error.\n";
+          return;
+        }
 
+        // DGEMM
+        status = cublasDgemm_v2(handle, CUBLAS_OP_N, CUBLAS_OP_N,k,n,k,&alpha,V_d,k,Q_d,k,&beta,QV_d,k);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Dgemm error.\n";
+          return;
+        }
+        
+        // DGEMV
+        status = cublasDgemv_v2(handle, CUBLAS_OP_T, k, n, &alpha, QV_d, k, eigvals_d, 1,&beta ,ans_d, 1);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Dgemv error.\n";
+          return;
+        }
 
-        cublasDgemm_v2(handle, CUBLAS_OP_T, CUBLAS_OP_T,k,n,k,alpha_d,V_d,k,Q_d,n,beta_d,QV_d,n);
-        cublasDgemv_v2(handle, CUBLAS_OP_T, k, n, alpha_d, Q_d, k, eigvals_d, 1, beta_d ,ans_d, 1);
+        std::vector<double> tmp(n*k);
+        
+        status = cublasGetVector(n, sizeof(double),ans_d, 1,&L.ans[0],1);
+        if (status != CUBLAS_STATUS_SUCCESS) {
+          std::cerr << "Error transferring from device to host.\n";
+          return;
+        }
 
-        std::vector<double> tmp(10);
-
-        cudaMemcpy(&tmp[0], V_d, sizeof(double) * 10, cudaMemcpyDeviceToHost);
-        std::cout << "CU first QV:\n";
-        std::for_each(tmp.begin(), tmp.end(), [](double & a){ std::cout << a << " ";});
-        std::cout << "\n";
-
-        cudaMemcpy(&L.ans[0], ans_d, sizeof(double) * n, cudaMemcpyDeviceToHost);
-        cudaMemcpy(&tmp[0], ans_d, sizeof(double) * 10, cudaMemcpyDeviceToHost);
-        std::cout << "CU first ans:\n";
-        std::for_each(tmp.begin(), tmp.end(), [](double & a){ std::cout << a << " ";});
-        std::cout << "\n\n";
+        cublasDestroy(handle);
 
         cudaFree(Q_d);
         cudaFree(V_d);
         cudaFree(QV_d);
         cudaFree(eigvals_d);
         cudaFree(ans_d);
-        cudaFree(alpha_d);
-        cudaFree(beta_d);
 }

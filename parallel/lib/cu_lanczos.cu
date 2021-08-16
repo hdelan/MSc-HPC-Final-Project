@@ -2,12 +2,12 @@
 
 #define BLOCK_SIZE 32
 
+template <typename T>
 void lanczosDecomp::cu_decompose()
 {
-
     unsigned long n{A.get_n()};
     unsigned long *IA_d, *JA_d;
-    double *Q_raw_d, *v_d, *alpha_d, *beta_d, *tmp_d;
+    T *Q_raw_d, *v_d, *alpha_d, *beta_d, *tmp_d;
 
     unsigned block_size{32}, num_blocks{static_cast<unsigned>(n) / block_size + 1};
     dim3 blocks{num_blocks}, threads{block_size};
@@ -15,8 +15,8 @@ void lanczosDecomp::cu_decompose()
     std::cout << num_blocks << " block(s) ";
     std::cout << "Running with "<< BLOCK_SIZE << " threads per block\n";
 
-    double *x_normed{new double[n]};
-    double x_norm = norm(x);
+    T *x_normed{new T[n]};
+    T x_norm = norm(x);
 
     /*
     std::cout << "x\n";
@@ -29,95 +29,70 @@ void lanczosDecomp::cu_decompose()
 
     cudaMalloc((void **)&IA_d, sizeof(long unsigned) * (n + 1));
     cudaMalloc((void **)&JA_d, sizeof(long unsigned) * 2 * A.edge_count);
-    cudaMalloc((void **)&v_d, sizeof(double) * n);
-    cudaMalloc((void **)&Q_raw_d, sizeof(double) * n * 2);
-    cudaMalloc((void **)&alpha_d, sizeof(double) * krylov_dim);
-    cudaMalloc((void **)&beta_d, sizeof(double) * (krylov_dim - 1));
-    cudaMalloc((void **)&tmp_d, sizeof(double) * (num_blocks));
+    cudaMalloc((void **)&v_d, sizeof(T) * n);
+    cudaMalloc((void **)&Q_raw_d, sizeof(T) * n * 2);
+    cudaMalloc((void **)&alpha_d, sizeof(T) * krylov_dim);
+    cudaMalloc((void **)&beta_d, sizeof(T) * (krylov_dim - 1));
+    cudaMalloc((void **)&tmp_d, sizeof(T) * (num_blocks));
 
-    double *Q_d_ptr[2] = {&Q_raw_d[0], &Q_raw_d[n]};
+    T *Q_d_ptr[2] = {&Q_raw_d[0], &Q_raw_d[n]};
 
-    cudaMemcpy(Q_d_ptr[0], x_normed, sizeof(double) * n, cudaMemcpyHostToDevice);
+    cudaMemcpy(Q_d_ptr[0], x_normed, sizeof(T) * n, cudaMemcpyHostToDevice);
     cudaMemcpy(IA_d, A.row_offset, sizeof(long unsigned) * (n + 1), cudaMemcpyHostToDevice);
     cudaMemcpy(JA_d, A.col_idx, sizeof(long unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice);
 
-    std::vector<double> tmp(n);
+    std::vector<T> tmp(n);
 
     int i{0};
 
     for (auto k = 0u; k < krylov_dim; k++)
     {
-        std::vector<double> tmp_vec(n);
+        std::vector<T> tmp_vec(n);
         std::vector<long unsigned> tmp2(n);
-
+        
         // v = A*Q(:,j)
-        cu_spMV1<double, unsigned long><<<blocks, threads>>>(IA_d, JA_d, n, Q_d_ptr[i], v_d);
+        cu_spMV1<T, unsigned long><<<blocks, threads>>>(IA_d, JA_d, n, Q_d_ptr[i], v_d); 
         
-        /*
-        cudaMemcpy(&tmp2[0], &IA_d[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
-        std::cout << "IA: \n";
-        std::for_each(tmp2.begin(), tmp2.end(), [](long unsigned a)
-                      { std::cout << a << '\n'; });
-        cudaMemcpy(&tmp_vec[0], &v_d[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
-        std::cout << "cu_SPMV product: \n";
-        std::for_each(tmp_vec.begin(), tmp_vec.end(), [](double a)
-                      { std::cout << a << '\n'; });
-        cudaMemcpy(&tmp_vec[0], Q_d_ptr[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
-        std::cout << "Q_s: \n";
-        std::for_each(tmp_vec.begin(), tmp_vec.end(), [](double a)
-                      { std::cout << a << '\n'; });
-*/
         // alpha = v*Q(:,j)
-        
         if (num_blocks==1) { 
-            cu_dot_prod<double, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, Q_d_ptr[i], n, &alpha_d[k]);
-        /*double alpha_tmp{-11};
-        cudaMemcpy(&alpha_tmp, &alpha_d[k], sizeof(double), cudaMemcpyDeviceToHost);
-        std::cout << "Got alpha=" << alpha_tmp << " from card\n";
-        */
+            cu_dot_prod<T, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(T)>>>(v_d, Q_d_ptr[i], n, &alpha_d[k]);
         } else {
-            cu_dot_prod<double, BLOCK_SIZE><<<num_blocks/2, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, Q_d_ptr[i], n, tmp_d);
-            cu_reduce<double, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(tmp_d, num_blocks, &alpha_d[k]);
+            cu_dot_prod<T, BLOCK_SIZE><<<num_blocks/2, threads, BLOCK_SIZE*sizeof(T)>>>(v_d, Q_d_ptr[i], n, tmp_d);
+            cu_reduce<T, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(T)>>>(tmp_d, num_blocks, &alpha_d[k]);
         }
 
-
-
         // v = v - alpha*Q(:,j)
-        cu_dpax<double><<<blocks, threads>>>(v_d, &alpha_d[k], Q_d_ptr[i], n);
-        /*
-        cudaMemcpy(&tmp_vec[0], &v_d[0], sizeof(double) * n, cudaMemcpyDeviceToHost);
-        std::cout << "v -= alpha*Q_s: \n";
-        std::for_each(tmp_vec.begin(), tmp_vec.end(), [](double a)
-                      { std::cout << a << '\n'; });
-*/
+        cu_dpax<T><<<blocks, threads>>>(v_d, &alpha_d[k], Q_d_ptr[i], n);
+        
         if (k > 0)
         {
             // v = v - beta*Q(:,j-1)
-            cu_dpax<double><<<blocks, threads>>>(v_d, &beta_d[k - 1], Q_d_ptr[1 - i], n);
+            cu_dpax<T><<<blocks, threads>>>(v_d, &beta_d[k - 1], Q_d_ptr[1 - i], n);
         }
 
         if (k < krylov_dim - 1)
         {
             // beta[j] = norm(v)
             if (num_blocks==1) {
-                cu_norm_sq_sqrt<double, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, n, &beta_d[k]);
+                cu_norm_sq_sqrt<T, BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(T)>>>(v_d, n, &beta_d[k]);
             } else {
-                cu_norm_sq<double, BLOCK_SIZE><<<num_blocks/2, threads, BLOCK_SIZE*sizeof(double)>>>(v_d, n, tmp_d);
-                cu_reduce_sqrt<double,BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(double)>>>(tmp_d, num_blocks, &beta_d[k]);
+                cu_norm_sq<T, BLOCK_SIZE><<<num_blocks/2, threads, BLOCK_SIZE*sizeof(T)>>>(v_d, n, tmp_d);
+                cu_reduce_sqrt<T,BLOCK_SIZE><<<1, threads, BLOCK_SIZE*sizeof(T)>>>(tmp_d, num_blocks, &beta_d[k]);
             }
-            cu_dvexda<double><<<blocks, threads>>>(Q_d_ptr[1 - i], &beta_d[k], v_d, n);
+            // Q(:,j) = v/beta
+            cu_dvexda<T><<<blocks, threads>>>(Q_d_ptr[1 - i], &beta_d[k], v_d, n);
         }
 
-        cudaMemcpy(&tmp[0], Q_d_ptr[i], sizeof(double) * n, cudaMemcpyDeviceToHost);
+        cudaMemcpy(&tmp[0], Q_d_ptr[i], sizeof(T) * n, cudaMemcpyDeviceToHost);
 
+        // Loading Q into memory
         for (auto j = 0u; j < n; j++)
             Q[k + j * krylov_dim] = tmp[j];
-        /*
-*/
+        
         i = 1 - i;
     }
-    cudaMemcpy(alpha, alpha_d, sizeof(double) * krylov_dim, cudaMemcpyDeviceToHost);
-    cudaMemcpy(beta, beta_d, sizeof(double) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
+    cudaMemcpy(alpha, alpha_d, sizeof(T) * krylov_dim, cudaMemcpyDeviceToHost);
+    cudaMemcpy(beta, beta_d, sizeof(T) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
 
 /*
     std::cout << "cu_Q:\n";
@@ -153,45 +128,32 @@ void lanczosDecomp::get_ans() const
                 std::cout << std::setprecision(20) << ans[i] << '\n';
 }
 
+template <typename T>
 void lanczosDecomp::decompose()
 {
         long unsigned n{A.get_n()}, i{0u};
-        double *v{new double[n]};
-        double *Q_raw(new double[2 * n]);
-        double *Q_s[2]{Q_raw, &Q_raw[n]}; // Tmp contiguous columns to use before storing
-                                          // in row-major matrix
-/*
-        std::cout << "A first edges: \n";
-        for (auto j=0u;j<10;j++) 
-        std::cout << A.row_idx[j] << " " << A.col_idx[j] << '\n';
+        T *v{new T[n]};
+        T *Q_raw(new T[2 * n]);
+        T *Q_s[2]{Q_raw, &Q_raw[n]}; // Tmp contiguous columns to use before storing
         
-        std::cout << "A last edges: \n";
-        for (auto j=2*A.edge_count-10;j<2*A.edge_count;j++) 
-        std::cout << A.row_idx[j] << " " << A.col_idx[j] << '\n';
-  */      
-        
-        double x_norm = norm(x);
+        T x_norm = norm(x);
 
         for (auto k = 0u; k < n; k++)
                 Q_s[i][k] = x[k] / x_norm;
         
+        // LANCZOS ALGORITHM
         for (auto j = 0u; j < krylov_dim; j++)
         {
-
-                // v = A*Q(:,j)
-                spMV(A, Q_s[i], v);
+                spMV(A, Q_s[i], v);                   // v = A*Q(:,j)
                 
-                // alpha = v*Q(:,j)
-                alpha[j] = inner_prod(v, Q_s[i], n);
-
-                // v = v - alpha*Q(:,j)
-                for (auto k = 0u; k < n; k++)
+                alpha[j] = inner_prod(v, Q_s[i], n);  // alpha = v*Q(:,j)
+                
+                for (auto k = 0u; k < n; k++)         // v = v - alpha*Q(:,j)
                         v[k] -= alpha[j] * Q_s[i][k];
 
                 if (j > 0)
                 {
-                        // v = v - beta*Q(:,j-1)
-                        for (auto k = 0u; k < n; k++)
+                        for (auto k = 0u; k < n; k++) // v = v - beta*Q(:,j-1)
                                 v[k] -= beta[j - 1] * Q_s[1 - i][k];
                 }
 
@@ -230,29 +192,6 @@ void lanczosDecomp::decompose()
         delete[] Q_raw;
 }
 
-std::ostream &operator<<(std::ostream &os, const lanczosDecomp &D)
-{
-        auto n {D.A.get_n()};
-        os << "\nAlpha: \n";
-        for (auto i = 0u; i < n; i++)
-                os << D.alpha[i] << " ";
-
-        os << "\n\nBeta: \n";
-        for (auto i = 0u; i < n - 1; i++)
-                os << D.beta[i] << " ";
-
-        os << "\n\nQ:\n";
-        for (auto i = 0u; i < n - 1; i++)
-        {
-                os << D.Q[i] << " ";
-                if (i % D.krylov_dim == D.krylov_dim - 1)
-                        os << '\n';
-        }
-
-        os << '\n';
-        return os;
-}
-
 void lanczosDecomp::check_ans(const double *analytic_ans) const
 {
         std::vector<double> diff(A.n);
@@ -270,16 +209,10 @@ void lanczosDecomp::check_ans(const double *analytic_ans) const
         std::cout << "Relative norm of differences\t= " << std::setprecision(20)<< norm(&diff[0])/norm(analytic_ans) << '\n';
 }
 
+template <typename T>
 void lanczosDecomp::check_ans(lanczosDecomp & L) const
 {     
-        /*
-        unsigned width {15};
-        std::cout <<std::setw(width) << "Serial" << std::setw(width) << "CUDA" << std::endl;
-        for (int i=0;i<5;i++) {
-          std::cout << std::setw(width) << ans[i] << std::setw(width) << L.ans[i] << std::endl;
-        }
-        */
-        std::vector<double> diff(A.n);
+        std::vector<T> diff(A.n);
         for (auto i = 0u; i < A.n; i++)
         {
                 diff[i] = std::abs(ans[i] - L.ans[i]);
@@ -296,18 +229,31 @@ void lanczosDecomp::check_ans(lanczosDecomp & L) const
 /*
 // Doesn't work! (doesn't give better accuracy)
 void lanczosDecomp::reorthog() {
-        double * tau {new double [krylov_dim]};
+        T * tau {new T [krylov_dim]};
         LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, A.n, krylov_dim, Q, krylov_dim, tau);
         LAPACKE_dorgqr(LAPACK_ROW_MAJOR, A.n, krylov_dim, krylov_dim, Q, krylov_dim, tau);
         delete[] tau;
 }
 */
-double lanczosDecomp::inner_prod(const double *const v, const double *const w, const long unsigned N) const
+template <typename T>
+T lanczosDecomp::inner_prod(const T *const v, const T *const w, const long unsigned N) const
 {
-        double ans{0.0};
+        T ans{0.0};
         for (auto i = 0u; i < N; i++)
         {
                 ans += v[i] * w[i];
         }
         return ans;
 }
+
+
+template float lanczosDecomp::inner_prod<float>(const float *const v, const float *const w, const long unsigned N) const;
+template double lanczosDecomp::inner_prod<double>(const double *const v, const double *const w, const long unsigned N) const;
+
+template void lanczosDecomp::check_ans<float>(lanczosDecomp<float>& L) const;
+template void lanczosDecomp::check_ans<double>(lanczosDecomp<double>& L) const;
+
+template void lanczosDecomp::decompose<float>();
+template void lanczosDecomp::decompose<double>();
+template void lanczosDecomp::cu_decompose<float>();
+template void lanczosDecomp::cu_decompose<double>();

@@ -14,6 +14,7 @@
 #include "cu_SPMV.h"
 #include "SPMV.h"
 
+template <typename T>
 class lanczosDecomp
 {
 private:
@@ -28,8 +29,10 @@ private:
     double *ans;   // The action of matrix function on x
 
     double x_norm;
-
+    
+    template <typename T>
     void decompose();
+    template <typename T>
     void cu_decompose();
 
 public:
@@ -45,8 +48,8 @@ public:
     {
         for (auto i = 0u; i < A.n; i++)
             x[i] = starting_vec[i];
-        if (cuda) { cu_decompose(); }
-        else { decompose(); }
+        if (cuda) { cu_decompose<T>(); }
+        else { decompose<T>(); }
     };
     lanczosDecomp(lanczosDecomp &) = delete;
     lanczosDecomp &operator=(lanczosDecomp &) = delete;
@@ -70,14 +73,16 @@ public:
 
     void check_ans(const double *) const;
     void check_ans(lanczosDecomp &) const;
-
-    double inner_prod(const double *const, const double *const, const long unsigned) const;
+    
+    template <typename T>
+    T inner_prod(const T *const, const T *const, const long unsigned) const;
 
     void reorthog();
-
-    double norm(const double *v) const
+    
+    template <typename T>
+    T norm(const T *v) const
     {
-        double norm{0.0};
+        T norm{0.0};
         for (auto i = 0u; i < A.n; i++)
             norm += v[i] * v[i];
         return std::sqrt(norm);

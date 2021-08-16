@@ -50,6 +50,7 @@ void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
         //naive_dgemm(L.Q, E.eigenvectors, n,k, QV);
         cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 0, QV, k);
 // PRINT OUT QV
+/*
         std::cout << "\nQV\n";
         for (auto j = 0u; j < 1; j++)
         {
@@ -57,7 +58,6 @@ void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
                         std::cout <<std::setprecision(4)<< QV[k + j * L.krylov_dim] << " ";
                 std::cout << '\n';
         }
-/*
         */
         // Getting QV*f(lambda)
         cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, k, &E.eigenvalues[0], 1, 0, &L.ans[0],1);
