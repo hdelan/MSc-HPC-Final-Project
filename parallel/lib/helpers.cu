@@ -1,7 +1,25 @@
 #include "helpers.h"
+
 #include <numeric>
 #include <vector>
 #include <cmath>
+
+void cuda_start_timer(cudaEvent_t &start, cudaEvent_t &end)
+{
+    cudaEventCreate(&start);
+    cudaEventCreate(&end);
+    cudaEventRecord(start, 0);
+}
+
+float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end)
+{
+    cudaEventRecord(end, 0);
+    cudaEventSynchronize(start);
+    cudaEventSynchronize(end);
+    float time_taken;
+    cudaEventElapsedTime(&time_taken, start, end);
+    return time_taken * 0.001;
+}
 
 int parseArguments(int argc, char *argv[], std::string &filename, long unsigned &krylov_dim, bool &verbose, long unsigned &n, long unsigned &bar_deg, long unsigned &E)
 {

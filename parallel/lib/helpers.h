@@ -9,4 +9,8 @@ template <typename T>
 void diff_arrays(const T * const, const T * const, const unsigned n, T & , unsigned & );
 template <typename T>
 T norm(const T * const a, const unsigned n);
+
+void cuda_start_timer(cudaEvent_t &start, cudaEvent_t &end);
+float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end);
+
 #endif

@@ -25,6 +25,7 @@ public:
         };
 
         friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
+        friend void cu_multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
         friend std::ostream &operator<<(std::ostream &, eigenDecomp &);
 
 private:

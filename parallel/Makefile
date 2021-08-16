@@ -3,7 +3,7 @@ CXX 		:= g++
 NVCXX 		:= nvcc
 NVCCFLAGS 	:= --use_fast_math -Wno-deprecated-gpu-targets #-arch=sm_35 
 CXXFLAGS 	:= -Wall -Wextra -Wno-unused-parameter -std=c++17
-LIBS 	 	:= -lblas -llapack -llapacke -lm #"-I/usr/local/opt/lapack/include"
+LIBS 	 	:= -lblas -llapack -llapacke -lm -lcublas #"-I/usr/local/opt/lapack/include"
 OPT			:= -O3
 
 MAIN 		:= adj
@@ -13,14 +13,14 @@ BUILDDIR 	:= ./build
 TESTDIR 	:= ./tests
 
 FILES 		:= adjMatrix.cc \
-       			helpers.cc \
 			make_graph.cc
 
 CUFILES		:= cu_lanczos.cu \
 			cu_SPMV.cu \
 		      	cu_linalg.cu \
        			multiplyOut.cu \
-       			eigen.cu 
+       			eigen.cu \
+                        helpers.cu
 
 TESTOBJS 	:=  $(BUILDDIR)/cu_linalg.o \
 				$(BUILDDIR)/cu_SPMV.o \
@@ -31,6 +31,7 @@ TESTOBJS 	:=  $(BUILDDIR)/cu_linalg.o \
 				$(BUILDDIR)/make_graph.o \
 				$(BUILDDIR)/eigen.o \
 				$(BUILDDIR)/multiplyOut.o \
+				$(BUILDDIR)/cu_multiplyOut.o
 
 OBJS		:= $(FILES:%.cc=$(BUILDDIR)/%.o) $(CUFILES:%.cu=$(BUILDDIR)/%.o) 
 

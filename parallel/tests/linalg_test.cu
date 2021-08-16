@@ -22,9 +22,6 @@
 template <typename T>
 void cu_linalg_test(const unsigned n, adjMatrix &A);
 
-void cuda_start_timer(cudaEvent_t &start, cudaEvent_t &end);
-float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end);
-
 int main(void)
 {
     unsigned n{5'000};
@@ -374,19 +371,3 @@ void cu_linalg_test(const unsigned n, adjMatrix &A)
     cudaProfilerStop();
 }
 
-void cuda_start_timer(cudaEvent_t &start, cudaEvent_t &end)
-{
-    cudaEventCreate(&start);
-    cudaEventCreate(&end);
-    cudaEventRecord(start, 0);
-}
-
-float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end)
-{
-    cudaEventRecord(end, 0);
-    cudaEventSynchronize(start);
-    cudaEventSynchronize(end);
-    float time_taken;
-    cudaEventElapsedTime(&time_taken, start, end);
-    return time_taken * 0.001;
-}

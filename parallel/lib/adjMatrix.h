@@ -91,7 +91,7 @@ public:
         friend void spMV(const adjMatrix &, const T *const, T *const);
         friend std::ostream &operator<<(std::ostream &, const adjMatrix &);
         friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
-        friend void lanczos_gpu(adjMatrix &);
+        friend void cu_multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
         template <typename T>
         friend void cu_linalg_test(const unsigned n, adjMatrix &);
         template <typename T>

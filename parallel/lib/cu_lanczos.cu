@@ -12,8 +12,8 @@ void lanczosDecomp::cu_decompose()
     unsigned block_size{32}, num_blocks{static_cast<unsigned>(n) / block_size + 1};
     dim3 blocks{num_blocks}, threads{block_size};
     
-    std::cout << BLOCK_SIZE << " threads per block\n";
-    std::cout << num_blocks << " block(s)\n";
+    std::cout << num_blocks << " block(s) ";
+    std::cout << "Running with "<< BLOCK_SIZE << " threads per block\n";
 
     double *x_normed{new double[n]};
     double x_norm = norm(x);
@@ -287,8 +287,8 @@ void lanczosDecomp::check_ans(lanczosDecomp & L) const
         auto max_it = std::max_element(diff.begin(), diff.end());
         auto max_idx = std::distance(diff.begin(), max_it);
         std::cout << "\nMax difference of " << *max_it
-                  << " found at index\n"<<std::setw(15)<<"serial_ans[" << max_idx << "] = " <<std::setw(15)<< ans[max_idx] <<"\n"
-                  <<std::setw(15)<<"cuda_ans[" << max_idx << "] = "<< std::setw(15) << L.ans[max_idx] << '\n' << std::endl;
+                  << " found at index\n"<<std::setw(15)<<"serial_ans[" << max_idx << "] = " <<std::setprecision(10)<<std::setw(15)<< ans[max_idx] <<"\n"
+                  <<std::setw(15)<<"cuda_ans[" << max_idx << "] = " <<std::setprecision(10)<<std::setw(15) << L.ans[max_idx] << '\n' << std::endl;
 
         std::cout << std::setw(30) << std::left << "Total norm of differences" << "=" << std::right << std::setprecision(20) <<  std::setw(30) << norm(&diff[0]) << std::endl;
         std::cout << std::setw(30) << std::left << "Relative norm of differences"<< "=" << std::right << std::setprecision(20) << std::setw(30) << norm(&diff[0])/norm(L.ans) << std::endl;

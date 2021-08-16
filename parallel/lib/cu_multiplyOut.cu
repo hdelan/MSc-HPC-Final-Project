@@ -1,25 +1,40 @@
-#include "multiplyOut.h"
-#include "lapacke.h"
+#include "cu_multiplyOut.h"
 #include "cblas.h"
 #include <iomanip>
 
-void exp_func(double & a) {
+#include "cublas_v2.h"
+
+void my_exp_func(double & a) {
         a = std::exp(a);
 }
 
-void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
+void cu_multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
 
-        auto n {L.get_n()};
+        auto n {L.get_n()}, k {L.get_krylov()};
         
         // Applying function
-        for (auto j=0u;j<L.krylov_dim;j++) exp_func(E.eigenvalues[j]);
+        for (auto j=0u;j<L.krylov_dim;j++) my_exp_func(E.eigenvalues[j]);
         
         // Elementwise multiplying of f(lambda) by first row of eigenvectors
         for (auto j=0u;j<L.krylov_dim;j++) E.eigenvalues[j] *= L.x_norm * E.eigenvectors[j];
 
         //print_matrix(3, 1, &E.eigenvalues[0]);
+        double *Q_d, *V_d;
+        double * QV_d;
+
+        cudaMalloc(&Q_d, sizeof(double)*n*k);
+        cudaMalloc(&V_d, sizeof(double)*k*k);
+        cudaMalloc(&QV_d, sizeof(double)*n*k);
+
+        cudaMemcpy(Q_d, L.Q, sizeof(double)*n*k,cudaMemcpyHostToDevice);
+        cudaMemcpy(V_d, E.eigenvectors, sizeof(double)*k*k,cudaMemcpyHostToDevice);
         
-        double * QV {new double [n*L.krylov_dim]};
+        cublasHandle_t handle;
+
+        double alpha{1}, beta{0};
+        
+        cublasDgemm(handle, CUBLAS_OP_T, CUBLAS_OP_T,n,k,k,&alpha,V_d,k,Q_d,n,&beta,QV_d,n);
+
         /*
         for (auto j = 0u; j < n; j++)
         {
@@ -44,11 +59,8 @@ void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
                         }
                 }
         }
-        */
-        // This call to cblas_dgemm was not working for me!
-        auto k = L.get_krylov();
-        //naive_dgemm(L.Q, E.eigenvectors, n,k, QV);
         cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 0, QV, k);
+        */
 // PRINT OUT QV
 /*
         std::cout << "\nQV\n";
@@ -62,19 +74,13 @@ void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
 /*
         */
         // Getting QV*f(lambda)
-        cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, k, &E.eigenvalues[0], 1, 0, &L.ans[0],1);
+        //cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, k, &E.eigenvalues[0], 1, 0, &L.ans[0],1);
         //naive_dgemv(QV, &E.eigenvalues[0], n, L.krylov_dim, &L.ans[0]);
 
-        delete[](QV);
+        //delete[](QV);
+        cudaFree(Q_d);
+        cudaFree(V_d);
+        cudaFree(QV_d);
         
 }
 
-void print_matrix(unsigned rows, unsigned cols, double * A) {
-        std::cout << "Printing matrix for "<<rows<<" rows and " << cols<< "cols\n";
-        for (auto i=0u; i<rows; ++i) {
-                for (auto j=0u; j<cols; ++j){
-                        std::cout << A[i*cols+j] << " ";
-                }
-                std::cout << '\n';
-        }
-}

@@ -65,6 +65,7 @@ public:
 
     friend class eigenDecomp;
     friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
+    friend void cu_multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
     friend std::ostream &operator<<(std::ostream &os, const lanczosDecomp &D);
 
     void check_ans(const double *) const;

@@ -1,6 +1,7 @@
 #include "../lib/cu_linalg.h"
 #include "../lib/cu_lanczos.h"
 #include "../lib/cu_SPMV.h"
+#include "../lib/cu_multiplyOut.h"
 #include "../lib/eigen.h"
 #include "../lib/SPMV.h"
 #include "../lib/adjMatrix.h"
@@ -21,72 +22,87 @@
 #define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
-void cuda_start_timer(cudaEvent_t &start, cudaEvent_t &end);
-float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end);
-
 int main(void)
 {
-    unsigned n{100};
-
-    long unsigned edges{n * 5};
-
+    unsigned n{100'000};
+    long unsigned edges{n * 10};
+    unsigned krylov_dim {1000};
+    
+    /*
     std::string filename {"../data/California.mtx"};
     std::ifstream fs;
     fs.open(filename);
     assert(!fs.fail() && "File opening failed\n");
     fs >> n >> n >> edges;
-
+    */
+    unsigned width {17};
 
     timeval start, end;
     gettimeofday(&start, NULL);
-    adjMatrix A(n, edges, fs);
-    fs.close();
+    //adjMatrix A(n, edges, fs);
+    //fs.close();
+    adjMatrix A(n, edges);
     gettimeofday(&end, NULL);
-    std::cout << "Time elapsed to build random adjacency matrix with n = " << n << " edges = " << edges << ":\n\t"
+    std::cout << "\nTime elapsed to build random adjacency matrix with n = " << n << " edges = " << edges << ":\n\t"
               << end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0 << " seconds\n\n";
-    
-    unsigned krylov_dim {20};
+
+    std::cout << "Running Lanczos algorithm for krylov_dim "<< krylov_dim << "\n\n";
 
     std::vector<double> x (n, 1);
     
+    timeval s, e1, e2;
+    gettimeofday(&s, NULL);
+    
+    // SERIAL LANCZOS
+    bool cuda {false};
+    lanczosDecomp L(A, krylov_dim, &x[0], cuda);
+    gettimeofday(&e1, NULL);
+    
+    eigenDecomp E(L);
+    multOut(L, E, A);
+    
+    gettimeofday(&e2, NULL);
+    
+    double cpu_time_lanczos {e1.tv_sec - s.tv_sec + (e1.tv_usec - s.tv_usec) / 1000000.0};
+    double cpu_time_whole {e2.tv_sec - s.tv_sec + (e2.tv_usec - s.tv_usec) / 1000000.0};
+    
+    timeval s_d, e_d;
     cudaEvent_t start_d, end_d;
     cuda_start_timer(start_d, end_d);
     
-    bool cuda {true};
+    // CUDA LANCZOS
+    cuda = true;
     lanczosDecomp cu_L(A, krylov_dim, &x[0], cuda);
+    float gpu_time_lanczos{cuda_end_timer(start_d, end_d)};
+    
+    gettimeofday(&s_d, NULL);
     eigenDecomp cu_E(cu_L);
-    multOut(cu_L, cu_E, A);
+    cu_multOut(cu_L, cu_E, A);
+    gettimeofday(&e_d, NULL);
+    double gpu_time_whole {gpu_time_lanczos + (e_d.tv_sec - s_d.tv_sec + (e_d.tv_usec - s_d.tv_usec) / 1000000.0)};
     
-    float gpu_time{cuda_end_timer(start_d, end_d)};
     
-    timeval s, e;
-    gettimeofday(&s, NULL);
+  
+    std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
+    std::cout << "TIMING\n";
+    std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
+    std::cout << std::setw(2*width) << "Serial" << std::setw(width) << "CUDA" << std::setw(width) << "Speedup"<<'\n';
+    std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
+    std::cout << std::setw(width) << std::left << "Lanczos" << std::right
+              << std::setw(width) << cpu_time_lanczos 
+              << std::setw(width) << gpu_time_lanczos
+              << std::setw(width) << cpu_time_lanczos/gpu_time_lanczos << "\n\n";
+    std::cout << std::setw(width) << std::left << "Entire algorithm" << std::right
+              << std::setw(width) << cpu_time_whole
+              << std::setw(width) << gpu_time_whole
+              << std::setw(width) << cpu_time_whole/gpu_time_whole << "\n\n";
     
-    cuda = false;
-    lanczosDecomp L(A, krylov_dim, &x[0], cuda);
-    eigenDecomp E(L);
-    multOut(L, E, A);
-
-    gettimeofday(&e, NULL);
-    std::cout <<  "Speedup:"
-              << std::setw(10) << (end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0)/gpu_time << "\n\n";
-
+    std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
+    std::cout << "ERROR CHECKING\n";
+    std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
+    
     L.check_ans(cu_L);
+    
+    std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
 }
 
-void cuda_start_timer(cudaEvent_t &start, cudaEvent_t &end)
-{
-    cudaEventCreate(&start);
-    cudaEventCreate(&end);
-    cudaEventRecord(start, 0);
-}
-
-float cuda_end_timer(cudaEvent_t &start, cudaEvent_t &end)
-{
-    cudaEventRecord(end, 0);
-    cudaEventSynchronize(start);
-    cudaEventSynchronize(end);
-    float time_taken;
-    cudaEventElapsedTime(&time_taken, start, end);
-    return time_taken * 0.001;
-}
