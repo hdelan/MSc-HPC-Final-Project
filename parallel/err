@@ -1,0 +1,87 @@
+nvcc --use_fast_math -Wno-deprecated-gpu-targets  -O3  -c lib/cu_lanczos.cu -o build/cu_lanczos.o
+lib/adjMatrix.h(95): error: too few arguments for class template "lanczosDecomp"
+
+lib/adjMatrix.h(97): error: too few arguments for class template "lanczosDecomp"
+
+lib/adjMatrix.h(103): error: too few template parameters -- does not match previous declaration (declared 
+(13): here)
+
+lib/cu_lanczos.h(68): warning: declaration of "U" hides template parameter
+
+lib/cu_lanczos.h(69): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.h(70): warning: declaration of "U" hides template parameter
+
+lib/cu_lanczos.h(71): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.h(75): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(6): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(123): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(123): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(132): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(196): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(196): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(214): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(214): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(214): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(241): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(241): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(252): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(252): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(252): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(253): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(253): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(253): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(255): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(255): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(255): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(255): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(256): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(256): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(256): error: a type qualifier is not allowed on a nonmember function
+
+lib/cu_lanczos.cu(256): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(260): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(260): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(261): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(261): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(263): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(263): error: invalid explicit instantiation declaration
+
+lib/cu_lanczos.cu(264): error: too few arguments for class template "lanczosDecomp"
+
+lib/cu_lanczos.cu(264): error: invalid explicit instantiation declaration
+
+39 errors detected in the compilation of "lib/cu_lanczos.cu".
+Makefile:49: recipe for target 'build/cu_lanczos.o' failed
+make: *** [build/cu_lanczos.o] Error 1

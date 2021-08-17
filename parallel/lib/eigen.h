@@ -6,33 +6,33 @@
 #include <lapacke.h>
 #include <vector>
 
+template <typename T>
 class eigenDecomp
 {
 public:
         eigenDecomp() = delete;
-        eigenDecomp(lanczosDecomp &_L) : eigenvalues(new double[_L.krylov_dim]),
-                                        eigenvectors(new double[_L.krylov_dim*_L.krylov_dim]),
+        eigenDecomp(lanczosDecomp<T> &_L) : eigenvalues(new T[_L.krylov_dim]),
+                                        eigenvectors(new T[_L.krylov_dim*_L.krylov_dim]),
                                         L {_L}
         {
                 for (auto i=0u;i<L.get_krylov();i++) eigenvalues[i] = L.alpha[i];
                 decompose();
         };
-        eigenDecomp(eigenDecomp &) = delete;
-        eigenDecomp &operator=(eigenDecomp &) = delete;
+        eigenDecomp(eigenDecomp<T> &) = delete;
+        eigenDecomp &operator=(eigenDecomp<T>&) = delete;
         ~eigenDecomp() {
                 delete[] eigenvalues;
                 delete[] eigenvectors;
         };
 
-        friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
-        friend void cu_multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
-        friend std::ostream &operator<<(std::ostream &, eigenDecomp &);
+        friend void multOut(lanczosDecomp<T> &, eigenDecomp<T> &, adjMatrix &);
+        friend void cu_multOut(lanczosDecomp<T> &, eigenDecomp<T> &, adjMatrix &);
 
 private:
-        double * eigenvalues;
-        double * eigenvectors;
+        T * eigenvalues;
+        T * eigenvectors;
 
-        lanczosDecomp & L;
+        lanczosDecomp<T> & L;
 
         void decompose();
 };

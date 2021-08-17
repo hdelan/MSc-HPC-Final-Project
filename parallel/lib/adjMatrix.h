@@ -10,6 +10,7 @@
 #include <random>
 
 class eigenDecomp;
+template <typename T>
 class lanczosDecomp;
 
 class adjMatrix
@@ -90,13 +91,16 @@ public:
         template <typename T>
         friend void spMV(const adjMatrix &, const T *const, T *const);
         friend std::ostream &operator<<(std::ostream &, const adjMatrix &);
-        friend void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
-        friend void cu_multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
+        template <typename T>
+        friend void multOut(lanczosDecomp<T> &, eigenDecomp &, adjMatrix &);
+        template <typename T>
+        friend void cu_multOut(lanczosDecomp<T> &, eigenDecomp &, adjMatrix &);
         template <typename T>
         friend void cu_linalg_test(const unsigned n, adjMatrix &);
         template <typename T>
         friend void get_blockrows(adjMatrix &, const unsigned, long unsigned *, long unsigned &);
 
+        template <typename T>
         friend class lanczosDecomp;
 };
 #endif

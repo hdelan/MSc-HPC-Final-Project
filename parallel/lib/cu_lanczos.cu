@@ -3,7 +3,7 @@
 #define BLOCK_SIZE 32
 
 template <typename T>
-void lanczosDecomp::cu_decompose()
+void lanczosDecomp<T>::cu_decompose()
 {
     unsigned long n{A.get_n()};
     unsigned long *IA_d, *JA_d;
@@ -119,8 +119,8 @@ void lanczosDecomp::cu_decompose()
     cudaFree(tmp_d);
 }
 
-
-void lanczosDecomp::get_ans() const
+template <typename T>
+void lanczosDecomp<T>::get_ans() const
 {
         std::cout << "Answer vector:\n";
 
@@ -129,7 +129,7 @@ void lanczosDecomp::get_ans() const
 }
 
 template <typename T>
-void lanczosDecomp::decompose()
+void lanczosDecomp<T>::decompose()
 {
         long unsigned n{A.get_n()}, i{0u};
         T *v{new T[n]};
@@ -192,7 +192,8 @@ void lanczosDecomp::decompose()
         delete[] Q_raw;
 }
 
-void lanczosDecomp::check_ans(const double *analytic_ans) const
+template <typename T>
+void lanczosDecomp<T>::check_ans(const T *analytic_ans) const
 {
         std::vector<double> diff(A.n);
         for (auto i = 0u; i < A.n; i++)
@@ -210,9 +211,11 @@ void lanczosDecomp::check_ans(const double *analytic_ans) const
 }
 
 template <typename T>
-void lanczosDecomp::check_ans(lanczosDecomp & L) const
+template <typename U>
+void lanczosDecomp<T>::check_ans(lanczosDecomp<U> & L) const
 {     
-        std::vector<T> diff(A.n);
+        //std::vector<decltype(T()+U())> diff(A.n);
+        std::vector<decltype(T()+U())> diff(A.n);
         for (auto i = 0u; i < A.n; i++)
         {
                 diff[i] = std::abs(ans[i] - L.ans[i]);
@@ -236,7 +239,7 @@ void lanczosDecomp::reorthog() {
 }
 */
 template <typename T>
-T lanczosDecomp::inner_prod(const T *const v, const T *const w, const long unsigned N) const
+T lanczosDecomp<T>::inner_prod(const T *const v, const T *const w, const long unsigned N) const
 {
         T ans{0.0};
         for (auto i = 0u; i < N; i++)
@@ -247,13 +250,16 @@ T lanczosDecomp::inner_prod(const T *const v, const T *const w, const long unsig
 }
 
 
-template float lanczosDecomp::inner_prod<float>(const float *const v, const float *const w, const long unsigned N) const;
-template double lanczosDecomp::inner_prod<double>(const double *const v, const double *const w, const long unsigned N) const;
+template float lanczosDecomp<float>::inner_prod(const float *const v, const float *const w, const long unsigned N) const;
+template double lanczosDecomp<double>::inner_prod(const double *const v, const double *const w, const long unsigned N) const;
 
-template void lanczosDecomp::check_ans<float>(lanczosDecomp<float>& L) const;
-template void lanczosDecomp::check_ans<double>(lanczosDecomp<double>& L) const;
+template void lanczosDecomp<float>::check_ans(lanczosDecomp<float>& L) const;
+template void lanczosDecomp<double>::check_ans(lanczosDecomp<float>& L) const;
+//template void lanczosDecomp<float>::check_ans(lanczosDecomp<double>& L) const;
+//template void lanczosDecomp<double>::check_ans(lanczosDecomp<float>& L) const;
 
-template void lanczosDecomp::decompose<float>();
-template void lanczosDecomp::decompose<double>();
-template void lanczosDecomp::cu_decompose<float>();
-template void lanczosDecomp::cu_decompose<double>();
+template void lanczosDecomp<float>::decompose();
+template void lanczosDecomp<double>::decompose();
+
+template void lanczosDecomp<float>::cu_decompose();
+template void lanczosDecomp<double>::cu_decompose();
