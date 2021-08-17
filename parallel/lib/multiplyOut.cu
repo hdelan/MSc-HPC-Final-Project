@@ -1,13 +1,35 @@
 #include "multiplyOut.h"
 #include "lapacke.h"
-#include "cblas.h"
+#include <cblas.h>
 #include <iomanip>
 
-void exp_func(double & a) {
+template <typename T>
+void exp_func(T & a) {
         a = std::exp(a);
 }
 
-void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
+// Wrapping sgemm in dgemm and sgemv in dgemv
+void cblas_dgemm(CBLAS_ORDER layout, CBLAS_TRANSPOSE transa, CBLAS_TRANSPOSE transb, 
+                        int m, int n, int k, 
+                        float alpha, 
+                        float * A, int lda, 
+                        float * B, int ldb, 
+                        float beta, 
+                        float * C, int ldc) {
+  cblas_sgemm (layout, transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+}
+void cblas_dgemv(CBLAS_ORDER layout, CBLAS_TRANSPOSE transa, 
+                        int m, int n, 
+                        float alpha,
+                        float * A, int lda, 
+                        float * x, int incx, 
+                        float beta,
+                        float * y, int incy) {
+  cblas_sgemv(layout, transa, m, n, alpha, A, lda, x, incx, beta, y, incy);
+}
+
+template <typename T>
+void multOut(lanczosDecomp<T> & L, eigenDecomp<T> & E, adjMatrix & A) {
 
         auto n {L.get_n()};
         
@@ -19,60 +41,19 @@ void multOut(lanczosDecomp & L, eigenDecomp & E, adjMatrix & A) {
 
         //print_matrix(3, 1, &E.eigenvalues[0]);
         
-        double * QV {new double [n*L.krylov_dim]};
-        /*
-        for (auto j = 0u; j < n; j++)
-        {
-                for (auto k = 0u; k < L.krylov_dim; k++)
-                        std::cout << std::setprecision(20) << Q[k + j * L.krylov_dim] << " ";
-                std::cout << '\n';
-        }
-        for (auto j = 0u; j < L.krylov_dim; j++)
-        {
-                for (auto k = 0u; k < L.krylov_dim; k++)
-                        std::cout << std::setprecision(20) << E.eigenvectors[k + j * L.krylov_dim] << " ";
-                std::cout << '\n';
-        }
-        */
-/*
-        // Getting QV (n x k)
-        for (auto i=0u;i<n;i++) {
-                for (auto j=0u;j<L.krylov_dim;j++) {
-                        QV[i*L.krylov_dim+j] = 0.0;
-                        for (auto k=0u;k<L.krylov_dim;k++) {
-                                QV[i*L.krylov_dim+j] += L.Q[i*L.krylov_dim+k]*E.eigenvectors[k*L.krylov_dim+j];
-                        }
-                }
-        }
-        */
-        // This call to cblas_dgemm was not working for me!
+        T * QV {new T [n*L.krylov_dim]};
+        
+
+
         auto k = L.get_krylov();
-        //naive_dgemm(L.Q, E.eigenvectors, n,k, QV);
         cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 0, QV, k);
-// PRINT OUT QV
-/*
-        std::cout << "\nQV\n";
-        for (auto j = 0u; j < 1; j++)
-        {
-                for (auto k = 0u; k<10; k++)
-                        std::cout <<std::setprecision(4)<< QV[k + j * L.krylov_dim] << " ";
-                std::cout << '\n';
-        }
-        */
+        
         // Getting QV*f(lambda)
         cblas_dgemv(CblasRowMajor, CblasNoTrans, n, L.krylov_dim, 1, QV, k, &E.eigenvalues[0], 1, 0, &L.ans[0],1);
-        //naive_dgemv(QV, &E.eigenvalues[0], n, L.krylov_dim, &L.ans[0]);
 
         delete[](QV);
         
 }
 
-void print_matrix(unsigned rows, unsigned cols, double * A) {
-        std::cout << "Printing matrix for "<<rows<<" rows and " << cols<< "cols\n";
-        for (auto i=0u; i<rows; ++i) {
-                for (auto j=0u; j<cols; ++j){
-                        std::cout << A[i*cols+j] << " ";
-                }
-                std::cout << '\n';
-        }
-}
+template void multOut(lanczosDecomp<double>&, eigenDecomp<double>&, adjMatrix &);
+template void multOut(lanczosDecomp<float>&, eigenDecomp<float>&, adjMatrix &);

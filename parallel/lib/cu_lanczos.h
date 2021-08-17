@@ -14,6 +14,18 @@
 #include "cu_SPMV.h"
 #include "SPMV.h"
 
+template <typename T, typename U>
+T norm(const T *v, U n)
+{
+  T norm{0.0};
+  for (auto i = 0u; i < n; i++)
+    norm += v[i] * v[i];
+  return std::sqrt(norm);
+}
+
+template <typename U, typename V>
+void check_ans(lanczosDecomp<U> &, lanczosDecomp<V> &);
+
 template <typename T>
 class lanczosDecomp
 {
@@ -42,7 +54,7 @@ class lanczosDecomp
       Q(new T[krylov * A.get_n()]),
       x(new T[A.get_n()]),
       ans(new T[A.get_n()]),
-      x_norm{norm(starting_vec)}
+      x_norm{norm(starting_vec, A.get_n())}
     {
       for (auto i = 0u; i < A.n; i++)
         x[i] = starting_vec[i];
@@ -64,29 +76,21 @@ class lanczosDecomp
     long unsigned get_n() const { return A.get_n(); };
     long unsigned get_krylov() const { return krylov_dim; };
 
-    friend class eigenDecomp;
+    friend class eigenDecomp<T>;
     template <typename U>
-    friend void multOut(lanczosDecomp<U> &, eigenDecomp &, adjMatrix &);
+    friend void multOut(lanczosDecomp<U> &, eigenDecomp<U> &, adjMatrix &);
     template <typename U>
-    friend void cu_multOut(lanczosDecomp<U> &, eigenDecomp &, adjMatrix &);
-    
+    friend void cu_multOut(lanczosDecomp<U> &, eigenDecomp<U> &, adjMatrix &);
+    template <typename U, typename V>
+      friend void check_ans(lanczosDecomp<U> &, lanczosDecomp<V> &);
+    template <typename U, typename V>
+      friend U norm(const U *const, const V);
+    template <typename U, typename V>
+      friend U inner_prod(const U *const, const U *const, const V);
 
     void check_ans(const T *) const;
-    void check_ans(lanczosDecomp<T> &) const;
-    if (std::is_same<T,double>::value) friend void check_ans(lanczosDecomp<float> &) const;
-    if (std::is_same<T,float>::value) friend void check_ans(lanczosDecomp<double> &) const;
-    //void check_ans(lanczosDecomp &) const;
-
-    T inner_prod(const T *const, const T *const, const long unsigned) const;
 
     void reorthog();
 
-    T norm(const T *v) const
-    {
-      T norm{0.0};
-      for (auto i = 0u; i < A.n; i++)
-        norm += v[i] * v[i];
-      return std::sqrt(norm);
-    }
 };
 #endif

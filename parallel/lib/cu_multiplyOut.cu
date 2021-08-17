@@ -1,5 +1,7 @@
 #include "cu_multiplyOut.h"
+
 #include "cblas.h"
+
 #include <iomanip>
 #include <algorithm>
 #include <type_traits>
@@ -12,7 +14,27 @@ void my_exp_func(T &a)
   a = std::exp(a);
 }
 
-  template <typename T>
+// Overloading cublas functions so I can call Sgemm through Dgemm 
+cublasStatus_t cublasDgemm_v2(cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb,
+                          int m, int n, int k,
+                          float * alpha,
+                          float * A, int lda,
+                          float * B, int ldb,
+                          float * beta,
+                          float * C, int ldc) {
+  return cublasSgemm_v2(handle, transa, transb, m,n,k,alpha,A,lda,B,ldb,beta,C,ldc);
+}
+cublasStatus_t cublasDgemv_v2(cublasHandle_t handle, cublasOperation_t transa,
+                          int m, int n,
+                          float * alpha,
+                          float * A, int lda,
+                          float * x, int incx,
+                          float * beta,
+                          float * y, int incy) {
+  return cublasSgemv_v2(handle,transa,m,n,alpha,A,lda,x,incx,beta,y,incy);
+}
+
+template <typename T>
 void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
 {
 
@@ -87,7 +109,6 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
     return;
   }
 
-  if (std::is_same<T, double>::value){
     // DGEMM
     status = cublasDgemm_v2(handle, CUBLAS_OP_N, CUBLAS_OP_N,k,n,k,&alpha,V_d,k,Q_d,k,&beta,QV_d,k);
     if (status != CUBLAS_STATUS_SUCCESS) {
@@ -101,22 +122,6 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
       std::cerr << "Dgemv error.\n";
       return;
     }
-  }
-  if (std::is_same<T, float>::value){
-    // DGEMM
-    status = cublasSgemm_v2(handle, CUBLAS_OP_N, CUBLAS_OP_N,k,n,k,&alpha,V_d,k,Q_d,k,&beta,QV_d,k);
-    if (status != CUBLAS_STATUS_SUCCESS) {
-      std::cerr << "Sgemm error.\n";
-      return;
-    }
-
-    // DGEMV
-    status = cublasSgemv_v2(handle, CUBLAS_OP_T, k, n, &alpha, QV_d, k, eigvals_d, 1,&beta ,ans_d, 1);
-    if (status != CUBLAS_STATUS_SUCCESS) {
-      std::cerr << "Sgemv error.\n";
-      return;
-    }
-  }
 
   status = cublasGetVector(n, sizeof(T),ans_d, 1,&L.ans[0],1);
   if (status != CUBLAS_STATUS_SUCCESS) {
@@ -132,3 +137,6 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
   cudaFree(eigvals_d);
   cudaFree(ans_d);
 }
+
+template void cu_multOut<float>(lanczosDecomp<float> &L, eigenDecomp<float> &E, adjMatrix &A);
+template void cu_multOut<double>(lanczosDecomp<double> &L, eigenDecomp<double> &E, adjMatrix &A);

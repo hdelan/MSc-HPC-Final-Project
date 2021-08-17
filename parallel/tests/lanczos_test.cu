@@ -5,6 +5,7 @@
 #include "../lib/eigen.h"
 #include "../lib/SPMV.h"
 #include "../lib/adjMatrix.h"
+#include "../lib/check_ans.h"
 #include "../lib/helpers.h"
 
 #include <iostream>
@@ -56,17 +57,18 @@ int main(void)
     
     std::cout << "Running Lanczos algorithm for krylov_dim "<< krylov_dim << "\n\n";
 
-    std::vector<double> x (n, 1);
+    std::vector<double> x_double (n, 1);
+    std::vector<float> x_float (n, 1);
     
     timeval s, e1, e2, e3, e4;
     gettimeofday(&s, NULL);
     
     // SERIAL LANCZOS
     bool cuda {false};
-    lanczosDecomp L(A, krylov_dim, &x[0], cuda);
+    lanczosDecomp<double> L(A, krylov_dim, &x_double[0], cuda);
     gettimeofday(&e1, NULL);
     
-    eigenDecomp E(L);
+    eigenDecomp<double> E(L);
     gettimeofday(&e2, NULL);
 
     multOut(L, E, A);
@@ -84,11 +86,11 @@ int main(void)
     
     // CUDA LANCZOS
     cuda = true;
-    lanczosDecomp cu_L(A, krylov_dim, &x[0], cuda);
+    lanczosDecomp<float> cu_L(A, krylov_dim, &x_float[0], cuda);
     float gpu_time_lanczos{cuda_end_timer(start1_d, end1_d)};
     
     gettimeofday(&s_d, NULL);
-    eigenDecomp cu_E(cu_L);
+    eigenDecomp<float> cu_E(cu_L);
     
     cuda_start_timer(start2_d, end2_d);
     cu_multOut(cu_L, cu_E, A);
@@ -96,8 +98,6 @@ int main(void)
     
     gettimeofday(&e_d, NULL);
     double gpu_time_whole {gpu_time_lanczos + (e_d.tv_sec - s_d.tv_sec + (e_d.tv_usec - s_d.tv_usec) / 1000000.0)};
-    
-    
   
     std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
     std::cout << "TIMING\n";
@@ -121,7 +121,7 @@ int main(void)
     std::cout << "ERROR CHECKING\n";
     std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
     
-    L.check_ans(cu_L);
+    check_ans(L, cu_L);
     
     std::cout << std::setfill('~') << std::setw(WIDTH) << '\n' << std::setfill(' ');
 }

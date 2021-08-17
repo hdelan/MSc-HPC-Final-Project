@@ -9,31 +9,32 @@
 template <typename T>
 class eigenDecomp
 {
-public:
-        eigenDecomp() = delete;
-        eigenDecomp(lanczosDecomp<T> &_L) : eigenvalues(new T[_L.krylov_dim]),
-                                        eigenvectors(new T[_L.krylov_dim*_L.krylov_dim]),
-                                        L {_L}
-        {
-                for (auto i=0u;i<L.get_krylov();i++) eigenvalues[i] = L.alpha[i];
-                decompose();
-        };
-        eigenDecomp(eigenDecomp<T> &) = delete;
-        eigenDecomp &operator=(eigenDecomp<T>&) = delete;
-        ~eigenDecomp() {
-                delete[] eigenvalues;
-                delete[] eigenvectors;
-        };
+  private:
+    T * eigenvalues;
+    T * eigenvectors;
 
-        friend void multOut(lanczosDecomp<T> &, eigenDecomp<T> &, adjMatrix &);
-        friend void cu_multOut(lanczosDecomp<T> &, eigenDecomp<T> &, adjMatrix &);
+    lanczosDecomp<T> & L;
 
-private:
-        T * eigenvalues;
-        T * eigenvectors;
+    void decompose();
 
-        lanczosDecomp<T> & L;
-
-        void decompose();
+  public:
+    eigenDecomp() = delete;
+    eigenDecomp(lanczosDecomp<T> &_L) : eigenvalues(new T[_L.krylov_dim]),
+    eigenvectors(new T[_L.krylov_dim*_L.krylov_dim]),
+    L {_L}
+    {
+      for (auto i=0u;i<L.get_krylov();i++) eigenvalues[i] = L.alpha[i];
+      decompose();
+    };
+    eigenDecomp(eigenDecomp<T> &) = delete;
+    eigenDecomp &operator=(eigenDecomp<T>&) = delete;
+    ~eigenDecomp() {
+      delete[] eigenvalues;
+      delete[] eigenvectors;
+    };
+    template <typename U>
+    friend void multOut(lanczosDecomp<U> &, eigenDecomp<U> &, adjMatrix &);
+    template <typename U>
+    friend void cu_multOut(lanczosDecomp<U> &, eigenDecomp<U> &, adjMatrix &);
 };
 #endif

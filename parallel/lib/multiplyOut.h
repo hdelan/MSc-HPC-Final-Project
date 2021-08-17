@@ -5,7 +5,7 @@
 #include "eigen.h"
 #include "cu_lanczos.h"
 
-void print_matrix(unsigned, unsigned, double *);
-void multOut(lanczosDecomp &, eigenDecomp &, adjMatrix &);
+template <typename T>
+void multOut(lanczosDecomp<T> &, eigenDecomp<T> &, adjMatrix &);
 
 #endif

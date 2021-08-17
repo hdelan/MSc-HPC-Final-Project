@@ -15,7 +15,8 @@
 
 #include <cuda_profiler_api.h>
 
-#define BLOCKSIZE 128
+#include "blocks.h"
+
 #define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
