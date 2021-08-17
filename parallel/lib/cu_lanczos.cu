@@ -36,53 +36,64 @@ void lanczosDecomp<T>::cu_decompose()
 
   T *Q_d_ptr[2] = {&Q_raw_d[0], &Q_raw_d[n]};
 
-  cudaMemcpy(Q_d_ptr[0], x_normed, sizeof(T) * n, cudaMemcpyHostToDevice);
-  cudaMemcpy(IA_d, A.row_offset, sizeof(long unsigned) * (n + 1), cudaMemcpyHostToDevice);
-  cudaMemcpy(JA_d, A.col_idx, sizeof(long unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice);
-
   std::vector<T> tmp(n);
+  
+  cudaStream_t stream[3];
+  cudaStreamCreate(&stream[0]);
+  cudaStreamCreate(&stream[1]);
+  cudaStreamCreate(&stream[2]);
+
+  cudaMemcpyAsync(Q_d_ptr[0], x_normed, sizeof(T) * n, cudaMemcpyHostToDevice, stream[0]);
+  cudaMemcpyAsync(IA_d, A.row_offset, sizeof(long unsigned) * (n + 1), cudaMemcpyHostToDevice, stream[1]);
+  cudaMemcpyAsync(JA_d, A.col_idx, sizeof(long unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice, stream[2]);
+
+  cudaStreamSynchronize(stream[0]);
+  cudaStreamSynchronize(stream[1]);
+  cudaStreamSynchronize(stream[2]);
+
+  cudaStreamDestroy(stream[2]);
 
   int i{0};
 
   for (auto k = 0u; k < krylov_dim; k++)
   {
-    std::vector<T> tmp_vec(n);
-    std::vector<long unsigned> tmp2(n);
-
     // v = A*Q(:,j)
     cu_spMV1<T, unsigned long><<<blocks, threads>>>(IA_d, JA_d, n, Q_d_ptr[i], v_d); 
 
     // alpha = v*Q(:,j)
     if (num_blocks==1) { 
-      cu_dot_prod<T, BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T)>>>(v_d, Q_d_ptr[i], n, &alpha_d[k]);
+      cu_dot_prod<T, BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T), stream[0]>>>(v_d, Q_d_ptr[i], n, &alpha_d[k]);
     } else {
-      cu_dot_prod<T, BLOCKSIZE><<<num_blocks/2, threads, BLOCKSIZE*sizeof(T)>>>(v_d, Q_d_ptr[i], n, tmp_d);
-      cu_reduce<T, BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T)>>>(tmp_d, num_blocks, &alpha_d[k]);
+      cu_dot_prod<T, BLOCKSIZE><<<num_blocks/2, threads, BLOCKSIZE*sizeof(T), stream[0]>>>(v_d, Q_d_ptr[i], n, tmp_d);
+      cu_reduce<T, BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T), stream[0]>>>(tmp_d, num_blocks, &alpha_d[k]);
     }
 
     // v = v - alpha*Q(:,j)
-    cu_dpax<T><<<blocks, threads>>>(v_d, &alpha_d[k], Q_d_ptr[i], n);
+    cu_dpax<T><<<blocks, threads,0,stream[0]>>>(v_d, &alpha_d[k], Q_d_ptr[i], n);
 
     if (k > 0)
     {
       // v = v - beta*Q(:,j-1)
-      cu_dpax<T><<<blocks, threads>>>(v_d, &beta_d[k - 1], Q_d_ptr[1 - i], n);
+      cu_dpax<T><<<blocks, threads,0,stream[0]>>>(v_d, &beta_d[k - 1], Q_d_ptr[1 - i], n);
     }
 
     if (k < krylov_dim - 1)
     {
       // beta[j] = norm(v)
       if (num_blocks==1) {
-        cu_norm_sq_sqrt<T, BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T)>>>(v_d, n, &beta_d[k]);
+        cu_norm_sq_sqrt<T, BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T), stream[0]>>>(v_d, n, &beta_d[k]);
       } else {
-        cu_norm_sq<T, BLOCKSIZE><<<num_blocks/2, threads, BLOCKSIZE*sizeof(T)>>>(v_d, n, tmp_d);
-        cu_reduce_sqrt<T,BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T)>>>(tmp_d, num_blocks, &beta_d[k]);
+        cu_norm_sq<T, BLOCKSIZE><<<num_blocks/2, threads, BLOCKSIZE*sizeof(T), stream[0]>>>(v_d, n, tmp_d);
+        cu_reduce_sqrt<T,BLOCKSIZE><<<1, threads, BLOCKSIZE*sizeof(T), stream[0]>>>(tmp_d, num_blocks, &beta_d[k]);
       }
       // Q(:,j) = v/beta
-      cu_dvexda<T><<<blocks, threads>>>(Q_d_ptr[1 - i], &beta_d[k], v_d, n);
+      cu_dvexda<T><<<blocks, threads,0,stream[0]>>>(Q_d_ptr[1 - i], &beta_d[k], v_d, n);
     }
+    
+    cudaStreamSynchronize(stream[0]);
+    cudaStreamSynchronize(stream[1]);
 
-    cudaMemcpy(&tmp[0], Q_d_ptr[i], sizeof(T) * n, cudaMemcpyDeviceToHost);
+    cudaMemcpyAsync(&tmp[0], Q_d_ptr[i], sizeof(T) * n, cudaMemcpyDeviceToHost, stream[1]);
 
     // Loading Q into memory
     for (auto j = 0u; j < n; j++)
@@ -90,8 +101,8 @@ void lanczosDecomp<T>::cu_decompose()
 
     i = 1 - i;
   }
-  cudaMemcpy(alpha, alpha_d, sizeof(T) * krylov_dim, cudaMemcpyDeviceToHost);
-  cudaMemcpy(beta, beta_d, sizeof(T) * (krylov_dim - 1), cudaMemcpyDeviceToHost);
+  cudaMemcpyAsync(alpha, alpha_d, sizeof(T) * krylov_dim, cudaMemcpyDeviceToHost, stream[0]);
+  cudaMemcpyAsync(beta, beta_d, sizeof(T) * (krylov_dim - 1), cudaMemcpyDeviceToHost, stream[1]);
 
   /*
      std::cout << "cu_Q:\n";
@@ -109,6 +120,9 @@ void lanczosDecomp<T>::cu_decompose()
      std::cout << "\n\n";
 
    */
+  cudaStreamDestroy(stream[0]);
+  cudaStreamDestroy(stream[1]);
+  
   cudaFree(IA_d);
   cudaFree(JA_d);
   cudaFree(v_d);
