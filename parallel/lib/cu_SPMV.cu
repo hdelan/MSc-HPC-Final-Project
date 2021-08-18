@@ -6,12 +6,12 @@
 #define SHARED_BYTES 49'152
 
 template <typename T>
-__device__ int min(T a, T b) {
+__device__ T min(T a, T b) {
     return a < b ? a : b;
 }
 
 template <typename T>
-__device__ int max(T a, T b) {
+__device__ T max(T a, T b) {
     return a > b ? a : b;
 }
 

@@ -1,0 +1,11 @@
+nvcc --use_fast_math -Wno-deprecated-gpu-targets  -O3  -c lib/adjMatrix.cc -o build/adjMatrix.o
+lib/adjMatrix.cc: In member function ‘void adjMatrix::write_matrix_to_file(char)’:
+lib/adjMatrix.cc:45:32: error: ‘edges’ was not declared in this scope
+   f << n << " " << n << " " << edges << '\n';
+                                ^~~~~
+lib/adjMatrix.cc:45:32: note: suggested alternative: ‘Edge’
+   f << n << " " << n << " " << edges << '\n';
+                                ^~~~~
+                                Edge
+Makefile:52: recipe for target 'build/adjMatrix.o' failed
+make: *** [build/adjMatrix.o] Error 1

@@ -51,11 +51,15 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
   //print_matrix(3, 1, &E.eigenvalues[0]);
   T *Q_d, *V_d, *QV_d, *eigvals_d, *ans_d, alpha {1.0}, beta {0.0};
 
-  std::vector<T> QV(n*k, 1.0);
+  std::vector<T> QV(n*k);
 
   cublasStatus_t status;
   cudaError_t cudaStat;
   cublasHandle_t handle;
+
+  cudaStream_t stream[2];
+  cudaStreamCreate(&stream[0]);
+  cudaStreamCreate(&stream[1]);
 
   cudaStat = cudaMalloc(&Q_d, sizeof(T) * n * k);
   if (cudaStat != cudaSuccess) {
@@ -88,22 +92,22 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
     std::cerr << "Cublas initialization error.\n";
     return;
   }
-  status = cublasSetVector(n*k, sizeof(T),L.Q, 1, Q_d,1);
+  status = cublasSetVectorAsync(n*k, sizeof(T),L.Q, 1, Q_d,1, stream[0]);
   if (status != CUBLAS_STATUS_SUCCESS) {
     std::cerr << "Device access error.\n";
     return;
   }
-  status = cublasSetVector(k*k, sizeof(T),E.eigenvectors, 1, V_d,1);
+  status = cublasSetVectorAsync(k*k, sizeof(T),E.eigenvectors, 1, V_d,1, stream[1]);
   if (status != CUBLAS_STATUS_SUCCESS) {
     std::cerr << "Device access error.\n";
     return;
   }
-  status = cublasSetVector(k, sizeof(T),E.eigenvalues, 1, eigvals_d,1);
+  status = cublasSetVectorAsync(k, sizeof(T),E.eigenvalues, 1, eigvals_d,1, stream[0]);
   if (status != CUBLAS_STATUS_SUCCESS) {
     std::cerr << "Device access error.\n";
     return;
   }
-  status = cublasSetVector(k*n, sizeof(T),&QV[0], 1, QV_d,1);
+  status = cublasSetVectorAsync(k*n, sizeof(T),&QV[0], 1, QV_d,1, stream[1]);
   if (status != CUBLAS_STATUS_SUCCESS) {
     std::cerr << "Device access error.\n";
     return;
@@ -129,6 +133,8 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
     return;
   }
 
+  cudaStreamDestroy(stream[0]);
+  cudaStreamDestroy(stream[1]);
   cublasDestroy(handle);
 
   cudaFree(Q_d);
