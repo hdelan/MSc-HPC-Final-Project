@@ -13,7 +13,7 @@ FILES 		:= adjMatrix.cc \
        			lanczos.cc \
        			eigen.cc \
        			multiplyOut.cc \
-       			sparse_mult.cc \
+       			SPMV.cc \
        			helpers.cc \
 			make_graph.cc
 
@@ -41,6 +41,10 @@ run: $(MAIN)
 numerical_test: tests/numerical_test.cc $(OBJS)
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
 	./numerical_test
+
+numerical_test_orthog: tests/numerical_test_orthog.cc $(OBJS)
+	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./numerical_test_orthog
 
 prof: PROFILE := -pg
 prof: $(MAIN)

@@ -25,6 +25,7 @@ private:
         double x_norm;
 
         void decompose();
+        void decompose_with_arnoldi();
 public:
 lanczosDecomp() = delete;
 lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double * starting_vec) : A {adj},
@@ -38,6 +39,20 @@ lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double * starting_vec)
 {
         for (auto i=0u;i<A.n;i++) x[i] = starting_vec[i];
         decompose();
+
+};
+lanczosDecomp(adjMatrix &adj, const long unsigned krylov, double * starting_vec, bool arnoldi) : A {adj},
+                                                                                krylov_dim {krylov},
+                                                                                alpha(new double[krylov]),
+                                                                                beta(new double[krylov - 1]),
+                                                                                Q(new double[krylov*A.get_n()]),
+                                                                                x(new double[A.get_n()]),
+                                                                                ans(new double[A.get_n()]),
+                                                                                x_norm {norm(starting_vec)}
+{
+        for (auto i=0u;i<A.n;i++) x[i] = starting_vec[i];
+        if (arnoldi) decompose_with_arnoldi();
+        if (!arnoldi) decompose();
 
 };
 lanczosDecomp(lanczosDecomp &) = delete;

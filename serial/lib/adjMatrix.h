@@ -8,6 +8,7 @@
 #include <cmath>
 #include <set>
 #include <random>
+#include <algorithm>
 
 class eigenDecomp;
 class lanczosDecomp;
@@ -84,6 +85,14 @@ public:
         long unsigned get_edges() const { return edge_count; };
 
         void print_full() const;
+        
+        void permute_matrix() {
+          std::vector<long unsigned> tmp(n);
+          for (auto i=0u;i<n;i++) tmp[i] = i;
+          std::sort(tmp.begin(),tmp.end(), [&](long unsigned & a, long unsigned & b) { 
+              return (row_offset[a+1]-row_offset[a]) > (row_offset[b+1] - row_offset[b]); });
+          std::for_each(tmp.begin(), tmp.end(), [&](long unsigned & a) { std::cout << "Row: "<< a << " Degree: "<< row_offset[a+1]-row_offset[a] << '\n';});
+        }
 
         template <typename T>
         friend void spMV(const adjMatrix &, const T *const, T *const);

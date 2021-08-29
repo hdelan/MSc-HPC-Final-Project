@@ -44,23 +44,23 @@ void lanczosDecomp<T>::decompose()
     i = 1 - i;
   }
   /*
-     std::cout << "\nAlpha:\n";
-     for (auto j = 0u; j < krylov_dim; j++)
-     std::cout << alpha[j] << " ";
-     std::cout << "\n\nBeta:\n";
-     for (auto j = 0u; j < krylov_dim - 1; j++)
-     std::cout << beta[j] << " ";
-     std::cout << '\n';
-     std::cout << '\n';
+  std::cout << "\nAlpha:\n";
+  for (auto j = 0u; j < krylov_dim; j++)
+    std::cout << alpha[j] << " ";
+  std::cout << "\n\nBeta:\n";
+  for (auto j = 0u; j < krylov_dim - 1; j++)
+    std::cout << beta[j] << " ";
+  std::cout << '\n';
+  std::cout << '\n';
+  // PRINT OUT Q
+  std::cout << "\nQ\n";
+  for (auto j = 0u; j < krylov_dim; j++)
+  {
+    for (auto k = 0u; k < krylov_dim; k++)
+      std::cout << Q[k + j * krylov_dim] << " ";
+    std::cout << '\n';
+  }
    */
-  /* PRINT OUT Q 
-     std::cout << "\nQ\n";
-     for (auto j = 0u; j < krylov_dim; j++)
-     {
-     for (auto k = 0u; k < krylov_dim; k++)
-     std::cout << Q[k + j * krylov_dim] << " ";
-     std::cout << '\n';
-     }*/
   delete[] v;
   delete[] Q_raw;
 }

@@ -65,6 +65,8 @@ int main(int argc, char *argv[])
 
         edges = A.get_edges();
 
+        A.permute_matrix();
+
         std::cout << std::setw(width) << std::setfill('~') << '\n' << std::setfill(' ');
 
         std::cout << "n: " << A.get_n() << '\n';

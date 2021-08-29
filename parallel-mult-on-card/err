@@ -1,0 +1,24 @@
+nvcc ./tests/SPMV_test.cu ./build/cu_linalg.o ./build/cu_SPMV.o ./build/cu_lanczos.o ./build/lanczos.o ./build/SPMV.o ./build/helpers.o ./build/adjMatrix.o ./build/check_ans.o ./build/make_graph.o ./build/eigen.o ./build/multiplyOut.o ./build/cu_multiplyOut.o --use_fast_math -Wno-deprecated-gpu-targets -rdc=true -O3 -lopenblas -llapack -llapacke -lm -lcublas -lpthread -lcudadevrt   -o SPMV_test
+./tests/SPMV_test.cu(246): error: no instance of function template "cu_spMV4" matches the argument list
+            argument types are: (unsigned int *, unsigned int *, float *, float *)
+          detected during instantiation of "void cu_SPMV_test<T>(unsigned int, adjMatrix &) [with T=float]" 
+(73): here
+
+./tests/SPMV_test.cu(296): error: no instance of function template "cu_spMV4" matches the argument list
+            argument types are: (unsigned int *, unsigned int *, float *, float *)
+          detected during instantiation of "void cu_SPMV_test<T>(unsigned int, adjMatrix &) [with T=float]" 
+(73): here
+
+./tests/SPMV_test.cu(246): error: no instance of function template "cu_spMV4" matches the argument list
+            argument types are: (unsigned int *, unsigned int *, double *, double *)
+          detected during instantiation of "void cu_SPMV_test<T>(unsigned int, adjMatrix &) [with T=double]" 
+(78): here
+
+./tests/SPMV_test.cu(296): error: no instance of function template "cu_spMV4" matches the argument list
+            argument types are: (unsigned int *, unsigned int *, double *, double *)
+          detected during instantiation of "void cu_SPMV_test<T>(unsigned int, adjMatrix &) [with T=double]" 
+(78): here
+
+4 errors detected in the compilation of "./tests/SPMV_test.cu".
+Makefile:67: recipe for target 'SPMV_test' failed
+make: *** [SPMV_test] Error 1

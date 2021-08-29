@@ -1,0 +1,532 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 152.78 found at index
+	lanczos[223] 			= 360.803
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 324.142
+Relative norm of differences	= 0.193322
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 10
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 0.504462 found at index
+	lanczos[223] 			= 513.078
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 1.55224
+Relative norm of differences	= 0.000925771
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 15
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 8.65358e-05 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 0.000495531
+Relative norm of differences	= 2.9554e-07
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 20
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.91332e-08 found at index
+	lanczos[1218] 			= -84.2667
+	analytic_ans[1218] 		= -84.2667
+
+Total norm of differences	= 5.9487e-08
+Relative norm of differences	= 3.54787e-11
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 21
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 6.62702e-10 found at index
+	lanczos[336] 			= 30.9915
+	analytic_ans[336] 		= 30.9915
+
+Total norm of differences	= 3.91788e-09
+Relative norm of differences	= 2.33667e-12
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 22
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.6388e-10 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 7.37483e-10
+Relative norm of differences	= 4.39843e-13
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 23
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.04592e-11 found at index
+	lanczos[1218] 			= -84.2667
+	analytic_ans[1218] 		= -84.2667
+
+Total norm of differences	= 4.08679e-11
+Relative norm of differences	= 2.43741e-14
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 24
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 4.03588e-12 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 9.81791e-12
+Relative norm of differences	= 5.85552e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 25
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 2.04636e-12 found at index
+	lanczos[1232] 			= 489.238
+	analytic_ans[1232] 		= 489.238
+
+Total norm of differences	= 6.75483e-12
+Relative norm of differences	= 4.02866e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 26
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 2.16005e-12 found at index
+	lanczos[375] 			= 536.793
+	analytic_ans[375] 		= 536.793
+
+Total norm of differences	= 5.97985e-12
+Relative norm of differences	= 3.56645e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 27
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 2.27374e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 6.18455e-12
+Relative norm of differences	= 3.68854e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 28
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.42109e-12 found at index
+	lanczos[760] 			= 376.557
+	analytic_ans[760] 		= 376.557
+
+Total norm of differences	= 5.7851e-12
+Relative norm of differences	= 3.4503e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 29
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.3074e-12 found at index
+	lanczos[760] 			= 376.557
+	analytic_ans[760] 		= 376.557
+
+Total norm of differences	= 5.4155e-12
+Relative norm of differences	= 3.22987e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.59162e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 4.49044e-12
+Relative norm of differences	= 2.67815e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 34
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.08002e-12 found at index
+	lanczos[760] 			= 376.557
+	analytic_ans[760] 		= 376.557
+
+Total norm of differences	= 5.21755e-12
+Relative norm of differences	= 3.11181e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 37
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 2.33058e-12 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 7.98434e-12
+Relative norm of differences	= 4.76195e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 40
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.6307e-12 found at index
+	lanczos[535] 			= -25.0036
+	analytic_ans[535] 		= -25.0036
+
+Total norm of differences	= 5.96739e-12
+Relative norm of differences	= 3.55902e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 45
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 3.18323e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 6.91574e-12
+Relative norm of differences	= 4.12463e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 50
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Using an Arnoldi Process every 2 iterations of Lanczos to reorthogonalize the q_i
+
+
+Max difference of 1.93268e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 5.6844e-12
+Relative norm of differences	= 3.39024e-15
+
+

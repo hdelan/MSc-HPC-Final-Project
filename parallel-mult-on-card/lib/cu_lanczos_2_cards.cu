@@ -30,8 +30,8 @@ void lanczosDecomp<T>::cu_decompose()
   for (auto k = 0u; k < n; k++)
     x_normed[k] = x[k] / x_norm;
 
-  cudaMalloc((void **)&IA_d, sizeof(long unsigned) * (n + 1));
-  cudaMalloc((void **)&JA_d, sizeof(long unsigned) * 2 * A.edge_count);
+  cudaMalloc((void **)&IA_d, sizeof(unsigned) * (n + 1));
+  cudaMalloc((void **)&JA_d, sizeof(unsigned) * 2 * A.edge_count);
   cudaMalloc((void **)&v_d, sizeof(T) * n);
   cudaMalloc((void **)&Q_raw_d, sizeof(T) * n * 2);
   cudaMalloc((void **)&alpha_d, sizeof(T) * krylov_dim);
@@ -41,8 +41,8 @@ void lanczosDecomp<T>::cu_decompose()
   T *Q_d_ptr[2] = {&Q_raw_d[0], &Q_raw_d[n]};
 
   cudaMemcpy(Q_d_ptr[0], x_normed, sizeof(T) * n, cudaMemcpyHostToDevice);
-  cudaMemcpy(IA_d, A.row_offset, sizeof(long unsigned) * (n + 1), cudaMemcpyHostToDevice);
-  cudaMemcpy(JA_d, A.col_idx, sizeof(long unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice);
+  cudaMemcpy(IA_d, A.row_offset, sizeof(unsigned) * (n + 1), cudaMemcpyHostToDevice);
+  cudaMemcpy(JA_d, A.col_idx, sizeof(unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice);
 
   std::vector<T> tmp(n);
 
@@ -51,7 +51,7 @@ void lanczosDecomp<T>::cu_decompose()
   for (auto k = 0u; k < krylov_dim; k++)
   {
     std::vector<T> tmp_vec(n);
-    std::vector<long unsigned> tmp2(n);
+    std::vector<unsigned> tmp2(n);
 
     // v = A*Q(:,j)
     cu_spMV1<T, unsigned long><<<blocks, threads>>>(IA_d, JA_d, n, Q_d_ptr[i], v_d); 
@@ -134,7 +134,7 @@ void lanczosDecomp<T>::get_ans() const
   template <typename T>
 void lanczosDecomp<T>::decompose()
 {
-  long unsigned n{A.get_n()}, i{0u};
+  unsigned n{A.get_n()}, i{0u};
   T *v{new T[n]};
   T *Q_raw(new T[2 * n]);
   T *Q_s[2]{Q_raw, &Q_raw[n]}; // Tmp contiguous columns to use before storing

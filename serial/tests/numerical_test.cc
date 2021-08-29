@@ -14,9 +14,7 @@ int main(int argc, char *argv[])
         std::string filename{dir + "data.mtx"};
         bool verbose;
         
-        long unsigned krylov_dim{20};
-
-        bool reorthogonalize{false};
+        long unsigned krylov_dim{25};
 
         unsigned max_eigen{100}, eigens{100};
 
@@ -51,15 +49,7 @@ int main(int argc, char *argv[])
                 for (auto i = 0u; i < max_eigen; i++)
                         fs >> eigvecs[i][j];
         fs.close();
-        /*
-        std::cout << "Eigvecs:\n";
-        for (auto i = n - 6; i < n; i++)
-        {
-                for (auto j = 0u; j < 6; j++)
-                        std::cout << eigvecs[j][i] << " ";
-                std::cout << '\n';
-        }
-        */
+        
         fs.open(dir + "eigvals.csv");
         std::vector<double> eigvals(max_eigen);
         for (auto i = 0u; i < max_eigen * max_eigen; i++)
@@ -87,12 +77,6 @@ int main(int argc, char *argv[])
                 for (auto j = 0u; j < eigens; j++)
                         x[i] += coeff[j] * eigvecs[j][i];
         }
-        /*
-        std::cout << "Eigenvalues: \n";
-        for (int i = 0u; i < 6; i++)
-                std::cout << eigvals[i] << " ";
-        std::cout << "\n";
-*/
         edges = A.get_edges();
         n = A.get_n();
 
@@ -105,8 +89,6 @@ int main(int argc, char *argv[])
         {
                 lanczosDecomp L(A, krylov_dim, &x[0]);
                 eigenDecomp E(L);
-                if (reorthogonalize)
-                        L.reorthog();
                 multOut(L, E, A);
 
                 // Getting the analytic answer since exp(A)v=exp(lambda)v when v is an

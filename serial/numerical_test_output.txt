@@ -1,0 +1,456 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 895.393 found at index
+	lanczos[282] 			= 940.801
+	analytic_ans[282] 		= 45.4073
+
+Total norm of differences	= 3593.84
+Relative norm of differences	= 2.14341
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 10
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 0.504462 found at index
+	lanczos[223] 			= 513.078
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 1.55224
+Relative norm of differences	= 0.000925771
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 15
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 8.65358e-05 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 0.000495531
+Relative norm of differences	= 2.9554e-07
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 20
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.91348e-08 found at index
+	lanczos[1218] 			= -84.2667
+	analytic_ans[1218] 		= -84.2667
+
+Total norm of differences	= 5.94869e-08
+Relative norm of differences	= 3.54787e-11
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 21
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 6.62887e-10 found at index
+	lanczos[336] 			= 30.9915
+	analytic_ans[336] 		= 30.9915
+
+Total norm of differences	= 3.91785e-09
+Relative norm of differences	= 2.33665e-12
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 22
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.66722e-10 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 7.3758e-10
+Relative norm of differences	= 4.39901e-13
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 23
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 8.48388e-12 found at index
+	lanczos[1218] 			= -84.2667
+	analytic_ans[1218] 		= -84.2667
+
+Total norm of differences	= 4.12082e-11
+Relative norm of differences	= 2.45771e-14
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 24
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 5.68434e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 1.2855e-11
+Relative norm of differences	= 7.66685e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 25
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.87583e-12 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 6.85255e-12
+Relative norm of differences	= 4.08694e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 26
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 3.63798e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 9.98046e-12
+Relative norm of differences	= 5.95247e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 27
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 3.18323e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 1.00255e-11
+Relative norm of differences	= 5.97934e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 28
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.87583e-12 found at index
+	lanczos[760] 			= 376.557
+	analytic_ans[760] 		= 376.557
+
+Total norm of differences	= 6.40252e-12
+Relative norm of differences	= 3.81854e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 29
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.42109e-12 found at index
+	lanczos[760] 			= 376.557
+	analytic_ans[760] 		= 376.557
+
+Total norm of differences	= 5.30235e-12
+Relative norm of differences	= 3.16238e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 2.50111e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 6.83588e-12
+Relative norm of differences	= 4.077e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 34
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 2.95586e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 7.17151e-12
+Relative norm of differences	= 4.27717e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 37
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 2.95586e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 7.57732e-12
+Relative norm of differences	= 4.5192e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 40
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.47793e-12 found at index
+	lanczos[375] 			= 536.793
+	analytic_ans[375] 		= 536.793
+
+Total norm of differences	= 6.19729e-12
+Relative norm of differences	= 3.69613e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 45
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.59162e-12 found at index
+	lanczos[223] 			= 513.583
+	analytic_ans[223] 		= 513.583
+
+Total norm of differences	= 6.30393e-12
+Relative norm of differences	= 3.75974e-15
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Comparing the Lanczos based approximation with an analytic answer, using the 
+fact that: 
+
+	f(A)v = f(lambda)v
+
+for an eigenpair (v,lambda).
+
+Using the first 100 eigenpairs to construct our problem vector x.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+n: 2114
+edges: 2240
+krylov dimension: 50
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 1.53477e-12 found at index
+	lanczos[928] 			= 274.345
+	analytic_ans[928] 		= 274.345
+
+Total norm of differences	= 5.68296e-12
+Relative norm of differences	= 3.38939e-15
+
+
