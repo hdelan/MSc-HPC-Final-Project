@@ -42,10 +42,10 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
     __syncthreads();
 
     // Reduction
-    if (blockSize == 1024) {/*if (tid < 256)*/ tmp_s[tid] += tmp_s[tid+512]; __syncthreads(); }
-    if (blockSize >= 512) {/*if (tid < 256)*/ tmp_s[tid] += tmp_s[tid+256]; __syncthreads(); }
-    if (blockSize >= 256) {/*if (tid < 128)*/ tmp_s[tid] += tmp_s[tid+128]; __syncthreads(); }
-    if (blockSize >= 128) {/*if (tid < 64)*/ tmp_s[tid] += tmp_s[tid+64]; __syncthreads(); }
+    if (blockSize == 1024) { tmp_s[tid] += tmp_s[tid+512]; __syncthreads(); }
+    if (blockSize >= 512) { tmp_s[tid] += tmp_s[tid+256];  __syncthreads(); }
+    if (blockSize >= 256) { tmp_s[tid] += tmp_s[tid+128];  __syncthreads(); }
+    if (blockSize >= 128) { tmp_s[tid] += tmp_s[tid+64];   __syncthreads(); }
 
     if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
     if (tid == 0) ans[startrow] = tmp_s[0];
@@ -53,13 +53,13 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
   }
 
   assert(nnz <= (SHARED_BYTES/sizeof(T)));
-
+  
   for (auto i = firstcol+tid; i < IA[endrow]; i += blockDim.x)
     tmp_s[i-firstcol] = x[JA[i]];
-
   __syncthreads();
+ 
+ /*
 
-  auto num_rows{endrow - startrow};
   if (tid < num_rows && startrow+tid < n)
   {
     auto sum{0.0};
@@ -69,10 +69,30 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
       sum += tmp_s[i];
     ans[startrow + tid] = sum;
   }
+
+   */
+
+  auto num_rows{endrow - startrow};
+  for (auto j=0u;j<num_rows;j++) {
+    auto row_s{IA[startrow + j] - firstcol};
+    auto row_e{IA[startrow + j + 1] - firstcol};
+    auto row_nnz{row_e - row_s};
+    if (row_s+tid < row_e) tmp_s[tid] = tmp_s[row_s+tid];
+    for (auto i = row_s+2*tid; i < row_e; i+=blockDim.x)
+      tmp_s[tid] += tmp_s[i];
+    __syncthreads();
+    if (blockSize == 1024) { if (tid+512 < row_nnz) tmp_s[tid] += tmp_s[tid+512]; __syncthreads(); }
+    if (blockSize >= 512) { if (tid+256 < row_nnz) tmp_s[tid] += tmp_s[tid+256];  __syncthreads(); }
+    if (blockSize >= 256) { if (tid+128 < row_nnz) tmp_s[tid] += tmp_s[tid+128];  __syncthreads(); }
+    if (blockSize >= 128) { if (tid+64 < row_nnz) tmp_s[tid] += tmp_s[tid+64];   __syncthreads(); }
+
+    if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
+    if (tid == 0) ans[startrow+j] = tmp_s[row_s];
+  }
 }
 
 // blockSize will range from 2 to 64 for child kernel
-  template <typename T, typename U, unsigned blockSize>
+template <typename T, typename U, unsigned blockSize>
 __global__ void cu_spMV3_child(U * const JA, const U nnz, T * const x, T * const ans) {
   __shared__ T tmp_s[blockSize*2];
   auto tid {threadIdx.x};
@@ -80,12 +100,12 @@ __global__ void cu_spMV3_child(U * const JA, const U nnz, T * const x, T * const
   tmp_s[tid] = 0;
   tmp_s[tid+blockSize] = 0;
   for (auto i=tid;i<nnz;i+=blockDim.x) tmp_s[tid] += x[JA[i]];
-  
+
   if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
   if (tid == 0) ans[0] = tmp_s[0];
 }
 
-  template <typename T, typename U, unsigned blockSize>
+template <typename T, typename U, unsigned blockSize>
 __global__ void cu_spMV3(U * const IA, U * const JA, const U n, const U avg_nnz, T * const x, T * const ans) {
   auto tid {blockDim.x*blockIdx.x+threadIdx.x};
   if (tid >= n) return;
@@ -103,19 +123,19 @@ __global__ void cu_spMV3(U * const IA, U * const JA, const U n, const U avg_nnz,
   }
 }
 
-  template <typename T, typename U, unsigned blockSize>
+template <typename T, typename U, unsigned blockSize>
 __global__ void cu_spMV4(U * const IA, U * const JA, T * const x, T * const ans) {
   __shared__ T sdata[blockSize*2];
   auto tid {threadIdx.x}, bid {blockIdx.x};
-  
+
   sdata[tid] = 0;
   sdata[tid+blockSize] = 0;
 
   for (auto i=IA[bid]+tid; i < IA[bid+1]; i+=blockSize)
     sdata[tid] += x[JA[i]];
-  
+
   __syncthreads();
-  
+
   // Now reduce the sdata into a single value
   if (blockSize == 1024){ sdata[tid] += sdata[tid+512]; __syncthreads(); }
   if (blockSize >= 512) { sdata[tid] += sdata[tid+256]; __syncthreads(); }

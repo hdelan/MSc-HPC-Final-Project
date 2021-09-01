@@ -53,7 +53,7 @@ void cblas_daxpby(CBLAS_INDEX n,float alpha, float * x, int incx,float beta, flo
 
 int main(void)
 {
-  unsigned n{10'000'000};
+  unsigned n{100'000};
 
   std::cout << "\nTesting CUDA linear algebra functions for n ="<<n<<" blocksize="<<BLOCKSIZE<<"\n\n";
   std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
@@ -113,11 +113,10 @@ void cu_linalg_test(const unsigned n)
   {
     cudaEvent_t start_d, end_d;
     cuda_start_timer(start_d, end_d);
-
     // These kernels outperform cublas
     cu_dot_prod<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE>>>(x_d, y_d, n, tmp_d);
-    cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE>>>(tmp_d, h_blocks, ans_d);
-
+    //cudaDeviceSynchronize();
+    cu_reduce<T, 256><<<1, 256>>>(tmp_d, h_blocks, ans_d);
     //cublasDdot(handle, static_cast<int>(n), x_d,1, y_d,1, ans_d);
 
     float gpu_time{cuda_end_timer(start_d, end_d)};
@@ -143,15 +142,13 @@ void cu_linalg_test(const unsigned n)
 
     // These kernels outperform cublas
     cu_norm_sq<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE>>>(x_d, n, tmp_d);
-    //cu_dot_prod<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE>>>(x_d, x_d, n, tmp_d);
-    cu_reduce_sqrt<T, BLOCKSIZE><<<1, BLOCKSIZE>>>(tmp_d, h_blocks, ans_d);
+    cu_reduce_sqrt<T, 256><<<1, 256>>>(tmp_d, h_blocks, ans_d);
 
     cudaMemcpy(&ans, ans_d, sizeof(T), cudaMemcpyDeviceToHost);
 
     //cublasDnrm2(handle, n, x_d, 1, &ans);
 
     float gpu_time{cuda_end_timer(start_d, end_d)};
-
 
     timeval start, end;
     gettimeofday(&start, NULL);
@@ -168,9 +165,10 @@ void cu_linalg_test(const unsigned n)
   {
     cudaEvent_t start_d, end_d;
     cuda_start_timer(start_d, end_d);
-
+    
     cu_reduce<T, BLOCKSIZE><<<h_blocks, BLOCKSIZE>>>(x_d, n, tmp_d);
-    cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE>>>(tmp_d, h_blocks, ans_d);
+    cu_reduce<T, 256><<<1, 256>>>(tmp_d, h_blocks, ans_d);
+    //cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE>>>(x_d, n, ans_d);
 
     float gpu_time{cuda_end_timer(start_d, end_d)};
 

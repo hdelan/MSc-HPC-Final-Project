@@ -1,7 +1,7 @@
 SHELL 		:= /bin/bash
 CXX 		:= g++
 NVCXX 		:= nvcc
-NVCCFLAGS 	:= --use_fast_math -Wno-deprecated-gpu-targets -rdc=true#-arch=sm_35
+NVCCFLAGS 	:= --use_fast_math -Wno-deprecated-gpu-targets -rdc=true #-arch=sm_35
 CXXFLAGS 	:= -Wall -Wextra -Wno-unused-parameter -std=c++17
 LIBS 	 	:= -lopenblas -llapack -llapacke -lm -lcublas -lpthread -lcudadevrt #"-I/usr/local/opt/lapack/include"
 OPT			:= -O3
