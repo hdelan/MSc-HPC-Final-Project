@@ -32,7 +32,7 @@ class lanczosDecomp
   private:
     adjMatrix &A;
 
-    long unsigned krylov_dim;
+    unsigned krylov_dim;
 
     T *alpha; // The diagonal of tridiag matrix
     T *beta;  // The subdiagonal of tridiag matrix
@@ -49,7 +49,7 @@ class lanczosDecomp
 
   public:
     lanczosDecomp() = delete;
-    lanczosDecomp(adjMatrix &adj, const long unsigned krylov, T *starting_vec, bool cuda) : A{adj},
+    lanczosDecomp(adjMatrix &adj, const unsigned krylov, T *starting_vec, bool cuda) : A{adj},
       krylov_dim{krylov},
       alpha(new T[krylov]),
       beta(new T[krylov - 1]),
@@ -76,8 +76,8 @@ class lanczosDecomp
     };
 
     void get_ans() const;
-    long unsigned get_n() const { return A.get_n(); };
-    long unsigned get_krylov() const { return krylov_dim; };
+    unsigned get_n() const { return A.get_n(); };
+    unsigned get_krylov() const { return krylov_dim; };
 
     friend class eigenDecomp<T>;
     template <typename U>

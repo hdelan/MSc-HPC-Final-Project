@@ -102,6 +102,7 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
   cudaStreamDestroy(stream[1]);
   cublasDestroy(handle);
 
+  cudaFree(L.Q_d);
   cudaFree(eigvals_d);
   cudaFree(ans_d);
 }

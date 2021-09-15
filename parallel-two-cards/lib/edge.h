@@ -3,9 +3,9 @@
 
 struct Edge
 {
-        long unsigned n1, n2;
-        Edge() = default;
-        Edge(long unsigned _x, long unsigned _y) : n1{_x}, n2{_y} {};
+        unsigned n1, n2;
+        Edge() : n1 {0u}, n2 {0u} {};
+        Edge(unsigned _x, unsigned _y) : n1{_x}, n2{_y} {};
 };
 
 inline bool operator<(const Edge &a, const Edge &b)

@@ -4,7 +4,7 @@ clear; clc;
 %krylov_dim = 7;
 
 adj = [0 0 1 1 1 ; 0 0 1 0 0 ; 1 1 0 0 0 ; 1 0 0 0 1 ; 1 0 0 1 0];
-load NotreDame_yeast.mtx;
+load ../data/NotreDame_yeast/NotreDame_yeast.mtx;
 adj = read_mat(NotreDame_yeast, 2114);n=2114;E = 2240;
 krylov_dim=2;
 

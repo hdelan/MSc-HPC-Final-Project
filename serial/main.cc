@@ -9,86 +9,86 @@
 int main(int argc, char *argv[])
 {
 
-        std::string filename{"../data/file.txt"};
-        long unsigned krylov_dim{10};
+  std::string filename{"../data/generated/file.txt"};
+  long unsigned krylov_dim{10};
 
-        long unsigned n{100}, edges{40};
-        long unsigned deg {0};
-        bool verbose {true};
+  long unsigned n{100}, edges{40};
+  long unsigned deg {0};
+  bool verbose {true};
 
-        unsigned width {40}; // for formatting text
+  unsigned width {40}; // for formatting text
 
-        assert(n > 0 && edges > 0 && deg < n);
+  assert(n > 0 && edges > 0 && deg < n);
 
-        parseArguments(argc, argv, filename, krylov_dim, verbose, n, deg, edges);
-        
-        adjMatrix A;
+  parseArguments(argc, argv, filename, krylov_dim, verbose, n, deg, edges);
 
-        char make_matrix{'f'};
+  adjMatrix A;
 
-        switch (make_matrix)
-        {
-        case 'f': // Read matrix from file
-        {
-                std::ifstream fs;
-                fs.open(filename);
-                //assert (!fs.fail());
+  char make_matrix{'f'};
 
-                fs >> n >> n >> edges;
+  switch (make_matrix)
+  {
+    case 'f': // Read matrix from file
+      {
+        std::ifstream fs;
+        fs.open(filename);
+        assert (!fs.fail());
 
-                adjMatrix B(n, edges, fs);
-                fs.close();
-                A = std::move(B);
-                break;
-        }
-        case 'r':  // Generate random matrix
-        {
-                adjMatrix B(n, edges);
-                A = std::move(B);
-                break;
-        }
-        case 's': // Generate 
-        {
-                adjMatrix B(n, 's');
-                A = std::move(B);
-                break;
-        }
-        case 'b': // generate random Barabasi matrix
-        {
-                adjMatrix B(n, deg, 'b');
-                A = std::move(B);
-                break;
+        fs >> n >> n >> edges;
 
-        }
-        }
-        krylov_dim = std::min(n-1, krylov_dim);
+        adjMatrix B(n, edges, fs);
+        fs.close();
+        A = std::move(B);
+        break;
+      }
+    case 'r':  // Generate random matrix
+      {
+        adjMatrix B(n, edges);
+        A = std::move(B);
+        break;
+      }
+    case 's': // Generate 
+      {
+        adjMatrix B(n, 's');
+        A = std::move(B);
+        break;
+      }
+    case 'b': // generate random Barabasi matrix
+      {
+        adjMatrix B(n, deg, 'b');
+        A = std::move(B);
+        break;
 
-        edges = A.get_edges();
+      }
+  }
+  krylov_dim = std::min(n-1, krylov_dim);
 
-        A.permute_matrix();
+  edges = A.get_edges();
 
-        std::cout << std::setw(width) << std::setfill('~') << '\n' << std::setfill(' ');
+  A.permute_matrix();
 
-        std::cout << "n: " << A.get_n() << '\n';
-        std::cout << "edges: " << A.get_edges() << '\n';
-        std::cout << "krylov dimension: " << krylov_dim << '\n';
-        std::cout << std::setw(width) << std::setfill('~') << '\n' << std::setfill(' ');
+  std::cout << std::setw(width) << std::setfill('~') << '\n' << std::setfill(' ');
 
-        //std::cout << "A: \n" << A << '\n';
-        //A.print_full();
-        std::vector<double> x(n, 1);
+  std::cout << "n: " << A.get_n() << '\n';
+  std::cout << "edges: " << A.get_edges() << '\n';
+  std::cout << "krylov dimension: " << krylov_dim << '\n';
+  std::cout << std::setw(width) << std::setfill('~') << '\n' << std::setfill(' ');
 
-        //assert(krylov_dim <= n);
+  //std::cout << "A: \n" << A << '\n';
+  //A.print_full();
+  std::vector<double> x(n, 1);
 
-        lanczosDecomp L(A, krylov_dim, &x[0]);
-        //std::cout << L;
-        eigenDecomp E(L);
-        //std::cout << E;
-        multOut(L, E, A);
+  //assert(krylov_dim <= n);
 
-        std::cout << '\n';
+  lanczosDecomp L(A, krylov_dim, &x[0]);
+  //std::cout << L;
+  eigenDecomp E(L);
+  //std::cout << E;
+  multOut(L, E, A);
 
-        if (verbose) L.get_ans();
-        std::cout << '\n';
-        return 0;
+  std::cout << '\n';
+
+  if (verbose) L.get_ans();
+  std::cout << '\n';
+  return 0;
 }

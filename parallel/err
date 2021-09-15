@@ -1,4 +1,0 @@
-nvcc --use_fast_math -Wno-deprecated-gpu-targets  -O3  -c lib/cu_lanczos.cu -o build/cu_lanczos.o
-nvcc --use_fast_math -Wno-deprecated-gpu-targets  -O3  -c lib/check_ans.cu -o build/check_ans.o
-nvcc --use_fast_math -Wno-deprecated-gpu-targets  -O3  -c lib/eigen.cu -o build/eigen.o
-nvcc tests/lanczos_test.cu build/cu_linalg.o build/cu_SPMV.o build/cu_lanczos.o build/SPMV.o build/helpers.o build/adjMatrix.o build/check_ans.o build/make_graph.o build/eigen.o build/multiplyOut.o build/cu_multiplyOut.o --use_fast_math -Wno-deprecated-gpu-targets  -O3 -lblas -llapack -llapacke -lm -lcublas   -o lanczos_test

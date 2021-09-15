@@ -51,14 +51,6 @@ void lanczosDecomp::decompose()
 
     i = 1 - i;
   }
-  /*
-  std::cout << "\nAlpha\n";
-  for (auto k=0u;k<krylov_dim;k++) std::cout << alpha[k] << " ";
-  std::cout << "\nBeta\n";
-  for (auto k=0u;k<krylov_dim-1;k++) std::cout << beta[k] << " ";
-  */
-  std::cout << "\nQ\n";
-  for (auto k=(n-1)*krylov_dim;k<n*krylov_dim;k++) std::cout << Q[k] << " ";
   delete[] v;
   delete[] Q_raw;
 }
@@ -71,7 +63,6 @@ void lanczosDecomp::decompose_with_arnoldi()
   double *Q_s[2]{Q_raw, &Q_raw[n]}; // Tmp contiguous columns to use before storing
   
   double *Q_col_maj {new double[krylov_dim*n]};
-  //std::vector<double> Q_col_maj(krylov_dim*n);
   double *Q_ptr[krylov_dim];
   for (auto i=0u;i<krylov_dim;i++) Q_ptr[i] = &Q_col_maj[i*n];
   
@@ -138,7 +129,6 @@ void lanczosDecomp::decompose_with_arnoldi()
   */
   delete[] v;
   delete[] Q_raw;
-  //delete[] Q_col_maj;
 }
 
 std::ostream &operator<<(std::ostream &os, const lanczosDecomp &D)

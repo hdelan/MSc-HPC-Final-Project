@@ -8,7 +8,7 @@ void adjMatrix::random_adj()
 {
   std::random_device rd;
   std::mt19937 gen{rd()};
-  std::uniform_int_distribution<long unsigned> distrib(0, n - 1);
+  std::uniform_int_distribution<unsigned> distrib(0, n - 1);
 
   unsigned n1, n2;
 
@@ -58,7 +58,7 @@ void adjMatrix::barabasi(const unsigned m)
 
   std::random_device rd;
   std::mt19937 gen{rd()};
-  std::uniform_int_distribution<long unsigned> distrib(0, n - 1);
+  std::uniform_int_distribution<unsigned> distrib(0, n - 1);
   std::uniform_real_distribution<double> prob(0.0, 1.0);
 
   std::set<Edge> edges;
@@ -97,8 +97,8 @@ void adjMatrix::barabasi(const unsigned m)
   }
   edge_count = edges.size() / 2;
 
-  row_offset = new long unsigned[n+1];
-  col_idx = new long unsigned[2 * edge_count];
+  row_offset = new unsigned[n+1];
+  col_idx = new unsigned[2 * edge_count];
 
   auto i{0u};
   auto prev_row {0u};
@@ -110,4 +110,5 @@ void adjMatrix::barabasi(const unsigned m)
   row_offset[n] = edges.size();
 }
 // TODO make a function to generate Erdos-Renyi graph
+
 

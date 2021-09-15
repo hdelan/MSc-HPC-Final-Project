@@ -20,6 +20,7 @@ void multOut(lanczosDecomp<T> & L, eigenDecomp<T> & E, adjMatrix & A) {
         auto k = L.get_krylov();
         //cblas_dgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans, n, k, k, 1, L.Q, k, E.eigenvectors, k, 0, QV, k);
         std::vector<T> tmp(k);
+        openblas_set_num_threads(8);
         //printf("\nSome values from QV serial: %E %E %E\n", QV[0], QV[L.krylov_dim], QV[2*L.krylov_dim]);
         cblas_dgemv(CblasRowMajor, CblasNoTrans, k, k, 1, E.eigenvectors, k, &E.eigenvalues[0], 1, 0, &tmp[0],1);
         

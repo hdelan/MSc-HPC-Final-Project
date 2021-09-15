@@ -1,7 +1,6 @@
 #include "cu_lanczos.h"
 #include "blocks.h"
-
-__global__ void change_IA_for_device1(long unsigned * IA_d, const long unsigned n) {
+__global__ void change_IA_for_device1(unsigned * IA_d, const unsigned n) {
   auto tid {blockIdx.x*blockDim.x+threadIdx.x};
   if (tid < n) {
     auto offset {IA_d[0]};
@@ -9,6 +8,7 @@ __global__ void change_IA_for_device1(long unsigned * IA_d, const long unsigned 
   }
 }
 
+/*
 __global__ void print_n(float*a, const unsigned n, const int dev) {
   printf("\n");
   printf("Device %d\t", dev);
@@ -23,29 +23,21 @@ __global__ void print_n(double*a, const unsigned n, const int dev) {
     printf(" %E ", a[i]);
   printf("\n");
 }
-__global__ void print_n(unsigned long *a, const unsigned n, const int dev) {
+__global__ void print_n(unsigned *a, const unsigned n, const int dev) {
   printf("\n");
   printf("Device %d\t", dev);
   for (auto i=0u;i<n;i++)
-    printf(" %lu ", a[i]);
+    printf(" %u ", a[i]);
   printf("\n");
 }
-
+*/
   template <typename T>
 void lanczosDecomp<T>::cu_decompose()
 {
-  /*
-     auto global_memory_used { (n+1+2*A.edge_count)*sizeof(long unsigned)+(n+2*krylov_dim-1+num_blocks)*sizeof(T)};
-
-     std::cout << "\nUsing " 
-     << global_memory_used << " bytes of CUDA global memory (" 
-     << 100* global_memory_used/(double)11996954624 
-     << "% of capacity 11996954624 bytes)\n";
-   */
-  unsigned long n{A.get_n()};
-  unsigned long *IA_d0, *JA_d0;
+  unsigned n{A.get_n()};
+  unsigned *IA_d0, *JA_d0;
   T *v_d0, *alpha_d0, *beta_d0, *tmp_d0, *Q_d_raw0;
-  unsigned long *IA_d1, *JA_d1;
+  unsigned *IA_d1, *JA_d1;
   T *v_d1, *x_d1;
 
   T *x_normed{new T[n]};
@@ -65,10 +57,10 @@ void lanczosDecomp<T>::cu_decompose()
 
   auto load_balance {0.5}; // This will determine the split of work between card one and card two
   // Card one will receive rows 0 to rows0-1, and card two will receive rows rows0 to n
-  long unsigned rows0 {static_cast<long unsigned> (load_balance*n)};
-  long unsigned rows1 {n-rows0};
-  long unsigned edges0 {A.row_offset[rows0]};
-  long unsigned edges1 {2*A.edge_count - A.row_offset[rows0]};
+  unsigned rows0 {static_cast<unsigned> (load_balance*n)};
+  unsigned rows1 {n-rows0};
+  unsigned edges0 {A.row_offset[rows0]};
+  unsigned edges1 {2*A.edge_count - A.row_offset[rows0]};
 
   assert(edges0+edges1 == 2*A.edge_count);
 
@@ -83,8 +75,8 @@ void lanczosDecomp<T>::cu_decompose()
 
   cudaMalloc((void **)&Q_d_raw0, sizeof(T)*n*2);
 
-  cudaMalloc((void **)&IA_d0, sizeof(long unsigned) * (rows0 + 1));
-  cudaMalloc((void **)&JA_d0, sizeof(long unsigned) * edges0);
+  cudaMalloc((void **)&IA_d0, sizeof(unsigned) * (rows0 + 1));
+  cudaMalloc((void **)&JA_d0, sizeof(unsigned) * edges0);
   cudaMalloc((void **)&v_d0, sizeof(T) * n);
   cudaMalloc((void **)&alpha_d0, sizeof(T) * krylov_dim);
   cudaMalloc((void **)&beta_d0, sizeof(T) * (krylov_dim - 1));
@@ -95,22 +87,22 @@ void lanczosDecomp<T>::cu_decompose()
   std::vector<T> tmp(n);
 
   cudaMemcpyAsync(Q_d_ptr0[0], x_normed, sizeof(T) * n, cudaMemcpyHostToDevice, stream[0]);
-  cudaMemcpyAsync(IA_d0, A.row_offset, sizeof(long unsigned) * (rows0 + 1), cudaMemcpyHostToDevice, stream[0]);
-  cudaMemcpyAsync(JA_d0, A.col_idx, sizeof(long unsigned) * edges0, cudaMemcpyHostToDevice, stream[0]);
+  cudaMemcpyAsync(IA_d0, A.row_offset, sizeof(unsigned) * (rows0 + 1), cudaMemcpyHostToDevice, stream[0]);
+  cudaMemcpyAsync(JA_d0, A.col_idx, sizeof(unsigned) * edges0, cudaMemcpyHostToDevice, stream[0]);
 
   cudaSetDevice(1);
   cudaStreamCreate(&stream[1]);
 
   unsigned num_blocks1 {static_cast<unsigned>(rows1) / BLOCKSIZE + 1};
 
-  cudaMalloc((void **)&IA_d1, sizeof(long unsigned) * (rows1 + 1));
-  cudaMalloc((void **)&JA_d1, sizeof(long unsigned) * edges1);
+  cudaMalloc((void **)&IA_d1, sizeof(unsigned) * (rows1 + 1));
+  cudaMalloc((void **)&JA_d1, sizeof(unsigned) * edges1);
   cudaMalloc((void **)&v_d1, sizeof(T) * n);
   cudaMalloc((void **)&x_d1, sizeof(T) * n);
 
   cudaMemcpyAsync(x_d1, x_normed, sizeof(T) * n, cudaMemcpyHostToDevice, stream[1]);
-  cudaMemcpyAsync(IA_d1, &A.row_offset[rows0], sizeof(long unsigned) * (rows1 + 1), cudaMemcpyHostToDevice, stream[1]);
-  cudaMemcpyAsync(JA_d1, &A.col_idx[edges0], sizeof(long unsigned) * edges1, cudaMemcpyHostToDevice, stream[1]);
+  cudaMemcpyAsync(IA_d1, &A.row_offset[rows0], sizeof(unsigned) * (rows1 + 1), cudaMemcpyHostToDevice, stream[1]);
+  cudaMemcpyAsync(JA_d1, &A.col_idx[edges0], sizeof(unsigned) * edges1, cudaMemcpyHostToDevice, stream[1]);
 
   change_IA_for_device1<<<num_blocks1, BLOCKSIZE, 0, stream[1]>>>(IA_d1, rows1+1);
   //print_n<<<1,1,0,stream[1]>>>(&IA_d1[rows1], 1);
@@ -121,9 +113,9 @@ void lanczosDecomp<T>::cu_decompose()
     cudaStreamSynchronize(stream[0]);
     // v = A*Q(:,j)
     cudaSetDevice(0);
-    cu_spMV1<T, unsigned long><<<num_blocks0, BLOCKSIZE, 0, stream[0]>>>(IA_d0, JA_d0, rows0, Q_d_ptr0[i], v_d0); 
+    cu_spMV1<T, unsigned><<<num_blocks0, BLOCKSIZE, 0, stream[0]>>>(IA_d0, JA_d0, rows0, Q_d_ptr0[i], v_d0); 
     cudaSetDevice(1);
-    cu_spMV1<T, unsigned long><<<num_blocks1, BLOCKSIZE, 0, stream[1]>>>(IA_d1, JA_d1, rows1, x_d1, v_d1); 
+    cu_spMV1<T, unsigned><<<num_blocks1, BLOCKSIZE, 0, stream[1]>>>(IA_d1, JA_d1, rows1, x_d1, v_d1); 
     
     //if (k<10) print_n<<<1,1,0,stream[1]>>>(&v_d1[0], 2);
 
@@ -221,3 +213,5 @@ void lanczosDecomp<T>::cu_decompose()
 template void lanczosDecomp<float>::cu_decompose();
 template void lanczosDecomp<double>::cu_decompose();
 
+ 
+ 

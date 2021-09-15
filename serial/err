@@ -1,1 +1,0 @@
-g++ main.cc build/adjMatrix.o build/lanczos.o build/eigen.o build/multiplyOut.o build/sparse_mult.o build/helpers.o build/make_graph.o -lblas -llapack -llapacke -lm  -Wall -Wextra -Wno-unused-parameter -std=c++17 -O3 -lblas -llapack -llapacke -lm   -o adj

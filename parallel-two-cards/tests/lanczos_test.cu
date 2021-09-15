@@ -3,7 +3,6 @@
 #include "../lib/cu_SPMV.h"
 #include "../lib/cu_multiplyOut.h"
 #include "../lib/eigen.h"
-#include "../lib/SPMV.h"
 #include "../lib/adjMatrix.h"
 #include "../lib/check_ans.h"
 #include "../lib/helpers.h"
@@ -26,7 +25,7 @@ double seconds_between(timeval s, timeval e);
 int main(void)
 {
   unsigned n{10'000};
-  long unsigned edges{n * 10};
+  unsigned edges{n * 10};
   unsigned krylov_dim {100};
   unsigned width {17};
   adjMatrix A;
@@ -37,7 +36,10 @@ int main(void)
   char make_or_read_matrix {'f'};
   if (make_or_read_matrix == 'f') {
     // Read matrix from file
-    std::string filename {"../data/generated/bn100000e999944"};
+    //std::string filename {"../data/generated/bn10000e99944"};
+    //std::string filename {"../data/bn1000000e9999944/bn1000000e9999944.mtx"};
+    //std::string filename {"../data/California/California.mtx"};
+    std::string filename {"../data/NotreDame_yeast/NotreDame_yeast.mtx"};
     //std::string filename {"../data/file.txt"};
     std::ifstream fs;
     fs.open(filename);

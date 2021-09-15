@@ -1,0 +1,320 @@
+bn1000000e9999944 krylov dim 30
+Going to open file: ../data/bn1000000e9999944/bn1000000e9999944.mtx
+
+Time elapsed to build random adjacency matrix with n = 1000000 edges = 9999944:
+	17.7931 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 88015420 bytes of CUDA global memory (0.733648% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    3.61348        0.0976006          37.0232
+
+Multiply Out              0.028907        0.0347681         0.831422
+
+Entire algorithm           3.75234         0.206949          18.1317
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of nan (Relative difference: nan) found at index:
+    serial_ans[0] = 6.387904533e+39
+      cuda_ans[0] =            -nan
+
+Total norm of differences     =                           nan
+Relative norm of differences  =                           nan
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+adaptive krylov dim 30
+Going to open file: ../data/adaptive/adaptive.mtx
+
+Time elapsed to build random adjacency matrix with n = 6815744 edges = 13624320:
+	8.47596 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 163627248 bytes of CUDA global memory (1.36391% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    6.34133         0.246067          25.7707
+
+Multiply Out              0.100093        0.0612244          1.63486
+
+Entire algorithm           6.44168         0.307453          20.9517
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 0.000188823 (Relative difference: 4.29122e-06) found at index:
+    serial_ans[76] =     44.00244331
+      cuda_ans[76] =     44.00225449
+
+Total norm of differences     =       0.064190919230825996267
+Relative norm of differences  =     4.5847095256583459303e-07
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+California krylov dim 30
+Going to open file: ../data/California/California.mtx
+
+Time elapsed to build random adjacency matrix with n = 9664 edges = 16150:
+	0.027259 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 205456 bytes of CUDA global memory (0.00171257% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                     0.0055       0.00170618          3.22358
+
+Multiply Out              0.006111        0.0061063          1.00077
+
+Entire algorithm          0.011855       0.00796218          1.48891
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 294188 (Relative difference: 6.64859e-06) found at index:
+    serial_ans[1078] = 4.424843601e+10
+      cuda_ans[1078] = 4.424814182e+10
+
+Total norm of differences     =          1138892.727425791556
+Relative norm of differences  =      6.473284256694346775e-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+channel-500x100x100-b050 krylov dim 30
+Going to open file: ../data/channel-500x100x100-b050/channel-500x100x100-b050.mtx
+
+Time elapsed to build random adjacency matrix with n = 4802000 edges = 42681372:
+	24.5434 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 379942248 bytes of CUDA global memory (3.16699% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    4.75499         0.208249          22.8332
+
+Multiply Out              0.071068        0.0455073          1.56168
+
+Entire algorithm            4.8263         0.253924          19.0068
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 154.863 (Relative difference: 2.35855e-06) found at index:
+    serial_ans[600248] =     65659969.14
+      cuda_ans[600248] =        65660124
+
+Total norm of differences     =         182930.68204176845029
+Relative norm of differences  =     1.3489077411990691914e-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+com-LiveJournal krylov dim 30
+Going to open file: ../data/com-LiveJournal/com-LiveJournal.mtx
+
+Time elapsed to build random adjacency matrix with n = 3997962 edges = 34681189:
+	53.1593 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 309495920 bytes of CUDA global memory (2.57979% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    10.9259          0.38658          28.2629
+
+Multiply Out              0.059105        0.0323364          1.82782
+
+Entire algorithm           10.9852         0.419079          26.2127
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of nan (Relative difference: nan) found at index:
+    serial_ans[0] = 1.177499898e+187
+      cuda_ans[0] =            -nan
+
+Total norm of differences     =                           nan
+Relative norm of differences  =                           nan
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+coPapersDBLP krylov dim 30
+Going to open file: ../data/coPapersDBLP/coPapersDBLP.mtx
+
+Time elapsed to build random adjacency matrix with n = 540486 edges = 15245729:
+	11.5577 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 126298408 bytes of CUDA global memory (1.05275% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    1.52808        0.0651479          23.4555
+
+Multiply Out              0.023718       0.00724646          3.27304
+
+Entire algorithm           1.55203        0.0725649          21.3882
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of nan (Relative difference: nan) found at index:
+    serial_ans[0] = 1.250742701e+151
+      cuda_ans[0] =            -nan
+
+Total norm of differences     =                           nan
+Relative norm of differences  =                           nan
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+NotreDame_yeast krylov dim 30
+Going to open file: ../data/NotreDame_yeast/NotreDame_yeast.mtx
+
+Time elapsed to build random adjacency matrix with n = 2114 edges = 2277:
+	0.014257 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 35108 bytes of CUDA global memory (0.000292641% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                   0.000967       0.00113443         0.852409
+
+Multiply Out               0.01266        0.0214585         0.589976
+
+Entire algorithm          0.013844        0.0227464         0.608623
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 0.00938398 (Relative difference: 1.0188e-06) found at index:
+    serial_ans[223] =     9210.820694
+      cuda_ans[223] =     9210.830078
+
+Total norm of differences     =        0.03240695030521190817
+Relative norm of differences  =     1.2805681423008698299e-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+hugetrace-00020 krylov dim 30
+Going to open file: ../data/hugetrace-00020/hugetrace-00020.mtx
+
+Time elapsed to build random adjacency matrix with n = 16002413 edges = 23998813:
+	25.3362 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 320260088 bytes of CUDA global memory (2.66951% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    17.7441          1.12503          15.7722
+
+Multiply Out              0.230553         0.132259          1.74319
+
+Entire algorithm           17.9749          1.25745          14.2947
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 3.04168e-05 (Relative difference: 1.51436e-06) found at index:
+    serial_ans[13745973] =     20.08553686
+      cuda_ans[13745973] =     20.08550644
+
+Total norm of differences     =       0.091328035881425129183
+Relative norm of differences  =     1.0536543673946217719e-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+road_central krylov dim 30
+Going to open file: ../data/road_central/road_central.mtx
+
+Time elapsed to build random adjacency matrix with n = 14081816 edges = 16933413:
+	18.3156 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 248342104 bytes of CUDA global memory (2.07004% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    15.8704         0.994284          15.9617
+
+Multiply Out               0.20251         0.112521          1.79975
+
+Entire algorithm           16.0732          1.10697            14.52
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 0.0123865 (Relative difference: 6.25256e-05) found at index:
+    serial_ans[6213562] =     198.1146814
+      cuda_ans[6213562] =     198.1022949
+
+Total norm of differences     =        0.08825195608416898374
+Relative norm of differences  =     1.4033462505295980648e-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+delaunay_n24 krylov dim 30
+Going to open file: ../data/delaunay_n24/delaunay_n24.mtx
+
+Time elapsed to build random adjacency matrix with n = 16777216 edges = 50331601:
+	35.909 seconds
+
+Running Lanczos algorithm for krylov_dim 30
+
+12
+Using 537132920 bytes of CUDA global memory (4.47724% of capacity 11996954624 bytes)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TIMING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Serial             CUDA          Speedup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lanczos                    15.4648         0.548004          28.2203
+
+Multiply Out              0.240667         0.140229          1.71624
+
+Entire algorithm           15.7057          0.68839          22.8151
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ERROR CHECKING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Max difference of 0.358105 (Relative difference: 1.28634e-05) found at index:
+    serial_ans[4456146] =     27838.74736
+      cuda_ans[4456146] =     27839.10547
+
+Total norm of differences     =         2.6272171063605007646
+Relative norm of differences  =     1.2127664190528005464e-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

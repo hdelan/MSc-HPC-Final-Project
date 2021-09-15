@@ -36,7 +36,7 @@ clean:
 	rm $(BUILDDIR)/* $(MAIN) *.out
 
 run: $(MAIN)
-	./adj ../data/file.txt
+	./adj -f ../data/generated/file.txt
 
 numerical_test: tests/numerical_test.cc $(OBJS)
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
@@ -46,7 +46,3 @@ numerical_test_orthog: tests/numerical_test_orthog.cc $(OBJS)
 	$(CXX) $^ $(LIBS) $(CXXFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
 	./numerical_test_orthog
 
-prof: PROFILE := -pg
-prof: $(MAIN)
-	./adj -e 10000000 -n 1000000 -k 1000
-	gprof -b ./adj > tests/serial_profile

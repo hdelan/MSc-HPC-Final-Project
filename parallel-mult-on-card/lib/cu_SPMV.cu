@@ -5,6 +5,7 @@
 #include "cu_linalg.h"
 
 #define SHARED_BYTES 49152
+#define THRESHOLD 200
 
   template <typename T, typename U>
 __global__ void cu_spMV1(U *const IA /*row_offset*/, U *const JA /* col_idx*/, const U n, T *const x, T *ans)
@@ -34,7 +35,6 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
     //if (tid == 0) printf("In here! Startrow %lu\tEndrow %lu\t nnz: %lu  \tblockId: %lu\n", blockrows[bid], blockrows[bid+1], nnz, blockIdx.x);
     
     tmp_s[tid] = 0;
-    tmp_s[tid+blockSize] = 0;
 
     for (auto i=firstcol+tid; i<IA[endrow];i+=blockSize)
       tmp_s[tid] += x[JA[i]];
@@ -42,10 +42,10 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
     __syncthreads();
 
     // Reduction
-    if (blockSize == 1024) { tmp_s[tid] += tmp_s[tid+512]; __syncthreads(); }
-    if (blockSize >= 512) { tmp_s[tid] += tmp_s[tid+256];  __syncthreads(); }
-    if (blockSize >= 256) { tmp_s[tid] += tmp_s[tid+128];  __syncthreads(); }
-    if (blockSize >= 128) { tmp_s[tid] += tmp_s[tid+64];   __syncthreads(); }
+    if (blockSize == 1024) {if (tid < 512) tmp_s[tid] += tmp_s[tid+512]; __syncthreads(); }
+    if (blockSize >= 512) {if (tid < 256) tmp_s[tid] += tmp_s[tid+256];  __syncthreads(); }
+    if (blockSize >= 256) {if (tid < 128) tmp_s[tid] += tmp_s[tid+128];  __syncthreads(); }
+    if (blockSize >= 128) {if (tid < 64) tmp_s[tid] += tmp_s[tid+64];   __syncthreads(); }
 
     if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
     if (tid == 0) ans[startrow] = tmp_s[0];
@@ -58,7 +58,7 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
     tmp_s[i-firstcol] = x[JA[i]];
   __syncthreads();
  
- /*
+  auto num_rows{endrow - startrow};
 
   if (tid < num_rows && startrow+tid < n)
   {
@@ -70,9 +70,8 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
     ans[startrow + tid] = sum;
   }
 
-   */
+ /*
 
-  auto num_rows{endrow - startrow};
   for (auto j=0u;j<num_rows;j++) {
     auto row_s{IA[startrow + j] - firstcol};
     auto row_e{IA[startrow + j + 1] - firstcol};
@@ -89,6 +88,7 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
     if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
     if (tid == 0) ans[startrow+j] = tmp_s[row_s];
   }
+   */
 }
 
 // blockSize will range from 2 to 64 for child kernel
@@ -96,10 +96,15 @@ template <typename T, typename U, unsigned blockSize>
 __global__ void cu_spMV3_child(U * const JA, const U nnz, T * const x, T * const ans) {
   __shared__ T tmp_s[blockSize*2];
   auto tid {threadIdx.x};
-  //if (tid==0) printf("Called!\n");
+  
   tmp_s[tid] = 0;
-  tmp_s[tid+blockSize] = 0;
+  
   for (auto i=tid;i<nnz;i+=blockDim.x) tmp_s[tid] += x[JA[i]];
+    
+  if (blockSize >= 1024) {if (tid < 512) tmp_s[tid] += tmp_s[tid+512];  __syncthreads(); }
+  if (blockSize >= 512)  {if (tid < 256) tmp_s[tid] += tmp_s[tid+256];  __syncthreads(); }
+  if (blockSize >= 256)  {if (tid < 128) tmp_s[tid] += tmp_s[tid+128];  __syncthreads(); }
+  if (blockSize >= 128)  {if (tid <  64) tmp_s[tid] += tmp_s[tid+64];   __syncthreads(); }
 
   if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
   if (tid == 0) ans[0] = tmp_s[0];
@@ -113,8 +118,8 @@ __global__ void cu_spMV3(U * const IA, U * const JA, const U n, const U avg_nnz,
   auto end_of_row {IA[tid+1]};
   auto nnz {end_of_row-start_of_row};
 
-  if (nnz / blockSize >= avg_nnz) {
-    cu_spMV3_child<T,U,blockSize><<<1,blockSize>>>(&JA[start_of_row], nnz, x, &ans[tid]);
+  if (nnz / THRESHOLD >= avg_nnz) {
+    cu_spMV3_child<T,U,32><<<1,32>>>(&JA[start_of_row], nnz, x, &ans[tid]);
   } else {
     T t_ans{0};
     for (auto i = IA[tid]; i < IA[tid + 1]; i++)
@@ -129,7 +134,6 @@ __global__ void cu_spMV4(U * const IA, U * const JA, T * const x, T * const ans)
   auto tid {threadIdx.x}, bid {blockIdx.x};
 
   sdata[tid] = 0;
-  sdata[tid+blockSize] = 0;
 
   for (auto i=IA[bid]+tid; i < IA[bid+1]; i+=blockSize)
     sdata[tid] += x[JA[i]];
@@ -137,10 +141,10 @@ __global__ void cu_spMV4(U * const IA, U * const JA, T * const x, T * const ans)
   __syncthreads();
 
   // Now reduce the sdata into a single value
-  if (blockSize == 1024){ sdata[tid] += sdata[tid+512]; __syncthreads(); }
-  if (blockSize >= 512) { sdata[tid] += sdata[tid+256]; __syncthreads(); }
-  if (blockSize >= 256) { sdata[tid] += sdata[tid+128]; __syncthreads(); }
-  if (blockSize >= 128) { sdata[tid] += sdata[tid+64]; __syncthreads(); }
+  if (blockSize == 1024){ if (tid < 512) sdata[tid] += sdata[tid+512]; __syncthreads(); }
+  if (blockSize >= 512) { if (tid < 256) sdata[tid] += sdata[tid+256]; __syncthreads(); }
+  if (blockSize >= 256) { if (tid < 128) sdata[tid] += sdata[tid+128]; __syncthreads(); }
+  if (blockSize >= 128) { if (tid <  64) sdata[tid] += sdata[tid+64]; __syncthreads(); }
 
   if (tid < 32) warpReduce<T,blockSize>(sdata, tid);
 
@@ -252,6 +256,14 @@ template __global__ void cu_spMV3<double, unsigned,256>(unsigned * const IA, uns
 template __global__ void cu_spMV3_child<double, unsigned,256>(unsigned * const JA, const unsigned nnz, double * const x, double * const ans);
 template __global__ void cu_spMV3<float, unsigned,256>(unsigned * const IA, unsigned * const JA, const unsigned n, const unsigned avg_nnz, float * const x, float * const ans);
 template __global__ void cu_spMV3_child<float, unsigned,256>(unsigned * const JA, const unsigned nnz, float * const x, float * const ans);
+template __global__ void cu_spMV3<double, unsigned,512>(unsigned * const IA, unsigned * const JA, const unsigned n, const unsigned avg_nnz, double * const x, double * const ans);
+template __global__ void cu_spMV3_child<double, unsigned,512>(unsigned * const JA, const unsigned nnz, double * const x, double * const ans);
+template __global__ void cu_spMV3<float, unsigned,512>(unsigned * const IA, unsigned * const JA, const unsigned n, const unsigned avg_nnz, float * const x, float * const ans);
+template __global__ void cu_spMV3_child<float, unsigned,512>(unsigned * const JA, const unsigned nnz, float * const x, float * const ans);
+template __global__ void cu_spMV3<double, unsigned,1024>(unsigned * const IA, unsigned * const JA, const unsigned n, const unsigned avg_nnz, double * const x, double * const ans);
+template __global__ void cu_spMV3_child<double, unsigned,1024>(unsigned * const JA, const unsigned nnz, double * const x, double * const ans);
+template __global__ void cu_spMV3<float, unsigned,1024>(unsigned * const IA, unsigned * const JA, const unsigned n, const unsigned avg_nnz, float * const x, float * const ans);
+template __global__ void cu_spMV3_child<float, unsigned,1024>(unsigned * const JA, const unsigned nnz, float * const x, float * const ans);
 
 template void get_blockrows<float>(adjMatrix &, const unsigned block_size, unsigned *blockrows, unsigned &blocks_needed);
 template void get_blockrows<double>(adjMatrix &, const unsigned block_size, unsigned *blockrows, unsigned &blocks_needed);

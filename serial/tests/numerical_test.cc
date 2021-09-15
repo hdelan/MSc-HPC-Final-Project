@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
         std::string dir{"../data/NotreDame_yeast/"};
-        std::string filename{dir + "data.mtx"};
+        std::string filename{dir + "NotreDame_yeast.mtx"};
         bool verbose;
         
         long unsigned krylov_dim{25};

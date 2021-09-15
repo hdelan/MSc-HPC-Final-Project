@@ -30,7 +30,7 @@ void cu_SPMV_test(const unsigned n, adjMatrix &A);
 
 int main(int argc, char * argv[])
 {
-  unsigned n{1'000'000};
+  unsigned n{100'000};
   unsigned edges{n * 10};
 
   adjMatrix A;
@@ -43,17 +43,23 @@ int main(int argc, char * argv[])
   gettimeofday(&start, NULL);
   
   if (construct_matrix == 'f') {
-    //std::string filename {"../data/California.mtx"};
-    std::string filename {"../data/generated/bn1000000e9999944"};
+    //std::string filename {"../data/California/California.mtx"};
+    //std::string filename {"../data/file.txt"};
+    std::string filename {"../data/bn1000000e9999944/bn1000000e9999944.mtx"};
+    //std::string filename {"../data/kmer_U1a/kmer_U1a.mtx"};
+    //std::string filename {"../data/kmer_P1a/kmer_P1a.mtx"};
+    //std::string filename {"../data/europe_osm/europe_osm.mtx"};
+    //std::string filename {"../data/delaunay_n24/delaunay_n24.mtx"};
     std::ifstream fs;
     fs.open(filename);
     assert(!fs.fail() && "Reading in file failed\n");
     fs >> n >> n >> edges;
+    std::cout << "Constructing matrix for " << n << " nodes and " << edges << " edges.\n\n";
     adjMatrix B(n, edges, fs);
     A = std::move(B);
     fs.close();
   } else if (construct_matrix == 'b') {
-    adjMatrix B(n, 10, 'b');
+    adjMatrix B(n, 20, 'b');
     A = std::move(B);
   } else {
     adjMatrix B(n, edges);
@@ -64,7 +70,7 @@ int main(int argc, char * argv[])
   std::cout << "Time elapsed for build adjacency matrix with n = " << n << " edges = " << edges << ": "
     << end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0 << " seconds\n\n";
   
-  std::cout << "\nBLOCSIZE = " << BLOCKSIZE << "\n\n";
+  std::cout << "\nBLOCKSIZE = " << BLOCKSIZE << "\n\n";
 
   std::cout << "\nTesting CUDA vs serial execution of SPMV for n = " << n << "\n\n";
   std::cout << std::setw(WIDTH) << std::setfill('~') << '\n'
@@ -120,7 +126,9 @@ void cu_SPMV_test(const unsigned n, adjMatrix &A)
   cudaMemcpy(x_d, &x[0], sizeof(T) * n, cudaMemcpyHostToDevice);
   cudaMemcpy(IA_d, A.row_offset, sizeof(unsigned) * (n + 1), cudaMemcpyHostToDevice);
   cudaMemcpy(JA_d, A.col_idx, sizeof(unsigned) * 2 * A.edge_count, cudaMemcpyHostToDevice);
-  /**************SPMV1*********/
+
+
+  /**************SPMV1*********/ // naive kernel
   {
     std::vector<T> gpu_ans_vec(n);
 
@@ -150,50 +158,51 @@ void cu_SPMV_test(const unsigned n, adjMatrix &A)
       << std::setw(width) << serial_ans 
       <<std::setw(width) << relative_error / serial_ans <<std::setw(width) << speedup << "\n";
   }
+
   /**************SPMV2*********/ // Adaptive number of rows per block
   {
     std::vector<T> gpu_ans_vec(n);
     std::vector<unsigned> blockrows(n);
     unsigned blocks_needed{0u};
     get_blockrows<T>(A, BLOCKSIZE, &blockrows[0], blocks_needed);
-    
-   // for (auto i=0u;i<blocks_needed+1;i++) {
-   //   std::cout << blockrows[i] << " ";
-    //}
-    dim3 blocks_IPCSR{static_cast<unsigned>(blocks_needed)};
 
-    unsigned *blockrows_d;
+  // for (auto i=0u;i<blocks_needed+1;i++) {
+  //   std::cout << blockrows[i] << " ";
+  //}
+  dim3 blocks_IPCSR{static_cast<unsigned>(blocks_needed)};
 
-    cudaMalloc((void **)&blockrows_d, sizeof(unsigned) * (blocks_needed + 1));
+  unsigned *blockrows_d;
 
-    cudaMemcpy(blockrows_d, &blockrows[0], sizeof(unsigned) * (blocks_needed + 1), cudaMemcpyHostToDevice);
+  cudaMalloc((void **)&blockrows_d, sizeof(unsigned) * (blocks_needed + 1));
 
-    cudaEvent_t start_d, end_d;
-    cuda_start_timer(start_d, end_d);
+  cudaMemcpy(blockrows_d, &blockrows[0], sizeof(unsigned) * (blocks_needed + 1), cudaMemcpyHostToDevice);
 
-    cu_spMV2<T, unsigned, BLOCKSIZE><<<blocks_IPCSR, BLOCKSIZE>>>(IA_d, JA_d, blockrows_d, n, x_d, spMV_ans_d);
+  cudaEvent_t start_d, end_d;
+  cuda_start_timer(start_d, end_d);
 
-    cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T) * n, cudaMemcpyDeviceToHost);
+  cu_spMV2<T, unsigned, BLOCKSIZE><<<blocks_IPCSR, BLOCKSIZE>>>(IA_d, JA_d, blockrows_d, n, x_d, spMV_ans_d);
 
-    float gpu_time{cuda_end_timer(start_d, end_d)};
+  cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T) * n, cudaMemcpyDeviceToHost);
 
-    timeval start, end;
-    gettimeofday(&start, NULL);
-    spMV(A, &x[0], &ans_vec[0]);
-    gettimeofday(&end, NULL);
-    auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
+  float gpu_time{cuda_end_timer(start_d, end_d)};
 
-    T relative_error{0};
-    unsigned max_idx{0u};
-    diff_arrays(&gpu_ans_vec[0], &ans_vec[0], n, relative_error, max_idx);
+  timeval start, end;
+  gettimeofday(&start, NULL);
+  spMV(A, &x[0], &ans_vec[0]);
+  gettimeofday(&end, NULL);
+  auto speedup{(end.tv_sec - start.tv_sec + (end.tv_usec - start.tv_usec) / 1000000.0) / gpu_time};
 
-    ans = std::sqrt(std::inner_product(gpu_ans_vec.begin(), gpu_ans_vec.end(), gpu_ans_vec.begin(), 0));
-    auto serial_ans = std::sqrt(std::inner_product(ans_vec.begin(), ans_vec.end(), ans_vec.begin(), 0));
+  T relative_error{0};
+  unsigned max_idx{0u};
+  diff_arrays(&gpu_ans_vec[0], &ans_vec[0], n, relative_error, max_idx);
 
-    std::cout << std::setw(width)<<std::left<< "SPMV2:"<<std::right<<std::setw(width) << ans
-      << std::setw(width) << serial_ans 
-      <<std::setw(width) << relative_error / serial_ans <<std::setw(width) << speedup << "\n";
-    cudaFree(blockrows_d);
+  ans = std::sqrt(std::inner_product(gpu_ans_vec.begin(), gpu_ans_vec.end(), gpu_ans_vec.begin(), 0));
+  auto serial_ans = std::sqrt(std::inner_product(ans_vec.begin(), ans_vec.end(), ans_vec.begin(), 0));
+
+  std::cout << std::setw(width)<<std::left<< "SPMV2:"<<std::right<<std::setw(width) << ans
+  << std::setw(width) << serial_ans 
+  <<std::setw(width) << relative_error / serial_ans <<std::setw(width) << speedup << "\n";
+  cudaFree(blockrows_d);
   }
   /**************SPMV3*********/ // Dynamically parallel kernel
   {
@@ -207,7 +216,7 @@ void cu_SPMV_test(const unsigned n, adjMatrix &A)
     cudaEvent_t start_d, end_d;
     cuda_start_timer(start_d, end_d);
 
-    auto avg_nnz {2lu*A.get_edges()/A.get_n()};
+    auto avg_nnz {2u*A.get_edges()/A.get_n()};
 
     auto num_blocks3 {n/THREADS3 + (n%THREADS3==0 ? 0 : 1)};
 
@@ -273,23 +282,23 @@ void cu_SPMV_test(const unsigned n, adjMatrix &A)
     cudaEvent_t start_d, end_d;
     cuda_start_timer(start_d, end_d);
 
-    unsigned split {n/10000};
+    unsigned split {std::max(n/10000, 1u)};
 
     std::vector<unsigned> tmp_hybrid(n-split+1);
-    
+
     auto j {split};
     auto offset {A.row_offset[split]};
     for (auto it=tmp_hybrid.begin();it!=tmp_hybrid.end();it++)
       *it = A.row_offset[j++] - offset;
 
     unsigned hybrid_blocks {(n-split) / BLOCKSIZE + ((n-split) % BLOCKSIZE ? 1 : 0)};
-    
+
     unsigned * other_IA_d;
     cudaMalloc(&other_IA_d, sizeof(unsigned)*(n-split+1));
     cudaMemcpy(other_IA_d, &tmp_hybrid[0], sizeof(unsigned)*(n-split+1), cudaMemcpyHostToDevice);
 
     cudaStream_t stream[2];
-    
+
     cudaStreamCreate(&stream[0]);
     cudaStreamCreate(&stream[1]);
 

@@ -45,8 +45,10 @@ PROFILE 	:=
 
 ########################################################################
 
-$(MAIN): main.cu $(OBJS) Makefile
-	$(NVCXX) main.cu $(OBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+lanczos_test: $(TESTDIR)/lanczos_test.cu $(TESTOBJS) lib/blocks.h Makefile 
+	$(NVCXX) $(TESTDIR)/lanczos_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./lanczos_test
+        
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cc $(SRCDIR)/%.h
 	$(NVCXX) $(NVCCFLAGS) $(OPT) $(PROFILE) -c $< -o $@
@@ -56,15 +58,6 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cu $(SRCDIR)/%.h
 
 .PHONY:
 	clean run 
-
 clean:
 	rm $(BUILDDIR)/* *test
 
-linalg_test: $(TESTDIR)/linalg_test.cu $(TESTOBJS) lib/blocks.h Makefile 
-	$(NVCXX) $(TESTDIR)/linalg_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
-
-SPMV_test: $(TESTDIR)/SPMV_test.cu $(TESTOBJS) lib/blocks.h Makefile 
-	$(NVCXX) $(TESTDIR)/SPMV_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
-
-lanczos_test: $(TESTDIR)/lanczos_test.cu $(TESTOBJS) lib/blocks.h Makefile 
-	$(NVCXX) $(TESTDIR)/lanczos_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@

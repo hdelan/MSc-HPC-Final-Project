@@ -6,8 +6,6 @@ CXXFLAGS 	:= -Wall -Wextra -Wno-unused-parameter -std=c++17
 LIBS 	 	:= -lopenblas -llapack -llapacke -lm -lcublas -lpthread -lcudadevrt #"-I/usr/local/opt/lapack/include"
 OPT			:= -O3
 
-MAIN 		:= adj
-
 SRCDIR 		:= ./lib
 BUILDDIR 	:= ./build
 TESTDIR 	:= ./tests
@@ -45,8 +43,7 @@ PROFILE 	:=
 
 ########################################################################
 
-$(MAIN): main.cu $(OBJS) Makefile
-	$(NVCXX) main.cu $(OBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+all:  linalg_test SPMV_test SPMV_blocks lanczos_test
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.cc $(SRCDIR)/%.h
 	$(NVCXX) $(NVCCFLAGS) $(OPT) $(PROFILE) -c $< -o $@
@@ -62,9 +59,19 @@ clean:
 
 linalg_test: $(TESTDIR)/linalg_test.cu $(TESTOBJS) lib/blocks.h Makefile 
 	$(NVCXX) $(TESTDIR)/linalg_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./linalg_test
+        
 
 SPMV_test: $(TESTDIR)/SPMV_test.cu $(TESTOBJS) lib/blocks.h Makefile 
 	$(NVCXX) $(TESTDIR)/SPMV_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./SPMV_test
+
+SPMV_blocks: $(TESTDIR)/SPMV_blocks.cu $(TESTOBJS) lib/blocks.h Makefile 
+	$(NVCXX) $(TESTDIR)/SPMV_blocks.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./SPMV_blocks
+        
 
 lanczos_test: $(TESTDIR)/lanczos_test.cu $(TESTOBJS) lib/blocks.h Makefile 
 	$(NVCXX) $(TESTDIR)/lanczos_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@
+	./lanczos_test
+

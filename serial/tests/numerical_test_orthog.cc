@@ -11,12 +11,14 @@
 int main(int argc, char *argv[])
 {
         std::string dir{"../data/NotreDame_yeast/"};
-        std::string filename{dir + "data.mtx"};
+        std::string filename{dir +"NotreDame_yeast.mtx"};
         bool verbose;
         
-        long unsigned krylov_dim{25};
-
-        bool reorthogonalize{true};
+        long unsigned krylov_dim{40};
+        
+        // Turning this variable to true will turn the LAPACKE QR routine on
+        // Which has disastrous accuracy, as mentioned in writeup
+        bool reorthogonalize{false};
 
         unsigned max_eigen{100}, eigens{100};
 
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
 
         std::ifstream fs;
         fs.open(filename);
-        //assert (!fs.fail());
+        assert (!fs.fail());
 
         fs >> n >> n >> edges;
 
@@ -51,15 +53,6 @@ int main(int argc, char *argv[])
                 for (auto i = 0u; i < max_eigen; i++)
                         fs >> eigvecs[i][j];
         fs.close();
-        /*
-        std::cout << "Eigvecs:\n";
-        for (auto i = n - 6; i < n; i++)
-        {
-                for (auto j = 0u; j < 6; j++)
-                        std::cout << eigvecs[j][i] << " ";
-                std::cout << '\n';
-        }
-        */
         fs.open(dir + "eigvals.csv");
         std::vector<double> eigvals(max_eigen);
         for (auto i = 0u; i < max_eigen * max_eigen; i++)
@@ -87,12 +80,7 @@ int main(int argc, char *argv[])
                 for (auto j = 0u; j < eigens; j++)
                         x[i] += coeff[j] * eigvecs[j][i];
         }
-        /*
-        std::cout << "Eigenvalues: \n";
-        for (int i = 0u; i < 6; i++)
-                std::cout << eigvals[i] << " ";
-        std::cout << "\n";
-*/
+        
         edges = A.get_edges();
         n = A.get_n();
 
