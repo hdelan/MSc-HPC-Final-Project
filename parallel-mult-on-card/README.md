@@ -1,3 +1,7 @@
+## Lanczos method With CUDA Implementation of multOut
+
+This directory implements a CUDA Lanczos approximation with an on-card multiply out. Performance is tested against multithreaded CBLAS.
+
 This directory contains tests:
 
 ```
