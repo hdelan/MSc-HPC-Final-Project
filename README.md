@@ -1,4 +1,9 @@
-# A CUDA Lanczos Method to Approximate the Matrix Exponential
+# A CUDA Lanczos Method to Compute Graph Centrality
+
+<figure>
+<img align="right" src=".images/Intro.png" alt="First pic"/>
+  <figcaption>"A matrix, and a heatmap of the centrality of its nodes"</figcaption>
+</figure>
 
 In the study and analysis of networks it is of great importance to identify central and non-central nodes. There are countless ways of measuring the centrality of nodes in a network, all with slightly different interpretations of what it means to be central. Finding highly central and poorly central nodes is essential in maintaining and managing real life graphs and networks. 
 
@@ -13,7 +18,7 @@ This project computes the action of the matrix exponential on a vector (usually 
 The accompanying report can be found at ```writeup.pdf```.
 
 ## Data
-In order to run code, data needs to be downloaded from:
+In order to run code, data must be downloaded from:
 
 ```https://drive.google.com/drive/folders/1HdyMdnjphMtafk8TBbWc0L-2V4OeWlmj?usp=sharing```
 
@@ -25,6 +30,6 @@ There are many implementations of the Lanczos method in this project directory:
   - A serial method, for details on how to run see ```serial/README.md```
   - A CUDA method using on-card multiplication. See ```parallel-mult-on-card/README.md```
   - A CUDA method using two cards. See ```parallel-two-cards/README.md```
-  - A final CUDA implementation. See ```parallel-final/README.md```
+  - A final CUDA implementation. Which uses a CUDA Lanczos method, and a multithreaded CBLAS multOut routine. See ```parallel-final/README.md```
 
 All directories except ```final``` include tests that check the accuracy of the method and of kernels.
