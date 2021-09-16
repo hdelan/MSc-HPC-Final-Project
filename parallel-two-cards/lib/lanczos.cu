@@ -1,6 +1,11 @@
 #include "cu_lanczos.h"
 #include "lanczos.h"
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Decompose function
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T>
 void lanczosDecomp<T>::decompose()
 {
@@ -43,28 +48,18 @@ void lanczosDecomp<T>::decompose()
 
     i = 1 - i;
   }
-  /*
-     std::cout << "\nAlpha:\n";
-     for (auto j = 0u; j < krylov_dim; j++)
-     std::cout << alpha[j] << " ";
-     std::cout << "\n\nBeta:\n";
-     for (auto j = 0u; j < krylov_dim - 1; j++)
-     std::cout << beta[j] << " ";
-     std::cout << '\n';
-     std::cout << '\n';
-   */
-  /* PRINT OUT Q 
-     std::cout << "\nQ\n";
-     for (auto j = 0u; j < krylov_dim; j++)
-     {
-     for (auto k = 0u; k < krylov_dim; k++)
-     std::cout << Q[k + j * krylov_dim] << " ";
-     std::cout << '\n';
-     }*/
+ 
   delete[] v;
   delete[] Q_raw;
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Check the answer against an analytic answer
+ *
+ * \param:       analytic_ans
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T>
 void lanczosDecomp<T>::check_ans(const T *analytic_ans) const
 {
@@ -82,15 +77,7 @@ void lanczosDecomp<T>::check_ans(const T *analytic_ans) const
   std::cout << "\nTotal norm of differences\t= " << std::setprecision(20) << norm(&diff[0],A.n) << '\n';
   std::cout << "Relative norm of differences\t= " << std::setprecision(20)<< norm(&diff[0], A.n)/norm(analytic_ans, A.n) << '\n';
 }
-/*
-// Doesn't work! (doesn't give better accuracy)
-void lanczosDecomp::reorthog() {
-T * tau {new T [krylov_dim]};
-LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, A.n, krylov_dim, Q, krylov_dim, tau);
-LAPACKE_dorgqr(LAPACK_ROW_MAJOR, A.n, krylov_dim, krylov_dim, Q, krylov_dim, tau);
-delete[] tau;
-}
- */
+
   template <typename T, typename U>
 T inner_prod(const T *const v, const T *const w, const U N) 
 {
