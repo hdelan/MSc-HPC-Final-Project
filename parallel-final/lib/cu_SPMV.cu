@@ -66,8 +66,6 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
 
   // A single long row for a whole block
   if (endrow-startrow == 1) {
-    //if (tid == 0) printf("In here! Startrow %lu\tEndrow %lu\t nnz: %lu  \tblockId: %lu\n", blockrows[bid], blockrows[bid+1], nnz, blockIdx.x);
-    
     tmp_s[tid] = 0;
 
     for (auto i=firstcol+tid; i<IA[endrow];i+=blockSize)
