@@ -8,3 +8,4 @@ The only test in this directory is ```lanczos_test```
 
 Run ```make lanczos_test``` to launch the CUDA lanczos algorithm on two cards. Performance is poor so the method is suitable for smaller matrices.
 
+This can only be run on a computer with two GPUs.
