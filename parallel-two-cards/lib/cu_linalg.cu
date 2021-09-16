@@ -1,20 +1,29 @@
+/**
+ * \file:        cu_linalg.cu
+ * \brief:       Linalg functions used in cu_lanczos.cu
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "cu_linalg.h"
 #include <stdio.h>
 
 #define FULL_MASK 0xffffffff
 
-/*
-   template <typename T, unsigned blockSize>
-   __device__ void warpReduce(volatile T * sdata, const unsigned tid) {
-   if (blockSize >= 64) sdata[tid] += sdata[tid+32];
-   if (blockSize >= 32 && tid < 16) sdata[tid] += sdata[tid+16];
-   if (blockSize >= 16 && tid < 8) sdata[tid] += sdata[tid+8];
-   if (blockSize >= 8 && tid < 4) sdata[tid] += sdata[tid+4];
-   if (blockSize >= 4 && tid < 2) sdata[tid] += sdata[tid+2];
-   if (blockSize >= 2 && tid < 1) sdata[tid] += sdata[tid+1];
-   }
- */
 
+
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Warp reduce function using shared memory
+ *
+ * @tparam T
+ * @tparam blockSize
+ * \param:       sdata
+ * \param:       tid
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __device__ void warpReduce(volatile T * sdata, const unsigned tid) {
   if (blockSize >= 32) sdata[tid] += sdata[tid+16];
@@ -24,6 +33,15 @@ __device__ void warpReduce(volatile T * sdata, const unsigned tid) {
   if (blockSize >=  2) sdata[tid] += sdata[tid+1]; 
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Warp reduce function using warp-level directives
+ *
+ * \param:       val
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __inline__ __device__ T warpReduceSum(T val) {
   if (blockSize >= 32) val += __shfl_down_sync(FULL_MASK, val, 16);
@@ -34,6 +52,18 @@ __inline__ __device__ T warpReduceSum(T val) {
   return val;
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Dot product
+ *
+ * \param:       a
+ * \param:       b
+ * \param:       n
+ * \param:       ans
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
   unsigned tid = threadIdx.x;
@@ -62,7 +92,19 @@ __global__ void cu_dot_prod(T * a, T * b, const unsigned n, T * ans) {
   if (tid == 0) ans[blockIdx.x] = sdata[0];
 }
 
-// Reduce operation, use for 1 block to get a final answer
+
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Reduce operation. Use for 1 block if used as second kernel in 
+                 two part reduce.
+ *
+ * \param:       a
+ * \param:       n
+ * \param:       ans
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
   unsigned tid = threadIdx.x;
@@ -90,6 +132,18 @@ __global__ void cu_reduce(T * a, const unsigned n, T * ans) {
   if (tid == 0) ans[blockIdx.x] = sdata[0];
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       A separate kernel for taking sqrt at the end. Useful as second
+                 kernel for norm
+ *
+ * \param:       a
+ * \param:       n
+ * \param:       ans
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
   unsigned tid = threadIdx.x;
@@ -117,6 +171,17 @@ __global__ void cu_reduce_sqrt(T * a, const unsigned n, T * ans) {
   if (tid == 0) ans[blockIdx.x] = std::sqrt(sdata[0]);
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Norm squared
+ *
+ * \param:       a
+ * \param:       n
+ * \param:       ans
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
   unsigned tid = threadIdx.x;
@@ -144,6 +209,17 @@ __global__ void cu_norm_sq(T * a, const unsigned n, T * ans) {
   if (tid == 0) ans[blockIdx.x] = sdata[0];
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Norm squared sqrt
+ *
+ * \param:       a
+ * \param:       n
+ * \param:       ans
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T, unsigned blockSize>
 __global__ void cu_norm_sq_sqrt(T * a, const unsigned n, T * ans) {
   unsigned tid = threadIdx.x;
@@ -172,12 +248,36 @@ __global__ void cu_norm_sq_sqrt(T * a, const unsigned n, T * ans) {
   if (tid == 0) ans[blockIdx.x] = std::sqrt(sdata[0]);
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Computes v -= alpha*x_d
+ *
+ * \param:       v_d
+ * \param:       alpha_d
+ * \param:       x_d
+ * \param:       n
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T>
 __global__ void cu_dpax(T * v_d, T * alpha_d, T * x_d, const unsigned n) {
   unsigned tid = threadIdx.x+blockIdx.x*blockDim.x;
   if (tid < n) v_d[tid] -= (*alpha_d)*x_d[tid];
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Computes v = x/alpha
+ *
+ * \param:       v_d
+ * \param:       alpha_d
+ * \param:       x_d
+ * \param:       n
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 template <typename T>
 __global__ void cu_dvexda(T * v_d, T * alpha_d, T * x_d, const unsigned n) {
   unsigned tid = threadIdx.x+blockIdx.x*blockDim.x;
