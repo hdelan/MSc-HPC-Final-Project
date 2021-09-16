@@ -24,7 +24,7 @@ In order to run code, data must be downloaded from:
 
 https://drive.google.com/drive/folders/1HdyMdnjphMtafk8TBbWc0L-2V4OeWlmj?usp=sharing
 
-and untarred. Please replace the empty ```data/``` directory with ```data/``` found in ```data.tar```.
+and untarred. Please move the ```data/``` file (extracted from ```data.tar```) in this root directory.
 
 ## Implementations
 
