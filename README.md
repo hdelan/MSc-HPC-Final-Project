@@ -36,4 +36,4 @@ There are many implementations of the Lanczos method in this project directory:
 
 All directories except ```final``` include tests that check the accuracy of the method and of kernels.
 
-Each implementation has its own ```lib/``` with slightly different code implementations. The final version of code can be found in ```parallel final```.
+Each implementation has its own ```lib/``` with slightly different code implementations. The final version of code can be found in ```parallel-final/lib```.
