@@ -382,26 +382,3 @@ template __global__ void cu_reduce<double, 1024>(double * a, const unsigned n, d
 template __global__ void cu_reduce_sqrt<double, 1024>(double * a, const unsigned n, double * ans);
 template __global__ void cu_norm_sq<double, 1024>(double * a, const unsigned n, double * ans);
 
-
-template __global__ void cu_norm_sq_sqrt<float, 1>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 2>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 4>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 8>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 16>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 32>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 64>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 128>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 256>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 512>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<float, 1024>(float * a, const unsigned n, float * ans);
-template __global__ void cu_norm_sq_sqrt<double, 1>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 2>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 4>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 8>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 16>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 32>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 64>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 128>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 256>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 512>(double * a, const unsigned n, double * ans);
-template __global__ void cu_norm_sq_sqrt<double, 1024>(double * a, const unsigned n, double * ans);

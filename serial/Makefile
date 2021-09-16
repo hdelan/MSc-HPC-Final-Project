@@ -33,7 +33,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cc #$(SRCDIR)/%.h
 	clean run prof
 
 clean:
-	rm $(BUILDDIR)/* $(MAIN) *.out
+	rm $(BUILDDIR)/*.o $(MAIN) 
 
 run: $(MAIN)
 	./adj -f ../data/generated/file.txt

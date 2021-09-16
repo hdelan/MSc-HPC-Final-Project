@@ -139,7 +139,6 @@ void lanczosDecomp<T>::cu_decompose()
   cudaFree(alpha_d);
   cudaFree(beta_d);
   cudaFree(tmp_d);
-  cudaFree(blockrows_d);
 }
 
 template void lanczosDecomp<float>::cu_decompose();

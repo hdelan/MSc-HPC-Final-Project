@@ -23,8 +23,6 @@
 #define SEED 1234 // To seed RNG
 #define WIDTH 81  // for formatting std::cout output
 
-#define THREADS3 32
-
 template <typename T>
 void cu_SPMV_test(const unsigned n, adjMatrix &A);
 
@@ -218,9 +216,9 @@ void cu_SPMV_test(const unsigned n, adjMatrix &A)
 
     auto avg_nnz {2u*A.get_edges()/A.get_n()};
 
-    auto num_blocks3 {n/THREADS3 + (n%THREADS3==0 ? 0 : 1)};
+    auto num_blocks3 {n/BLOCKSIZE + (n%BLOCKSIZE==0 ? 0 : 1)};
 
-    cu_spMV3<T, unsigned, THREADS3><<<num_blocks3, THREADS3>>>(IA_d,JA_d, n, avg_nnz, x_d, spMV_ans_d);
+    cu_spMV3<T, unsigned, BLOCKSIZE><<<num_blocks3, BLOCKSIZE>>>(IA_d,JA_d, n, avg_nnz, x_d, spMV_ans_d);
 
     cudaMemcpy(&gpu_ans_vec[0], spMV_ans_d, sizeof(T) * n, cudaMemcpyDeviceToHost);
 

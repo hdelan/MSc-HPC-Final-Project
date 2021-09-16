@@ -55,7 +55,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cu $(SRCDIR)/%.h
 	clean run 
 
 clean:
-	rm $(BUILDDIR)/* *test
+	rm $(BUILDDIR)/*.o *test
 
 linalg_test: $(TESTDIR)/linalg_test.cu $(TESTOBJS) lib/blocks.h Makefile 
 	$(NVCXX) $(TESTDIR)/linalg_test.cu $(TESTOBJS) $(NVCCFLAGS) $(OPT) $(LIBS) $(PROFILE) -o $@

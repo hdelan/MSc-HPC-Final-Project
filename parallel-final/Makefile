@@ -36,8 +36,7 @@ OBJS 	:=  $(BUILDDIR)/cu_linalg.o \
 				$(BUILDDIR)/check_ans.o \
 				$(BUILDDIR)/make_graph.o \
 				$(BUILDDIR)/eigen.o \
-				$(BUILDDIR)/multiplyOut.o \
-				$(BUILDDIR)/cu_multiplyOut.o
+				$(BUILDDIR)/multiplyOut.o
 
 PROFILE 	:= 
 
@@ -59,5 +58,5 @@ run: $(MAIN)
 	./final       
 
 clean:
-	rm $(BUILDDIR)/* $(MAIN)
+	rm $(BUILDDIR)/*.o $(MAIN)
 

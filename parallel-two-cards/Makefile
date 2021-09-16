@@ -59,5 +59,5 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cu $(SRCDIR)/%.h
 .PHONY:
 	clean run 
 clean:
-	rm $(BUILDDIR)/* *test
+	rm $(BUILDDIR)/*.o *test
 
