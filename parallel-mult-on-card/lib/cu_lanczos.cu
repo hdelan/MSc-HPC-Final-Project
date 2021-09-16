@@ -1,3 +1,10 @@
+/**
+ * \file:        cu_lanczos.cu
+ * \brief:       Perform Lanczos decomposition in parallel. Complete with optimal blocksizes for each kernel
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "cu_lanczos.h"
 
 #define SPMV_BLOCKSIZE 1024
