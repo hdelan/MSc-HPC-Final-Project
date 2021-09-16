@@ -17,8 +17,6 @@ This project computes the action of the matrix exponential on a vector (usually 
 
 The accompanying report can be found at ```writeup.pdf```.
 
-<div style="text-align: justify">"A matrix, and a heatmap of the centrality of its nodes"</div>
-
 ## Data
 In order to run code, data must be downloaded from:
 
