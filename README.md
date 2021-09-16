@@ -20,7 +20,7 @@ The accompanying report can be found at ```writeup.pdf```.
 ## Data
 In order to run code, data must be downloaded from:
 
-```https://drive.google.com/drive/folders/1HdyMdnjphMtafk8TBbWc0L-2V4OeWlmj?usp=sharing```
+https://drive.google.com/drive/folders/1HdyMdnjphMtafk8TBbWc0L-2V4OeWlmj?usp=sharing
 
 and untarred. Please replace the empty ```data/``` directory with the untarred ```data.tar```.
 
