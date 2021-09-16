@@ -1,3 +1,10 @@
+/**
+ * \file:        multiplyOut.cu
+ * \brief:       Multiply out in parallel with cublas.
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "cu_multiplyOut.h"
 #include "multiplyOut.h"
 #include "helpers.h"
