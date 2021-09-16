@@ -1,7 +1,21 @@
+/**
+ * \file:        make_graph.cc
+ * \brief:       Some functions to make graphs
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "adjMatrix.h"
 #include "edge.h"
 #include <set>
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Constructs a random adjacency matrix where each edge can be 
+ *               assigned to any two nodes that are not already joined with 
+ *               equal probability.
+ */
+/* ----------------------------------------------------------------------------*/
 void adjMatrix::random_adj()
 {
         std::random_device rd;
@@ -29,27 +43,16 @@ void adjMatrix::random_adj()
         }
         row_offset[n] = edges.size();
 }
-/*
-// NEED TO UPDATE
-void adjMatrix::stencil_adj()
-{
-        // 2d stencil graph
-        auto j = 0u, offset{static_cast<unsigned>(sqrt(n))};
-        for (auto i = 0u; i < n; i++)
-        {
-                for (auto k : {i - offset, i - 1, i + 1, i + offset})
-                {
-                        if (k < n)
-                        {
-                                row_offset[j] = i;
-                                col_idx[j] = k;
-                                j++;
-                        }
-                }
-        }
-}
-*/
 
+
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Constructs a Barabasi-Albert matrix where the degree of nodes
+ *               is highly imbalanced.
+ *
+ * \param:       m
+ */
+/* ----------------------------------------------------------------------------*/
 void adjMatrix::barabasi(const unsigned m)
 {
         unsigned min_degree = (m > n - 1) ? n-1 : m;
