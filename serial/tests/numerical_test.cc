@@ -1,3 +1,13 @@
+/**
+ * \file:        numerical_test.cc
+ * \brief:       Compares the accuracy of the lanczos approximation with an 
+ *               analytic answer, using precomputed eigenvalues and eigenvectors.
+ *               Can only be run for NotreDame_yeast, as this is the only matrix
+ *               whose eigendecomposition we have stored in data/.
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "../lib/adjMatrix.h"
 #include "../lib/eigen.h"
 #include "../lib/lanczos.h"

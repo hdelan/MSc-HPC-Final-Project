@@ -1,3 +1,11 @@
+/**
+ * \file:        SPMV_blocks.cu
+ * \brief:       Some code to run SPMV_test for every blocksize
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
+
 #include "../lib/cu_linalg.h"
 #include "../lib/cu_SPMV.h"
 #include "../lib/SPMV.h"

@@ -1,3 +1,11 @@
+/**
+ * \file:        numerical_test_orthog.cc
+ * \brief:       The same numerical test but including two additional reorthog-
+ *               onalize routines, neither of which give good results.
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "../lib/adjMatrix.h"
 #include "../lib/eigen.h"
 #include "../lib/lanczos.h"

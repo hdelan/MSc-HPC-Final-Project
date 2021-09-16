@@ -1,3 +1,10 @@
+/**
+ * \file:        linalg_test.cu
+ * \brief:       Code to test the speedups of linalg functions
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "../lib/cu_linalg.h"
 #include "../lib/cu_SPMV.h"
 #include "../lib/SPMV.h"

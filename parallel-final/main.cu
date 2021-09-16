@@ -1,3 +1,10 @@
+/**
+ * \file:        main.cu
+ * \brief:       The final implementation of CUDA Lanczos method.
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "lib/cu_linalg.h"
 #include "lib/cu_lanczos.h"
 #include "lib/cu_SPMV.h"
@@ -100,12 +107,20 @@ int main(int argc, char ** argv)
 
     // CUDA LANCZOS
     cuda = true;
+    
+    // To use floats uncomment the following line
     //lanczosDecomp<float> cu_L(A, krylov_dim, &x_float[0], cuda);
+    
+    // And comment out the below
     lanczosDecomp<double> cu_L(A, krylov_dim, &x_double[0], cuda);
     float gpu_time_lanczos{cuda_end_timer(start1_d, end1_d)};
 
     gettimeofday(&s_d, NULL);
+    
+    // To use floats uncomment the following line
     //eigenDecomp<float> cu_E(cu_L);
+    
+    // And comment out the below
     eigenDecomp<double> cu_E(cu_L);
 
     cuda_start_timer(start2_d, end2_d);

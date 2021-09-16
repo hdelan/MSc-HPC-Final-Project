@@ -1,3 +1,10 @@
+/**
+ * \file:        lanczos_test.cu
+ * \brief:       Compares the two card lanczos method with serial.
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "../lib/cu_linalg.h"
 #include "../lib/cu_lanczos.h"
 #include "../lib/cu_SPMV.h"
