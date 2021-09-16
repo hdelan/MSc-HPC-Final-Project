@@ -35,3 +35,5 @@ There are many implementations of the Lanczos method in this project directory:
   - A final CUDA implementation. Which uses a CUDA Lanczos method, and a multithreaded CBLAS multOut routine. See ```parallel-final/README.md```
 
 All directories except ```final``` include tests that check the accuracy of the method and of kernels.
+
+Each implementation has its own ```lib/``` with slightly different code implementations. The final version of code can be found in ```parallel final```.
