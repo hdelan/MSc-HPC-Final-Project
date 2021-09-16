@@ -9,6 +9,7 @@
 #include "cu_lanczos.h"
 #include <iomanip>
 
+// Overloaded so can be called with floats
 void LAPACKE_dstevd(int layout, char job, int n, float* a, float * b, float * c, int k) {
     LAPACKE_sstevd(layout, job, n, a, b, c, k);
 }
