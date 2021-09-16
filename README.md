@@ -29,7 +29,7 @@ and untarred. Please replace the empty ```data/``` directory with ```data/``` fo
 ## Implementations
 
 There are many implementations of the Lanczos method in this project directory:
-  - A serial method, for details on how to run see ```serial/README.md```
+  - A serial method. See ```serial/README.md```
   - A CUDA method using on-card multiplication. See ```parallel-mult-on-card/README.md```
   - A CUDA method using two cards. See ```parallel-two-cards/README.md```
   - A final CUDA implementation. Which uses a CUDA Lanczos method, and a multithreaded CBLAS multOut routine. See ```parallel-final/README.md```
