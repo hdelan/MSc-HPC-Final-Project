@@ -1,15 +1,16 @@
+/**
+ * \file:        multiplyOut.cu
+ * \brief:       Multiply out in parallel with cublas.
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
+
 #include "cu_multiplyOut.h"
 #include "multiplyOut.h"
 #include "helpers.h"
 
 #include <iomanip>
-#include <algorithm>
-#include <type_traits>
-
-template <typename T>
-__global__ void print_some(T * a) {
-  printf("%E %E %E\n\n", a[0], a[1], a[2]);
-}
 
 template <typename T>
 void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
@@ -60,24 +61,7 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
     std::cerr << "Device access error.\n";
     return;
   }
-  //printf("\nSome values from Q_d: ");
-  //print_some<<<1,1>>>(L.Q_d);
-  /*
-    // DGEMM
-    status = cublasDgemm_v2(handle,CUBLAS_OP_N,CUBLAS_OP_T,
-                                n,k,k,
-                                &alpha,
-                                L.Q_d,n,
-                                V_d,k,
-                                &beta,
-                                QV_d,n);
-    if (status != CUBLAS_STATUS_SUCCESS) {
-      std::cerr << "Dgemm error.\n";
-      return;
-    }
-    //printf("\nSome values from QV_d: ");
-    //print_some<<<1,1>>>(QV_d);
-*/
+
     // DGEMV
     status = cublasDgemv_v2(handle,CUBLAS_OP_N,
                                 n,k,
@@ -89,8 +73,6 @@ void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
       std::cerr << "Dgemv error.\n";
       return;
     }
-    //printf("\nSome values from ans_d: ");
-    //print_some<<<1,1>>>(ans_d);
 
   status = cublasGetVector(n, sizeof(T),ans_d, 1,&L.ans[0],1);
   if (status != CUBLAS_STATUS_SUCCESS) {
