@@ -11,7 +11,7 @@ To run the code use:
 ```
 
 A note on files: 
-  - Files are not addressed by their path, but rather their name. So to compute on the file ../data/NotreDame_yeast/NotreDame_yeast.mtx 
+  - Files are **not** addressed by their path, but rather their name. So to compute on the file ../data/NotreDame_yeast/NotreDame_yeast.mtx 
 
   We use the command:
     ```./final -f NotreDame_yeast ```
