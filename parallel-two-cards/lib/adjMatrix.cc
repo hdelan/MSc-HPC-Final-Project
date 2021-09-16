@@ -9,6 +9,13 @@
 #include "adjMatrix.h"
 #include "edge.h"
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       A function to populate a sparse matrix from file
+ *
+ * \param:       f
+ */
+/* ----------------------------------------------------------------------------*/
 void adjMatrix::populate_sparse_matrix(std::ifstream &f)
 {
   std::set<Edge> edges;
@@ -40,6 +47,11 @@ void adjMatrix::populate_sparse_matrix(std::ifstream &f)
 
 }
 
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       A function to write a generated matrix to file
+ */
+/* ----------------------------------------------------------------------------*/
 void adjMatrix::write_matrix_to_file() {
   std::string dir {"../data/generated/"};
   std::string type {matrix_type};
@@ -58,7 +70,13 @@ void adjMatrix::write_matrix_to_file() {
   f.close();
 }
 
-
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       A function to generate sparse matrices in a few different ways
+ *
+ * \param:       c
+ */
+/* ----------------------------------------------------------------------------*/
 void adjMatrix::generate_sparse_matrix(const char c)
 {
   switch (c)
@@ -85,7 +103,16 @@ void adjMatrix::generate_sparse_matrix(const char c)
   }
 }
 
-
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       Overloaded ostream operator
+ *
+ * \param:       os
+ * \param:       A
+ *
+ * \returns      
+ */
+/* ----------------------------------------------------------------------------*/
 std::ostream &operator<<(std::ostream &os, const adjMatrix &A)
 {
   os << "JA\n";
@@ -101,77 +128,3 @@ std::ostream &operator<<(std::ostream &os, const adjMatrix &A)
 
   return os;
 }
-/*
-   void adjMatrix::print_full() const
-   {
-   auto i{0u}, j{0u};
-   while (i < n * n)
-   {
-   if (row_idx[j] == i / n && col_idx[j] == i % n)
-   {
-   std::cout << " 1";
-   j++;
-   }
-   else
-   {
-   std::cout << " *";
-   }
-   if (i % n == n - 1)
-   std::cout << '\n';
-   i++;
-   }
-   }
-
-
-   void get_raw_upper_matrix(double * mat, adjMatrix & A) {
-
-   std::vector<Edge> edges(A.edge_count);
-
-// Get the upper triangular edges
-for (auto i=0u;i<A.edge_count*2;i++){
-if (A.row_idx[i] < A.col_idx[i]) 
-edges.emplace_back(Edge(A.row_idx[i], A.col_idx[i]));
-
-}
-
-auto k {0u}, m {0u};
-for (unsigned i=0u;i<A.n;i++) {
-for (auto j=i;j<A.n;j++) {
-if (Edge(i,j) == edges[k]) {
-mat[m] = 1.0;
-k++;
-}
-else {
-mat[m] = 0.0;
-} 
-m++;
-}
-}
-}
-
-void get_raw_full_matrix(double * mat, adjMatrix & A) {
-
-std::vector<Edge> edges(A.edge_count);
-
-// Get the upper triangular edges
-for (auto i=0u;i<A.edge_count*2;i++){
-edges.emplace_back(Edge(A.row_idx[i], A.col_idx[i]));
-
-}
-
-auto k {0u}, m {0u};
-for (unsigned i=0u;i<A.n;i++) {
-for (auto j=0u;j<A.n;j++) {
-if (Edge(i,j) == edges[k]) {
-mat[m] = 1.0;
-k++;
-}
-else {
-mat[m] = 0.0;
-} 
-m++;
-}
-}
-}
-
-*/
