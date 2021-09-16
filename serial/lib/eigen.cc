@@ -1,3 +1,11 @@
+/**
+ * \file:        eigen.cu
+ * \brief:       Computes the eigendecomposition of the tridiagonal defined by alpha, beta
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
+
 #include "eigen.h"
 #include <iomanip>
 
