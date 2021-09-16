@@ -1,3 +1,10 @@
+/**
+ * \file:        SPMV.cc
+ * \brief:       A function to naively compute SPMV in serial
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-15
+ */
 #include "SPMV.h"
 
 /* --------------------------------------------------------------------------*/
