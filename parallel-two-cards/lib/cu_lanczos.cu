@@ -1,5 +1,23 @@
+/**
+ * \file:        cu_lanczos.cu
+ * \brief:       Perform Lanczos decomposition in parallel. 
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "cu_lanczos.h"
 #include "blocks.h"
+
+
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       A function to change IA for the second GPU, so that IA[first_index on GPU1] = 0
+                 instead of IA[first index on GPU1] ~= nnz/2
+          
+ *
+ * \param:       IA_d
+ */
+/* ----------------------------------------------------------------------------*/
 __global__ void change_IA_for_device1(unsigned * IA_d, const unsigned n) {
   auto tid {blockIdx.x*blockDim.x+threadIdx.x};
   if (tid < n) {
@@ -8,29 +26,15 @@ __global__ void change_IA_for_device1(unsigned * IA_d, const unsigned n) {
   }
 }
 
-/*
-__global__ void print_n(float*a, const unsigned n, const int dev) {
-  printf("\n");
-  printf("Device %d\t", dev);
-  for (auto i=0u;i<n;i++)
-    printf(" %E ", a[i]);
-  printf("\n");
-}
-__global__ void print_n(double*a, const unsigned n, const int dev) {
-  printf("\n");
-  printf("Device %d\t", dev);
-  for (auto i=0u;i<n;i++)
-    printf(" %E ", a[i]);
-  printf("\n");
-}
-__global__ void print_n(unsigned *a, const unsigned n, const int dev) {
-  printf("\n");
-  printf("Device %d\t", dev);
-  for (auto i=0u;i<n;i++)
-    printf(" %u ", a[i]);
-  printf("\n");
-}
-*/
+
+/* --------------------------------------------------------------------------*/
+/**
+ * \brief:       A Lanczos decomposition involving halo transfers between
+                 two GPUs.
+ *
+ * 
+ */
+/* ----------------------------------------------------------------------------*/
   template <typename T>
 void lanczosDecomp<T>::cu_decompose()
 {
@@ -174,22 +178,6 @@ void lanczosDecomp<T>::cu_decompose()
   cudaMemcpyAsync(alpha, alpha_d0, sizeof(T) * krylov_dim, cudaMemcpyDeviceToHost, stream[0]);
   cudaMemcpyAsync(beta, beta_d0, sizeof(T) * (krylov_dim - 1), cudaMemcpyDeviceToHost, stream[0]);
 
-  /*
-     std::cout << "cu_Q:\n";
-     for (int i=0;i<krylov_dim;i++) {
-     for (int j=0;j<krylov_dim;j++)
-     std::cout << Q[i*krylov_dim+j] << " ";
-     std::cout << '\n';
-     }
-
-     std::cout << "\ncu_Alpha:\n";
-     for (int i=0;i<krylov_dim;i++) std::cout << alpha[i] << " ";
-
-     std::cout << "\n\ncu_Beta:\n";
-     for (int i=0;i<krylov_dim-1;i++) std::cout << beta[i] << " ";
-     std::cout << "\n\n";
-
-   */
   cudaStreamDestroy(stream[0]);
   cudaStreamDestroy(stream[1]);
   cudaStreamDestroy(memcpy_stream);
