@@ -1,3 +1,12 @@
+
+/**
+ * \file:        helpers.cu
+ * \brief:       A few helper functions
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
+
 #include "helpers.h"
 
 int parseArguments (int argc, char *argv[], std::string & filename, long unsigned & krylov_dim, bool & verbose, long unsigned & n, long unsigned & bar_deg, long unsigned & E) {
