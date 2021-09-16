@@ -1,9 +1,9 @@
 # A CUDA Lanczos Method to Compute Graph Centrality
 
 <figure>
-<img align="right" src=".images/Intro.png" alt="First pic"/>
-  <figcaption>"A matrix, and a heatmap of the centrality of its nodes"</figcaption>
+<img align="right" src=".images/Intro.png" alt="First pic"/>  
 </figure>
+
 
 In the study and analysis of networks it is of great importance to identify central and non-central nodes. There are countless ways of measuring the centrality of nodes in a network, all with slightly different interpretations of what it means to be central. Finding highly central and poorly central nodes is essential in maintaining and managing real life graphs and networks. 
 
@@ -16,6 +16,8 @@ This project computes the action of the matrix exponential on a vector (usually 
 ## Report
 
 The accompanying report can be found at ```writeup.pdf```.
+
+<div style="text-align: justify">"A matrix, and a heatmap of the centrality of its nodes"</div>
 
 ## Data
 In order to run code, data must be downloaded from:
