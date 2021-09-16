@@ -1,3 +1,10 @@
+/**
+ * \file:        cu_SPMV.cu
+ * \brief:       A few CUDA SPMV function implementations
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 
 #include "cu_SPMV.h"
 
@@ -7,6 +14,19 @@
 #define SHARED_BYTES 49152
 #define THRESHOLD 200
 
+  /* --------------------------------------------------------------------------*/
+  /**
+   * \brief:       A naive SPMV kernel
+   *
+   * \param:       IA           
+   * \param:       JA
+   * \param:       n
+   * \param:       x            starting vector, normalized
+   * \param:       ans
+   *
+   * \returns      
+   */
+  /* ----------------------------------------------------------------------------*/
   template <typename T, typename U>
 __global__ void cu_spMV1(U *const IA /*row_offset*/, U *const JA /* col_idx*/, const U n, T *const x, T *ans)
 {
@@ -20,6 +40,21 @@ __global__ void cu_spMV1(U *const IA /*row_offset*/, U *const JA /* col_idx*/, c
   }
 }
 
+
+  /* --------------------------------------------------------------------------*/
+  /**
+   * \brief:       A SPMV kernel that assigns rows dynamically to blocks
+   *
+   * \param:       IA
+   * \param:       JA
+   * \param:       blockrows    Communicates which rows each block should be responsible for
+   * \param:       n
+   * \param:       x
+   * \param:       ans
+   *
+   * \returns      
+   */
+  /* ----------------------------------------------------------------------------*/
   template <typename T, typename U, unsigned blockSize>
 __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U *const blockrows, const U n, T *const x, T *ans)
 {
@@ -69,29 +104,9 @@ __global__ void cu_spMV2(U *const IA /*row_offset*/, U *const JA /* col_idx*/, U
       sum += tmp_s[i];
     ans[startrow + tid] = sum;
   }
-
- /*
-
-  for (auto j=0u;j<num_rows;j++) {
-    auto row_s{IA[startrow + j] - firstcol};
-    auto row_e{IA[startrow + j + 1] - firstcol};
-    auto row_nnz{row_e - row_s};
-    if (row_s+tid < row_e) tmp_s[tid] = tmp_s[row_s+tid];
-    for (auto i = row_s+2*tid; i < row_e; i+=blockDim.x)
-      tmp_s[tid] += tmp_s[i];
-    __syncthreads();
-    if (blockSize == 1024) { if (tid+512 < row_nnz) tmp_s[tid] += tmp_s[tid+512]; __syncthreads(); }
-    if (blockSize >= 512) { if (tid+256 < row_nnz) tmp_s[tid] += tmp_s[tid+256];  __syncthreads(); }
-    if (blockSize >= 256) { if (tid+128 < row_nnz) tmp_s[tid] += tmp_s[tid+128];  __syncthreads(); }
-    if (blockSize >= 128) { if (tid+64 < row_nnz) tmp_s[tid] += tmp_s[tid+64];   __syncthreads(); }
-
-    if (tid < 32) warpReduce<T,blockSize>(tmp_s, tid);
-    if (tid == 0) ans[startrow+j] = tmp_s[row_s];
-  }
-   */
 }
 
-// This function assigns a number of rows to each block
+// This function assigns a number of rows to each block for SPMV2
   template <typename T>
 void get_blockrows(adjMatrix &A, const unsigned block_size, unsigned *blockrows, unsigned &blocks_needed)
 {
