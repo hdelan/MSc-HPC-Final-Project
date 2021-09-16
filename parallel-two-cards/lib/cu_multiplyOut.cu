@@ -10,13 +10,6 @@
 #include "helpers.h"
 
 #include <iomanip>
-#include <algorithm>
-#include <type_traits>
-
-template <typename T>
-__global__ void print_some(T * a) {
-  printf("%E %E %E\n\n", a[0], a[1], a[2]);
-}
 
 template <typename T>
 void cu_multOut(lanczosDecomp<T> &L, eigenDecomp<T> &E, adjMatrix &A)
