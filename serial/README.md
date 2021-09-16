@@ -6,7 +6,7 @@ To run the Lanczos approximation for any matrix run:
 ```
 ./adj -f [../data/somedir/somefile.mtx] -k [krylov_dim]
 ```
-Any ```.mtx``` file can be run, provided any comments are removed from the ```.mtx``` file, and that the graph is unweighted, meaning there are only two columns in the ```.mtx``` file.
+Any ```.mtx``` file can be run, provided any comments are removed from the ```.mtx``` file. The graph must also be unweighted, meaning there are only two columns in the ```.mtx``` file. 
 
 There are two numerical tests:
 
