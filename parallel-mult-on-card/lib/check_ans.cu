@@ -1,3 +1,10 @@
+/**
+ * \file:        check_ans.cu
+ * \brief:       A function to compare the answer vectors of two lanczos decomposition objects
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "check_ans.h"
 
 template <typename T, typename U>
