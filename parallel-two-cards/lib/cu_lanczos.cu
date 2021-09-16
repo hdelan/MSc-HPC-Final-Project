@@ -120,14 +120,9 @@ void lanczosDecomp<T>::cu_decompose()
     cu_spMV1<T, unsigned><<<num_blocks0, BLOCKSIZE, 0, stream[0]>>>(IA_d0, JA_d0, rows0, Q_d_ptr0[i], v_d0); 
     cudaSetDevice(1);
     cu_spMV1<T, unsigned><<<num_blocks1, BLOCKSIZE, 0, stream[1]>>>(IA_d1, JA_d1, rows1, x_d1, v_d1); 
-    
-    //if (k<10) print_n<<<1,1,0,stream[1]>>>(&v_d1[0], 2);
 
     cudaSetDevice(0);
     cudaMemcpyPeer(&v_d0[rows0], 0, v_d1, 1, sizeof(T)*rows1);
-    
-    //if (k<10) print_n<<<1,1,0,stream[0]>>>(&v_d0[0], 5);
-    //if (k<10) print_n<<<1,1,0,stream[0]>>>(Q_d_ptr0[0], 5, 0);
 
     // alpha = v*Q(:,j)
     if (num_blocks_total==1) { 
@@ -136,8 +131,6 @@ void lanczosDecomp<T>::cu_decompose()
       cu_dot_prod<T, BLOCKSIZE><<<num_blocks_total/2, BLOCKSIZE, BLOCKSIZE*sizeof(T), stream[0]>>>(v_d0, Q_d_ptr0[i], n, tmp_d0);
       cu_reduce<T, BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE*sizeof(T), stream[0]>>>(tmp_d0, num_blocks_total/2, &alpha_d0[k]);
     }
-
-    //if (k < 10)print_n<<<1,1>>>(&alpha_d0[k], 1, 0);
 
     // v = v - alpha*Q(:,j)
     cu_dpax<T><<<num_blocks_total, BLOCKSIZE,0,stream[0]>>>(v_d0, &alpha_d0[k], Q_d_ptr0[i], n);
@@ -157,7 +150,6 @@ void lanczosDecomp<T>::cu_decompose()
         cu_norm_sq<T, BLOCKSIZE><<<num_blocks_total/2, BLOCKSIZE, BLOCKSIZE*sizeof(T), stream[0]>>>(v_d0, n, tmp_d0);
         cu_reduce_sqrt<T,BLOCKSIZE><<<1, BLOCKSIZE, BLOCKSIZE*sizeof(T), stream[0]>>>(tmp_d0, num_blocks_total, &beta_d0[k]);
       }
-      //if (k < 10)print_n<<<1,1>>>(&beta_d0[k], 1,0);
 
       // Q(:,j) = v/beta
       cu_dvexda<T><<<num_blocks_total,BLOCKSIZE,0,stream[0]>>>(Q_d_ptr0[1-i], &beta_d0[k], v_d0, n);
