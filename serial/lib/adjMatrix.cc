@@ -1,3 +1,10 @@
+/**
+ * \file:        adjMatrix.cc
+ * \brief:       An adjacency matrix helper constructor
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-15
+ */
 #include "adjMatrix.h"
 #include "edge.h"
 
