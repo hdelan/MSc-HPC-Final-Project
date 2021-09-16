@@ -5,13 +5,11 @@
 </figure>
 
 
-In the study and analysis of networks it is of great importance to identify central and non-central nodes. There are countless ways of measuring the centrality of nodes in a network, all with slightly different interpretations of what it means to be central. Finding highly central and poorly central nodes is essential in maintaining and managing real life graphs and networks. 
+In the analysis of networks it is of great importance to identify central and non-central nodes. There are countless ways of measuring the centrality of nodes in a network, all with slightly different interpretations of what it means to be central. 
 
-The aim of this project is to compute the centrality of nodes in an undirected graph <img src="https://render.githubusercontent.com/render/math?math=A^T = A">. The action of the exponential matrix function: 
+The aim of this project is to compute the centrality of nodes in an undirected graph <img src="https://render.githubusercontent.com/render/math?math=A^T = A">. using the exponential matrix function: 
 
 <img src="https://render.githubusercontent.com/render/math?math=f(A)x = e^Ax"> 
-
-Will be used as a measure of node centrality. 
 
 <img src="https://render.githubusercontent.com/render/math?math=e^Ax"> will be approximated without forming  <img src="https://render.githubusercontent.com/render/math?math=e^A"> explicitly, instead using Krylov subspace methods, most notably the Lanczos method. This makes computing <img src="https://render.githubusercontent.com/render/math?math=e^Ax"> scalable to the limits of the memory hardware, which are tested in this project. 
 
