@@ -1,3 +1,11 @@
+
+/**
+ * \file:        helpers.cu
+ * \brief:       A few helper functions
+ * \author:      Hugh Delaney
+ * \version:     
+ * \date:        2021-09-16
+ */
 #include "helpers.h"
 
 #include <numeric>
